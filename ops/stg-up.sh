@@ -1,0 +1,14 @@
+#!/bin/bash
+# foty 스테이징을 gamma runner에 올린다(시연 데이터, 비밀값 없음). alpha에서: ops/stg-up.sh [커밋, 기본 HEAD]
+# 보기: Tailscale 켠 기기에서 http://10.10.10.14:4060   내리기: ssh gamma-runner 'docker compose -f ~/stg/foty/compose.yml down -v'
+set -euo pipefail
+cd "$(git -C "$(dirname "$0")" rev-parse --show-toplevel)"
+rev=$(git rev-parse --short "${1:-HEAD}")
+ssh gamma-runner 'mkdir -p ~/stg/foty && rm -rf ~/stg/foty/web'
+git archive --format=tar "$rev" web | ssh gamma-runner 'tar -x -C ~/stg/foty'
+ssh gamma-runner "set -e; cd ~/stg/foty/web && docker build -q -t foty-web:stg-$rev . >/dev/null \
+  && sed -i 's#image: foty-web:stg-.*#image: foty-web:stg-$rev#' ~/stg/foty/compose.yml \
+  && cd ~/stg/foty && docker compose up -d >/dev/null 2>&1 \
+  && for i in \$(seq 40); do curl -sf http://10.10.10.14:4060/robots.txt >/dev/null && break; sleep 1; done \
+  && docker image prune -f --filter label!=keep >/dev/null; docker images foty-web --format '{{.Tag}}' | grep -v stg-$rev | xargs -r -I{} docker rmi -f foty-web:{} >/dev/null"
+echo "foty 스테이징 $rev → http://10.10.10.14:4060 ($(curl -s -m 8 -o /dev/null -w '%{http_code}' http://10.10.10.14:4060/))"
