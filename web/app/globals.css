@@ -1,21 +1,67 @@
 @import "tailwindcss";
 
-/* laea ink: 종이 위 먹. 밝은 바탕만 — 어두운 테마는 두지 않는다. */
-@theme {
-  --color-paper: #fbfaf7;
-  --color-ink: #111111;
-  --color-ink-2: #555555;
-  --color-rule: #d9d6cf;
-  --font-sans: ui-sans-serif, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+/* foty 디자인 토큰 — 디자인 캔버스(foty 서비스 화면) 아트보드에서 뽑은 실제 값.
+   tokens.json(라임)은 옛 버전이라 쓰지 않는다. */
+@font-face {
+  font-family: "Wanted Sans";
+  src: url("/fonts/WantedSansVariable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
 }
 
-html {
-  color-scheme: light;
+@theme {
+  --color-ink: #0b0d12;
+  --color-sub: #5b5f69; /* 보조 글자 */
+  --color-label: #4a4e57; /* 꺼진 칩 글자 */
+  --color-muted: #8d929c; /* 캡션 */
+  --color-faint: #a9adb6; /* 꺼진 탭 제목 */
+  --color-face: #f3f4f5; /* 면 */
+  --color-line: #e9e9eb;
+  --color-line-2: #dcdee2; /* 테두리·빈 진행 칸 */
+  --color-avatar: #e3e5e8;
+  --color-accent: #ff6a3d; /* 심볼 색 */
+  --color-warn: #d9480f;
+  --color-warn-bg: #ffeee8;
+  --color-kakao: #fee500;
+  --color-photo: #e6e1d8; /* 사진 뒤 바탕 */
+
+  --font-sans: "Wanted Sans", "Noto Sans KR", system-ui, sans-serif;
+  --breakpoint-lg: 64rem;
 }
-body {
-  background: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
+
+/* 기본값은 base 레이어에 — 레이어 밖에 두면 Tailwind 유틸리티(text-white 등)를 이겨 버린다 */
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    -webkit-font-smoothing: antialiased;
+  }
+  a {
+    color: inherit;
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
 }

@@ -1,0 +1,1781 @@
+{
+ "v": 3,
+ "attachments": {},
+ "boards": {
+  "Login.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "로그인",
+   "x": 0,
+   "y": 0
+  },
+  "Onboarding.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "여행 성향 (1/3)",
+   "x": 470,
+   "y": 0
+  },
+  "Main.dc.html": {
+   "h": 1483,
+   "w": 390,
+   "is_interactive": true,
+   "title": "홈 — 이번 주말 테마",
+   "x": 940,
+   "y": 0
+  },
+  "Filter.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "조건 입력",
+   "x": 1410,
+   "y": 0
+  },
+  "Empty.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "테마 없음",
+   "x": 1880,
+   "y": 0
+  },
+  "Request.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "테마 요청",
+   "x": 2350,
+   "y": 0
+  },
+  "Detail.dc.html": {
+   "h": 1678,
+   "w": 390,
+   "is_interactive": true,
+   "title": "테마 상세 — 모집 중",
+   "x": 0,
+   "y": 1863
+  },
+  "Apply.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "참여 신청",
+   "x": 470,
+   "y": 1863
+  },
+  "Trips.dc.html": {
+   "h": 1164,
+   "w": 390,
+   "is_interactive": true,
+   "title": "내 여행",
+   "x": 940,
+   "y": 1863
+  },
+  "Cancelled.dc.html": {
+   "h": 861,
+   "w": 390,
+   "is_interactive": true,
+   "title": "미성사 취소",
+   "x": 1410,
+   "y": 1863
+  },
+  "Space.dc.html": {
+   "h": 1183,
+   "w": 390,
+   "is_interactive": true,
+   "title": "그룹 공간 — 일정",
+   "x": 0,
+   "y": 3921
+  },
+  "Chat.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "그룹 공간 — 대화",
+   "x": 470,
+   "y": 3921
+  },
+  "Members.dc.html": {
+   "h": 926,
+   "w": 390,
+   "is_interactive": true,
+   "title": "그룹 공간 — 참여자",
+   "x": 940,
+   "y": 3921
+  },
+  "AI.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "AI 도우미",
+   "x": 1410,
+   "y": 3921
+  },
+  "Checkin.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "현장 체크인",
+   "x": 1880,
+   "y": 3921
+  },
+  "Course.dc.html": {
+   "h": 1117,
+   "w": 390,
+   "is_interactive": true,
+   "title": "코스",
+   "x": 0,
+   "y": 5484
+  },
+  "Community.dc.html": {
+   "h": 949,
+   "w": 390,
+   "is_interactive": true,
+   "title": "커뮤니티",
+   "x": 470,
+   "y": 5484
+  },
+  "My.dc.html": {
+   "h": 1067,
+   "w": 390,
+   "is_interactive": true,
+   "title": "마이",
+   "x": 940,
+   "y": 5484
+  },
+  "HostJoin.dc.html": {
+   "h": 849,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 등록 — 확인 대기",
+   "x": 0,
+   "y": 6981
+  },
+  "HostNew.dc.html": {
+   "h": 928,
+   "w": 390,
+   "is_interactive": true,
+   "title": "테마 등록",
+   "x": 470,
+   "y": 6981
+  },
+  "HostDraft.dc.html": {
+   "h": 913,
+   "w": 390,
+   "is_interactive": true,
+   "title": "코스 초안 확인",
+   "x": 940,
+   "y": 6981
+  },
+  "HostThemes.dc.html": {
+   "h": 995,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 내 테마",
+   "x": 1410,
+   "y": 6981
+  },
+  "HostCheckin.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 체크인 QR",
+   "x": 1880,
+   "y": 6981
+  },
+  "HostSummary.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 방문 요약",
+   "x": 2350,
+   "y": 6981
+  },
+  "Onb2.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "가입 정보 (2/3)",
+   "x": 0,
+   "y": 8356
+  },
+  "Onb3.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "여행 성향 (3/3)",
+   "x": 470,
+   "y": 8356
+  },
+  "Mbti.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "MBTI 입력",
+   "x": 940,
+   "y": 8356
+  },
+  "Privacy.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "개인정보 공개 범위",
+   "x": 1410,
+   "y": 8356
+  },
+  "Blocks.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "차단 목록",
+   "x": 1880,
+   "y": 8356
+  },
+  "ResidentJoin.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 등록 — 주민",
+   "x": 2350,
+   "y": 8356
+  },
+  "Applied.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "신청 완료",
+   "x": 0,
+   "y": 9580
+  },
+  "Matched.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "성사 알림",
+   "x": 470,
+   "y": 9580
+  },
+  "Rejected.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "신청 거절",
+   "x": 940,
+   "y": 9580
+  },
+  "DetailClosed.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "테마 상세 — 모집 마감",
+   "x": 1410,
+   "y": 9580
+  },
+  "DetailConfirmed.dc.html": {
+   "h": 1040,
+   "w": 390,
+   "is_interactive": true,
+   "title": "테마 상세 — 일정 확정",
+   "x": 1880,
+   "y": 9580
+  },
+  "DetailDone.dc.html": {
+   "h": 1190,
+   "w": 390,
+   "is_interactive": true,
+   "title": "테마 상세 — 여행 완료",
+   "x": 2350,
+   "y": 9580
+  },
+  "TripsUpcoming.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "내 여행 — 예정",
+   "x": 2820,
+   "y": 9580
+  },
+  "TripsPast.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "내 여행 — 지난 여행",
+   "x": 3290,
+   "y": 9580
+  },
+  "History.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "변경 이력",
+   "x": 0,
+   "y": 11150
+  },
+  "CheckinDone.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "체크인 완료",
+   "x": 470,
+   "y": 11150
+  },
+  "Review.dc.html": {
+   "h": 1341,
+   "w": 390,
+   "is_interactive": true,
+   "title": "여행 후 평가",
+   "x": 940,
+   "y": 11150
+  },
+  "WriteReview.dc.html": {
+   "h": 1325,
+   "w": 390,
+   "is_interactive": true,
+   "title": "후기 작성",
+   "x": 1410,
+   "y": 11150
+  },
+  "CourseMap.dc.html": {
+   "h": 884,
+   "w": 390,
+   "is_interactive": true,
+   "title": "코스 — 지도",
+   "x": 1880,
+   "y": 11150
+  },
+  "SavedCourses.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "저장한 코스",
+   "x": 2350,
+   "y": 11150
+  },
+  "Notifications.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "알림",
+   "x": 0,
+   "y": 12871
+  },
+  "Report.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "신고",
+   "x": 470,
+   "y": 12871
+  },
+  "Search.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "검색",
+   "x": 940,
+   "y": 12871
+  },
+  "SearchEmpty.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "검색 결과 없음",
+   "x": 1410,
+   "y": 12871
+  },
+  "HostProfile.dc.html": {
+   "h": 927,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 프로필",
+   "x": 1880,
+   "y": 12871
+  },
+  "UserProfile.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "참여자 프로필",
+   "x": 2350,
+   "y": 12871
+  },
+  "PostDetail.dc.html": {
+   "h": 1051,
+   "w": 390,
+   "is_interactive": true,
+   "title": "후기 상세",
+   "x": 2820,
+   "y": 12871
+  },
+  "Loading.dc.html": {
+   "h": 847,
+   "w": 390,
+   "is_interactive": true,
+   "title": "로딩",
+   "x": 0,
+   "y": 14302
+  },
+  "Error.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "오류",
+   "x": 470,
+   "y": 14302
+  },
+  "AIUnknown.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "AI 확인 불가",
+   "x": 940,
+   "y": 14302
+  },
+  "HostApplicants.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 신청 현황",
+   "x": 0,
+   "y": 15529
+  },
+  "HostAddDate.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 날짜 추가",
+   "x": 470,
+   "y": 15529
+  },
+  "HostPast.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 지난 테마",
+   "x": 940,
+   "y": 15529
+  },
+  "RegionSummary.dc.html": {
+   "h": 943,
+   "w": 390,
+   "is_interactive": true,
+   "title": "지역 방문 요약",
+   "x": 1410,
+   "y": 15529
+  },
+  "EmailLogin.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "이메일 로그인",
+   "x": 0,
+   "y": 16852
+  },
+  "EmailSignup.dc.html": {
+   "h": 846,
+   "w": 390,
+   "is_interactive": true,
+   "title": "이메일 가입",
+   "x": 470,
+   "y": 16852
+  },
+  "AskWrite.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "질문 작성",
+   "x": 940,
+   "y": 16852
+  },
+  "HostEdit.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 프로필 편집",
+   "x": 1410,
+   "y": 16852
+  },
+  "Admin.dc.html": {
+   "h": 1001,
+   "w": 390,
+   "is_interactive": true,
+   "title": "운영팀 — 확인과 신고",
+   "x": 1880,
+   "y": 16852
+  },
+  "Credits.dc.html": {
+   "h": 1185,
+   "w": 390,
+   "is_interactive": true,
+   "title": "사진 출처",
+   "x": 2350,
+   "y": 16852
+  },
+  "Components.dc.html": {
+   "h": 2560,
+   "w": 390,
+   "is_interactive": true,
+   "title": "재사용 컴포넌트",
+   "x": 2820,
+   "y": 16852
+  },
+  "Stampbook.dc.html": {
+   "h": 1033,
+   "w": 390,
+   "is_interactive": true,
+   "title": "스탬프북",
+   "x": 0,
+   "y": 19792
+  },
+  "StampSeason.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "스탬프북 — 계절 시리즈",
+   "x": 470,
+   "y": 19792
+  },
+  "StampRegion.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "빈 칸 → 모집 중인 테마",
+   "x": 940,
+   "y": 19792
+  },
+  "StampRegionEmpty.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "빈 칸 → 테마 없음",
+   "x": 1410,
+   "y": 19792
+  },
+  "StampDetail.dc.html": {
+   "h": 885,
+   "w": 390,
+   "is_interactive": true,
+   "title": "스탬프 상세",
+   "x": 1880,
+   "y": 19792
+  },
+  "CancelDone.dc.html": {
+   "h": 865,
+   "w": 390,
+   "is_interactive": true,
+   "title": "신청 취소 완료",
+   "x": 0,
+   "y": 21205
+  },
+  "HostCancelled.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 취소 안내",
+   "x": 470,
+   "y": 21205
+  },
+  "HostCancel.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 테마 취소",
+   "x": 940,
+   "y": 21205
+  },
+  "HostRequests.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 테마 요청",
+   "x": 1410,
+   "y": 21205
+  },
+  "CorePick.dc.html": {
+   "h": 898,
+   "w": 390,
+   "is_interactive": true,
+   "title": "코스 — 핵심 장소 고르기",
+   "x": 1880,
+   "y": 21205
+  },
+  "FriendInvite.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "친구와 함께 신청",
+   "x": 2350,
+   "y": 21205
+  },
+  "FriendJoin.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "친구 초대 받은 화면",
+   "x": 2820,
+   "y": 21205
+  },
+  "HostSpace.dc.html": {
+   "h": 1151,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 일정 편집",
+   "x": 3290,
+   "y": 21205
+  },
+  "HostReview.dc.html": {
+   "h": 1039,
+   "w": 390,
+   "is_interactive": true,
+   "title": "호스트 — 참여자 평가",
+   "x": 3760,
+   "y": 21205
+  },
+  "MemberMenu.dc.html": {
+   "h": 844,
+   "w": 390,
+   "is_interactive": true,
+   "title": "참여자 더보기 메뉴",
+   "x": 4230,
+   "y": 21205
+  },
+  "GuestDetail.dc.html": {
+   "h": 1717,
+   "w": 390,
+   "is_interactive": true,
+   "title": "테마 상세 — 비로그인",
+   "x": 4700,
+   "y": 21205
+  },
+  "DLogin.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "로그인 — 데스크톱",
+   "x": 0,
+   "y": 23502
+  },
+  "DOnboarding.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "여행 성향 — 데스크톱",
+   "x": 1520,
+   "y": 23502
+  },
+  "DHome.dc.html": {
+   "expand": "fill",
+   "h": 1488,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "홈 — 데스크톱",
+   "x": 3040,
+   "y": 23502
+  },
+  "DEmpty.dc.html": {
+   "expand": "fill",
+   "h": 1127,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "테마 없음 — 데스크톱",
+   "x": 4560,
+   "y": 23502
+  },
+  "DRequest.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "테마 요청 — 데스크톱",
+   "x": 6080,
+   "y": 23502
+  },
+  "DDetail.dc.html": {
+   "expand": "fill",
+   "h": 1824,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "테마 상세 — 데스크톱",
+   "x": 0,
+   "y": 25370
+  },
+  "DApply.dc.html": {
+   "expand": "fill",
+   "h": 1000,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "참여 신청 — 데스크톱",
+   "x": 1520,
+   "y": 25370
+  },
+  "DTrips.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "내 여행 — 데스크톱",
+   "x": 3040,
+   "y": 25370
+  },
+  "DCancelled.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "미성사 취소 — 데스크톱",
+   "x": 4560,
+   "y": 25370
+  },
+  "DSpace.dc.html": {
+   "expand": "fill",
+   "h": 1011,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "그룹 공간 — 일정 — 데스크톱",
+   "x": 0,
+   "y": 27574
+  },
+  "DChat.dc.html": {
+   "expand": "fill",
+   "h": 1023,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "그룹 공간 — 대화 — 데스크톱",
+   "x": 1520,
+   "y": 27574
+  },
+  "DMembers.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "그룹 공간 — 참여자 — 데스크톱",
+   "x": 3040,
+   "y": 27574
+  },
+  "DAI.dc.html": {
+   "expand": "fill",
+   "h": 1011,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "AI 도우미 — 데스크톱",
+   "x": 4560,
+   "y": 27574
+  },
+  "DCheckin.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "현장 체크인 — 데스크톱",
+   "x": 6080,
+   "y": 27574
+  },
+  "DCourse.dc.html": {
+   "expand": "fill",
+   "h": 1122,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "코스 — 데스크톱",
+   "x": 0,
+   "y": 28977
+  },
+  "DCommunity.dc.html": {
+   "expand": "fill",
+   "h": 1215,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "커뮤니티 — 데스크톱",
+   "x": 1520,
+   "y": 28977
+  },
+  "DMy.dc.html": {
+   "expand": "fill",
+   "h": 1030,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "마이 — 데스크톱",
+   "x": 3040,
+   "y": 28977
+  },
+  "DHostJoin.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 등록 — 데스크톱",
+   "x": 0,
+   "y": 30572
+  },
+  "DHostNew.dc.html": {
+   "expand": "fill",
+   "h": 1054,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "테마 등록 — 데스크톱",
+   "x": 1520,
+   "y": 30572
+  },
+  "DHostDraft.dc.html": {
+   "expand": "fill",
+   "h": 981,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "코스 초안 확인 — 데스크톱",
+   "x": 3040,
+   "y": 30572
+  },
+  "DHostThemes.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 내 테마 — 데스크톱",
+   "x": 4560,
+   "y": 30572
+  },
+  "DHostCheckin.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 체크인 QR — 데스크톱",
+   "x": 6080,
+   "y": 30572
+  },
+  "DHostSummary.dc.html": {
+   "expand": "fill",
+   "h": 907,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 방문 요약 — 데스크톱",
+   "x": 7600,
+   "y": 30572
+  },
+  "DOnb2.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "가입 정보 (2/3) — 데스크톱",
+   "x": 0,
+   "y": 32006
+  },
+  "DOnb3.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "여행 성향 (3/3) — 데스크톱",
+   "x": 1520,
+   "y": 32006
+  },
+  "DMbti.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "MBTI 입력 — 데스크톱",
+   "x": 3040,
+   "y": 32006
+  },
+  "DPrivacy.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "개인정보 공개 범위 — 데스크톱",
+   "x": 4560,
+   "y": 32006
+  },
+  "DBlocks.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "차단 목록 — 데스크톱",
+   "x": 6080,
+   "y": 32006
+  },
+  "DResidentJoin.dc.html": {
+   "expand": "fill",
+   "h": 941,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 등록 — 주민 — 데스크톱",
+   "x": 7600,
+   "y": 32006
+  },
+  "DApplied.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "신청 완료 — 데스크톱",
+   "x": 0,
+   "y": 33327
+  },
+  "DMatched.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "성사 알림 — 데스크톱",
+   "x": 1520,
+   "y": 33327
+  },
+  "DRejected.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "신청 거절 — 데스크톱",
+   "x": 3040,
+   "y": 33327
+  },
+  "DDetailClosed.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "테마 상세 — 모집 마감 — 데스크톱",
+   "x": 4560,
+   "y": 33327
+  },
+  "DDetailConfirmed.dc.html": {
+   "expand": "fill",
+   "h": 1131,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "테마 상세 — 일정 확정 — 데스크톱",
+   "x": 6080,
+   "y": 33327
+  },
+  "DDetailDone.dc.html": {
+   "expand": "fill",
+   "h": 1281,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "테마 상세 — 여행 완료 — 데스크톱",
+   "x": 7600,
+   "y": 33327
+  },
+  "DTripsUpcoming.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "내 여행 — 예정 — 데스크톱",
+   "x": 9120,
+   "y": 33327
+  },
+  "DTripsPast.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "내 여행 — 지난 여행 — 데스크톱",
+   "x": 10640,
+   "y": 33327
+  },
+  "DHistory.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "변경 이력 — 데스크톱",
+   "x": 0,
+   "y": 34988
+  },
+  "DCheckinDone.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "체크인 완료 — 데스크톱",
+   "x": 1520,
+   "y": 34988
+  },
+  "DReview.dc.html": {
+   "expand": "fill",
+   "h": 1239,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "여행 후 평가 — 데스크톱",
+   "x": 3040,
+   "y": 34988
+  },
+  "DWriteReview.dc.html": {
+   "expand": "fill",
+   "h": 1455,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "후기 작성 — 데스크톱",
+   "x": 4560,
+   "y": 34988
+  },
+  "DCourseMap.dc.html": {
+   "expand": "fill",
+   "h": 1122,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "코스 — 지도 — 데스크톱",
+   "x": 6080,
+   "y": 34988
+  },
+  "DSavedCourses.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "저장한 코스 — 데스크톱",
+   "x": 7600,
+   "y": 34988
+  },
+  "DNotifications.dc.html": {
+   "expand": "fill",
+   "h": 940,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "알림 — 데스크톱",
+   "x": 0,
+   "y": 36823
+  },
+  "DReport.dc.html": {
+   "expand": "fill",
+   "h": 992,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "신고 — 데스크톱",
+   "x": 1520,
+   "y": 36823
+  },
+  "DSearch.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "검색 — 데스크톱",
+   "x": 3040,
+   "y": 36823
+  },
+  "DSearchEmpty.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "검색 결과 없음 — 데스크톱",
+   "x": 4560,
+   "y": 36823
+  },
+  "DHostProfile.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 프로필 — 데스크톱",
+   "x": 6080,
+   "y": 36823
+  },
+  "DUserProfile.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "참여자 프로필 — 데스크톱",
+   "x": 7600,
+   "y": 36823
+  },
+  "DPostDetail.dc.html": {
+   "expand": "fill",
+   "h": 1240,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "후기 상세 — 데스크톱",
+   "x": 9120,
+   "y": 36823
+  },
+  "DLoading.dc.html": {
+   "expand": "fill",
+   "h": 1274,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "로딩 — 데스크톱",
+   "x": 0,
+   "y": 38443
+  },
+  "DError.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "오류 — 데스크톱",
+   "x": 1520,
+   "y": 38443
+  },
+  "DAIUnknown.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "AI 확인 불가 — 데스크톱",
+   "x": 3040,
+   "y": 38443
+  },
+  "DHostApplicants.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 신청 현황 — 데스크톱",
+   "x": 0,
+   "y": 40097
+  },
+  "DHostAddDate.dc.html": {
+   "expand": "fill",
+   "h": 960,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 날짜 추가 — 데스크톱",
+   "x": 1520,
+   "y": 40097
+  },
+  "DHostPast.dc.html": {
+   "expand": "fill",
+   "h": 1018,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 지난 테마 — 데스크톱",
+   "x": 3040,
+   "y": 40097
+  },
+  "DRegionSummary.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "지역 방문 요약 — 데스크톱",
+   "x": 4560,
+   "y": 40097
+  },
+  "DEmailLogin.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "이메일 로그인 — 데스크톱",
+   "x": 0,
+   "y": 41495
+  },
+  "DEmailSignup.dc.html": {
+   "expand": "fill",
+   "h": 992,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "이메일 가입 — 데스크톱",
+   "x": 1520,
+   "y": 41495
+  },
+  "DAskWrite.dc.html": {
+   "expand": "fill",
+   "h": 965,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "질문 작성 — 데스크톱",
+   "x": 3040,
+   "y": 41495
+  },
+  "DHostEdit.dc.html": {
+   "expand": "fill",
+   "h": 1017,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 프로필 편집 — 데스크톱",
+   "x": 4560,
+   "y": 41495
+  },
+  "DAdmin.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "운영팀 — 확인과 신고 — 데스크톱",
+   "x": 6080,
+   "y": 41495
+  },
+  "DCredits.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "사진 출처 — 데스크톱",
+   "x": 7600,
+   "y": 41495
+  },
+  "DComponents.dc.html": {
+   "expand": "fill",
+   "h": 1610,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "재사용 컴포넌트 — 데스크톱",
+   "x": 9120,
+   "y": 41495
+  },
+  "DStampbook.dc.html": {
+   "expand": "fill",
+   "h": 1064,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "스탬프북 — 데스크톱",
+   "x": 0,
+   "y": 43485
+  },
+  "DStampSeason.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "스탬프북 — 계절 시리즈 — 데스크톱",
+   "x": 1520,
+   "y": 43485
+  },
+  "DStampRegion.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "빈 칸 → 모집 중인 테마 — 데스크톱",
+   "x": 3040,
+   "y": 43485
+  },
+  "DStampRegionEmpty.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "빈 칸 → 테마 없음 — 데스크톱",
+   "x": 4560,
+   "y": 43485
+  },
+  "DStampDetail.dc.html": {
+   "expand": "fill",
+   "h": 1042,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "스탬프 상세 — 데스크톱",
+   "x": 6080,
+   "y": 43485
+  },
+  "DCancelDone.dc.html": {
+   "expand": "fill",
+   "h": 1039,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "신청 취소 완료 — 데스크톱",
+   "x": 0,
+   "y": 44929
+  },
+  "DHostCancelled.dc.html": {
+   "expand": "fill",
+   "h": 949,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 취소 안내 — 데스크톱",
+   "x": 1520,
+   "y": 44929
+  },
+  "DHostCancel.dc.html": {
+   "expand": "fill",
+   "h": 931,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 테마 취소 — 데스크톱",
+   "x": 3040,
+   "y": 44929
+  },
+  "DHostRequests.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 테마 요청 — 데스크톱",
+   "x": 4560,
+   "y": 44929
+  },
+  "DCorePick.dc.html": {
+   "expand": "fill",
+   "h": 1058,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "코스 — 핵심 장소 고르기 — 데스크톱",
+   "x": 6080,
+   "y": 44929
+  },
+  "DFriendInvite.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "친구와 함께 신청 — 데스크톱",
+   "x": 7600,
+   "y": 44929
+  },
+  "DFriendJoin.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "친구 초대 받은 화면 — 데스크톱",
+   "x": 9120,
+   "y": 44929
+  },
+  "DHostSpace.dc.html": {
+   "expand": "fill",
+   "h": 1299,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 일정 편집 — 데스크톱",
+   "x": 10640,
+   "y": 44929
+  },
+  "DHostReview.dc.html": {
+   "expand": "fill",
+   "h": 1037,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "호스트 — 참여자 평가 — 데스크톱",
+   "x": 12160,
+   "y": 44929
+  },
+  "DMemberMenu.dc.html": {
+   "expand": "fill",
+   "h": 900,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "참여자 더보기 메뉴 — 데스크톱",
+   "x": 13680,
+   "y": 44929
+  },
+  "DGuestDetail.dc.html": {
+   "expand": "fill",
+   "h": 1868,
+   "w": 1440,
+   "is_interactive": true,
+   "title": "테마 상세 — 비로그인 — 데스크톱",
+   "x": 15200,
+   "y": 44929
+  }
+ },
+ "createdOnFiles": {
+  "at": "2026-11-21T04:29:35Z",
+  "v": 1
+ },
+ "designSystems": [
+  {
+   "artifact": "https://claude.ai/artifact/Dimw8E8tqzKeQqSC2d1FCY",
+   "copiedAt": "2026-11-21T04:29:35Z",
+   "namespace": "foty",
+   "title": "foty",
+   "version": "1795234376-a149"
+  }
+ ],
+ "launch": {
+  "view": "canvas"
+ },
+ "notes": {
+  "row1": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "가입과 홈",
+   "w": 240,
+   "x": 0,
+   "y": -260
+  },
+  "row2": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "테마 참여",
+   "w": 240,
+   "x": 0,
+   "y": 1603
+  },
+  "row3": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "그룹 여행 공간과 체크인",
+   "w": 240,
+   "x": 0,
+   "y": 3661
+  },
+  "row4": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "코스 · 커뮤니티 · 마이",
+   "w": 240,
+   "x": 0,
+   "y": 5224
+  },
+  "row5": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "호스트",
+   "w": 240,
+   "x": 0,
+   "y": 6721
+  },
+  "row6": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "가입 · 설정 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 8096
+  },
+  "row7": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "신청과 성사 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 9320
+  },
+  "row8": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "여행 중 · 여행 후 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 10890
+  },
+  "row9": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "공통 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 12611
+  },
+  "row10": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "상태 화면 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 14042
+  },
+  "row11": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "호스트 추가 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 15269
+  },
+  "row12": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "그 외 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 16592
+  },
+  "row13": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "스탬프북 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 19532
+  },
+  "row14": {
+   "kind": "title1",
+   "maxW": 3600,
+   "text": "남은 흐름 (추가)",
+   "w": 240,
+   "x": 0,
+   "y": 20945
+  },
+  "row15": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 가입과 홈",
+   "w": 400,
+   "x": 0,
+   "y": 23242
+  },
+  "row16": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 테마 참여",
+   "w": 400,
+   "x": 0,
+   "y": 25110
+  },
+  "row17": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 그룹 여행 공간과 체크인",
+   "w": 400,
+   "x": 0,
+   "y": 27314
+  },
+  "row18": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 코스 · 커뮤니티 · 마이",
+   "w": 400,
+   "x": 0,
+   "y": 28717
+  },
+  "row19": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 호스트",
+   "w": 400,
+   "x": 0,
+   "y": 30312
+  },
+  "row20": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 가입 · 설정 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 31746
+  },
+  "row21": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 신청과 성사 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 33067
+  },
+  "row22": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 여행 중 · 여행 후 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 34728
+  },
+  "row23": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 공통 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 36563
+  },
+  "row24": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 상태 화면 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 38183
+  },
+  "row25": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 호스트 추가 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 39837
+  },
+  "row26": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 그 외 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 41235
+  },
+  "row27": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 스탬프북 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 43225
+  },
+  "row28": {
+   "kind": "title1",
+   "maxW": 12000,
+   "text": "데스크톱 — 남은 흐름 (추가)",
+   "w": 400,
+   "x": 0,
+   "y": 44669
+  }
+ },
+ "order": [
+  "Login.dc.html",
+  "Onboarding.dc.html",
+  "Main.dc.html",
+  "Filter.dc.html",
+  "Empty.dc.html",
+  "Request.dc.html",
+  "Detail.dc.html",
+  "Apply.dc.html",
+  "Trips.dc.html",
+  "Cancelled.dc.html",
+  "Space.dc.html",
+  "Chat.dc.html",
+  "Members.dc.html",
+  "AI.dc.html",
+  "Checkin.dc.html",
+  "Course.dc.html",
+  "Community.dc.html",
+  "My.dc.html",
+  "HostJoin.dc.html",
+  "HostNew.dc.html",
+  "HostDraft.dc.html",
+  "HostThemes.dc.html",
+  "HostCheckin.dc.html",
+  "HostSummary.dc.html",
+  "Onb2.dc.html",
+  "Onb3.dc.html",
+  "Mbti.dc.html",
+  "Privacy.dc.html",
+  "Blocks.dc.html",
+  "ResidentJoin.dc.html",
+  "Applied.dc.html",
+  "Matched.dc.html",
+  "Rejected.dc.html",
+  "DetailClosed.dc.html",
+  "DetailConfirmed.dc.html",
+  "DetailDone.dc.html",
+  "TripsUpcoming.dc.html",
+  "TripsPast.dc.html",
+  "History.dc.html",
+  "CheckinDone.dc.html",
+  "Review.dc.html",
+  "WriteReview.dc.html",
+  "CourseMap.dc.html",
+  "SavedCourses.dc.html",
+  "Notifications.dc.html",
+  "Report.dc.html",
+  "Search.dc.html",
+  "SearchEmpty.dc.html",
+  "HostProfile.dc.html",
+  "UserProfile.dc.html",
+  "PostDetail.dc.html",
+  "Loading.dc.html",
+  "Error.dc.html",
+  "AIUnknown.dc.html",
+  "HostApplicants.dc.html",
+  "HostAddDate.dc.html",
+  "HostPast.dc.html",
+  "RegionSummary.dc.html",
+  "EmailLogin.dc.html",
+  "EmailSignup.dc.html",
+  "AskWrite.dc.html",
+  "HostEdit.dc.html",
+  "Admin.dc.html",
+  "Credits.dc.html",
+  "Components.dc.html",
+  "Stampbook.dc.html",
+  "StampSeason.dc.html",
+  "StampRegion.dc.html",
+  "StampRegionEmpty.dc.html",
+  "StampDetail.dc.html",
+  "CancelDone.dc.html",
+  "HostCancelled.dc.html",
+  "HostCancel.dc.html",
+  "HostRequests.dc.html",
+  "CorePick.dc.html",
+  "FriendInvite.dc.html",
+  "FriendJoin.dc.html",
+  "HostSpace.dc.html",
+  "HostReview.dc.html",
+  "MemberMenu.dc.html",
+  "GuestDetail.dc.html",
+  "DLogin.dc.html",
+  "DOnboarding.dc.html",
+  "DHome.dc.html",
+  "DEmpty.dc.html",
+  "DRequest.dc.html",
+  "DDetail.dc.html",
+  "DApply.dc.html",
+  "DTrips.dc.html",
+  "DCancelled.dc.html",
+  "DSpace.dc.html",
+  "DChat.dc.html",
+  "DMembers.dc.html",
+  "DAI.dc.html",
+  "DCheckin.dc.html",
+  "DCourse.dc.html",
+  "DCommunity.dc.html",
+  "DMy.dc.html",
+  "DHostJoin.dc.html",
+  "DHostNew.dc.html",
+  "DHostDraft.dc.html",
+  "DHostThemes.dc.html",
+  "DHostCheckin.dc.html",
+  "DHostSummary.dc.html",
+  "DOnb2.dc.html",
+  "DOnb3.dc.html",
+  "DMbti.dc.html",
+  "DPrivacy.dc.html",
+  "DBlocks.dc.html",
+  "DResidentJoin.dc.html",
+  "DApplied.dc.html",
+  "DMatched.dc.html",
+  "DRejected.dc.html",
+  "DDetailClosed.dc.html",
+  "DDetailConfirmed.dc.html",
+  "DDetailDone.dc.html",
+  "DTripsUpcoming.dc.html",
+  "DTripsPast.dc.html",
+  "DHistory.dc.html",
+  "DCheckinDone.dc.html",
+  "DReview.dc.html",
+  "DWriteReview.dc.html",
+  "DCourseMap.dc.html",
+  "DSavedCourses.dc.html",
+  "DNotifications.dc.html",
+  "DReport.dc.html",
+  "DSearch.dc.html",
+  "DSearchEmpty.dc.html",
+  "DHostProfile.dc.html",
+  "DUserProfile.dc.html",
+  "DPostDetail.dc.html",
+  "DLoading.dc.html",
+  "DError.dc.html",
+  "DAIUnknown.dc.html",
+  "DHostApplicants.dc.html",
+  "DHostAddDate.dc.html",
+  "DHostPast.dc.html",
+  "DRegionSummary.dc.html",
+  "DEmailLogin.dc.html",
+  "DEmailSignup.dc.html",
+  "DAskWrite.dc.html",
+  "DHostEdit.dc.html",
+  "DAdmin.dc.html",
+  "DCredits.dc.html",
+  "DComponents.dc.html",
+  "DStampbook.dc.html",
+  "DStampSeason.dc.html",
+  "DStampRegion.dc.html",
+  "DStampRegionEmpty.dc.html",
+  "DStampDetail.dc.html",
+  "DCancelDone.dc.html",
+  "DHostCancelled.dc.html",
+  "DHostCancel.dc.html",
+  "DHostRequests.dc.html",
+  "DCorePick.dc.html",
+  "DFriendInvite.dc.html",
+  "DFriendJoin.dc.html",
+  "DHostSpace.dc.html",
+  "DHostReview.dc.html",
+  "DMemberMenu.dc.html",
+  "DGuestDetail.dc.html"
+ ],
+ "pages": [],
+ "title": "foty 서비스 화면"
+}
