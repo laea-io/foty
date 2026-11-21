@@ -10,5 +10,5 @@ ssh gamma-runner "set -e; cd ~/stg/foty/web && docker build -q -t foty-web:stg-$
   && sed -i 's#image: foty-web:stg-.*#image: foty-web:stg-$rev#' ~/stg/foty/compose.yml \
   && cd ~/stg/foty && docker compose up -d >/dev/null 2>&1 \
   && for i in \$(seq 40); do curl -sf http://10.10.10.14:4060/robots.txt >/dev/null && break; sleep 1; done \
-  && docker image prune -f --filter label!=keep >/dev/null; docker images foty-web --format '{{.Tag}}' | grep -v stg-$rev | xargs -r -I{} docker rmi -f foty-web:{} >/dev/null"
+  && docker images foty-web --format '{{.Tag}}' | grep -v stg-$rev | xargs -r -I{} docker rmi -f foty-web:{} >/dev/null"
 echo "foty 스테이징 $rev → http://10.10.10.14:4060 ($(curl -s -m 8 -o /dev/null -w '%{http_code}' http://10.10.10.14:4060/))"
