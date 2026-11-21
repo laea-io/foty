@@ -1,20 +1,17 @@
+import 'server-only'
 import { notFound } from 'next/navigation'
-import { themeById } from '@/lib/demo/themes'
-import { memberById, spaceById, spaces } from '@/lib/demo/trips'
+import { loadSpace as load } from '@/lib/server/q/b-trips'
+import type { SpaceData } from './types'
 
-/** 그룹 공간 주소의 [id] → 공간 + 테마. 없으면 404 */
-export function loadSpace(id: string) {
-  const s = spaceById(id)
-  const t = themeById(id)
-  if (!s || !t) notFound()
-  /** 확인 요청 카드(집결 시간 변경)는 광릉숲 여행에만 있다 */
-  return { s, t, change: id === 'gwangneung-morning' }
+/** 그룹 공간 주소의 [id] → 공간(그룹 사람만 · 아니면 404 · 비로그인은 로그인으로) */
+export async function loadSpace(params: Promise<{ id: string }>, sub = ''): Promise<SpaceData> {
+  const id = (await params).id
+  return load(id, `/trips/${id}${sub}`)
 }
 
-export function loadMember(uid: string) {
-  const m = memberById(uid)
+/** 참여자 더보기의 [uid](handle) → 그룹 사람 */
+export function memberOf(sp: SpaceData, uid: string) {
+  const m = sp.members.find((x) => x.id === uid)
   if (!m) notFound()
   return m
 }
-
-export const spaceParams = () => spaces.map((s) => ({ id: s.id }))

@@ -1,14 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { type FormEvent, useState } from 'react'
+import { useActionState, useState } from 'react'
+import { applyAction } from '@/app/actions/b-themes'
 import { Icon } from '@/components/ui/icon'
 import { Button, Photo, Segmented } from '@/components/ui/primitives'
 import type { Theme } from '@/lib/demo/themes'
 
 /** 참여 신청: 모바일은 상세 위 바텀시트, 데스크톱은 가운데 창 */
-export function ApplySheet({ t }: { t: Theme }) {
+export function ApplySheet({ t, party, manual }: { t: Theme; party: 1 | 2; manual?: boolean }) {
   const close = `/themes/${t.id}`
   return (
     <>
@@ -25,7 +25,7 @@ export function ApplySheet({ t }: { t: Theme }) {
             <h2 className="m-0 text-[18px] font-bold tracking-[-0.03em]">참여 신청</h2>
             <Close href={close} />
           </div>
-          <ApplyForm t={t} />
+          <ApplyForm t={t} party={party} manual={manual} />
         </div>
       </div>
 
@@ -43,33 +43,42 @@ export function ApplySheet({ t }: { t: Theme }) {
               <Close href={close} />
             </span>
           </div>
-          <ApplyForm t={t} wide />
+          <ApplyForm t={t} party={party} manual={manual} wide />
         </div>
       </div>
     </>
   )
 }
 
-function ApplyForm({ t, wide }: { t: Theme; wide?: boolean }) {
-  const router = useRouter()
+function ApplyForm({ t, party, manual, wide }: { t: Theme; party: 1 | 2; manual?: boolean; wide?: boolean }) {
   const [message, setMessage] = useState('')
   const [agreed, setAgreed] = useState(false)
-  const [sending, setSending] = useState(false)
-  const submit = (e: FormEvent) => {
-    e.preventDefault()
-    if (!agreed) return
-    setSending(true)
-    router.push(`/themes/${t.id}/applied`)
-  }
+  const [state, action, sending] = useActionState(applyAction, undefined)
   const id = wide ? 'apply-wide' : 'apply'
   const button = (
-    <Button type="submit" variant="accent" size="lg" block disabled={!agreed || sending}>
-      신청 보내기
-    </Button>
+    <>
+      {state?.error && <div className="mb-2 text-[13px] text-warn">{state.error}</div>}
+      <Button type="submit" variant="accent" size="lg" block disabled={!agreed || sending}>
+        신청 보내기
+      </Button>
+    </>
   )
+  // 동의 문장의 첫 줄: 지금 인원에 맞춰
+  const after = t.current + party
+  const first =
+    t.current >= t.min
+      ? '이미 성사된 테마예요.'
+      : after >= t.min && !manual
+        ? '지금 신청하면 최소 인원이 채워져요.'
+        : manual
+          ? '호스트가 확인하면 신청이 확정돼요.'
+          : `성사까지 ${t.min - t.current}명 남았어요.`
+  const base = `/themes/${t.id}/apply`
 
   return (
-    <form onSubmit={submit} className={wide ? '' : 'flex min-h-0 grow flex-col'}>
+    <form action={action} className={wide ? '' : 'flex min-h-0 grow flex-col'}>
+      <input type="hidden" name="themeId" value={t.id} />
+      <input type="hidden" name="party" value={party} />
       <div className={wide ? 'mt-4' : 'flex min-h-0 grow flex-col gap-[22px] overflow-y-auto px-5 pt-1.5'}>
         <div className="flex items-center gap-3">
           <Photo
@@ -91,10 +100,10 @@ function ApplyForm({ t, wide }: { t: Theme; wide?: boolean }) {
           <div className="mb-2.5 text-[14px] font-semibold">누구와 가나요?</div>
           <Segmented
             items={[
-              { href: `/themes/${t.id}/apply`, label: '혼자 신청' },
-              { href: `/themes/${t.id}/invite`, label: '친구와 함께 +1' },
+              { href: base, label: '혼자 신청' },
+              { href: `${base}?party=2`, label: '친구와 함께 +1' },
             ]}
-            current={`/themes/${t.id}/apply`}
+            current={party === 2 ? `${base}?party=2` : base}
           />
         </div>
         <div className={wide ? 'mt-6' : ''}>
@@ -115,12 +124,13 @@ function ApplyForm({ t, wide }: { t: Theme; wide?: boolean }) {
           <label className={`flex cursor-pointer items-start gap-2 ${wide ? 'mt-3' : 'mt-2.5'}`}>
             <input
               type="checkbox"
+              name="agreed"
               checked={agreed}
               onChange={(e) => setAgreed(e.target.checked)}
               className="mt-px h-[18px] w-[18px] flex-none accent-ink"
             />
             <span className="text-[12px] leading-[18px] text-muted">
-              지금 신청하면 최소 인원이 채워져요. 성사되면 그룹 공간과 집결 정보가 열려요.
+              {first} 성사되면 그룹 공간과 집결 정보가 열려요.
               {wide ? ' ' : <br />}
               성사 전에는 언제든 취소할 수 있어요.
             </span>

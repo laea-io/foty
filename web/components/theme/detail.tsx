@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 import { BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
-import { Badge, ButtonLink, DemoNote, Photo, Progress, Reason } from '@/components/ui/primitives'
-import { hostById } from '@/lib/demo/people'
+import { Badge, ButtonLink, DemoNote, Note, Photo, Progress, Reason } from '@/components/ui/primitives'
+import type { Host } from '@/lib/demo/people'
 import type { Theme } from '@/lib/demo/themes'
 import { courseLength, DetailHead, HostBlock, InfoRows, MapSketch, StopList } from './parts'
 import { ShareButton } from './share-button'
@@ -12,12 +13,25 @@ const statusTone = (s: Theme['status']) => (s === '일정 확정' ? 'ink' : s ==
 /**
  * 테마 상세 — 모집 중(기본). guest: 로그인 없이 보는 화면(위 안내 띠 + “가입하고 신청하기”).
  * 모집 마감·일정 확정·여행 완료는 components/b/theme/state-detail.tsx.
+ * host: DB의 호스트(진행한 테마 수 포함) · action: 보는 사람에 따라 바뀌는 버튼(신청 취소 · 그룹 공간 …)
+ * notice: 내 신청 상태 한 줄
  */
-export function ThemeDetail({ t, guest }: { t: Theme; guest?: boolean }) {
-  const host = hostById(t.hostId)
+export function ThemeDetail({
+  t,
+  guest,
+  host,
+  action,
+  notice,
+}: {
+  t: Theme
+  guest?: boolean
+  host?: Host | null
+  action?: ReactNode
+  notice?: ReactNode
+}) {
   const left = t.min - t.current
   const matched = left <= 0
-  const open = t.status === '모집 중' || (t.status === '일정 조율 중' && t.current < t.max)
+  const open = t.status === '모집 중'
   const rows: [string, string][] = [
     ['집결', t.meet],
     ['포함', t.include],
@@ -26,7 +40,8 @@ export function ThemeDetail({ t, guest }: { t: Theme; guest?: boolean }) {
   ]
   const headline = matched ? '성사됐어요' : `성사까지 ${left}명`
   const cta = () =>
-    guest ? (
+    action ??
+    (guest ? (
       <ButtonLink href={`/login?next=/themes/${t.id}/apply`} variant="accent" size="lg" block>
         가입하고 신청하기
       </ButtonLink>
@@ -38,7 +53,7 @@ export function ThemeDetail({ t, guest }: { t: Theme; guest?: boolean }) {
       <ButtonLink href="/" variant="soft" size="lg" block aria-disabled>
         {t.status === '모집 마감' ? '모집이 마감됐어요' : t.status}
       </ButtonLink>
-    )
+    ))
 
   return (
     <>
@@ -105,6 +120,7 @@ export function ThemeDetail({ t, guest }: { t: Theme; guest?: boolean }) {
             />
           </div>
           <Reason className="mt-[18px] gap-2.5">{t.reason}</Reason>
+          {notice && <Note className="mt-4">{notice}</Note>}
 
           {host && (
             <>
@@ -203,6 +219,7 @@ export function ThemeDetail({ t, guest }: { t: Theme; guest?: boolean }) {
                 <Progress current={t.current} max={t.max} min={t.min} deadline={t.deadline} />
               </div>
               <Reason className="mt-4">{t.reason}</Reason>
+              {notice && <Note className="mt-4">{notice}</Note>}
               <div className="mt-5 flex gap-2">
                 <div className="grow">{cta()}</div>
                 <ShareButton title={t.title} wide />

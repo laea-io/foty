@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { Icon, type IconName } from '@/components/ui/icon'
 import { Avatar, Badge, ButtonLink, Tag } from '@/components/ui/primitives'
-import { displayName, type Member, members } from '@/lib/demo/trips'
+import { BlockButton } from './forms'
+import { displayName, type Member, type SpaceData } from './types'
 
 function MoreLink({ id, m }: { id: string; m: Member }) {
   return (
@@ -25,11 +26,12 @@ function WideTag({ children }: { children: string }) {
 }
 
 /** 모바일 참여자 목록 */
-export function MemberList({ id }: { id: string }) {
+export function MemberList({ sp }: { sp: SpaceData }) {
+  const id = sp.t.id
   return (
     <div className="px-5">
       <div className="mt-2">
-        {members.map((m) => (
+        {sp.members.map((m) => (
           <div key={m.id} className="flex gap-3 border-t border-line py-4">
             <Avatar name={displayName(m)} size={44} />
             <div className="min-w-0 grow">
@@ -57,11 +59,12 @@ export function MemberList({ id }: { id: string }) {
 }
 
 /** 데스크톱 참여자 격자(3열) */
-export function MemberGrid({ id }: { id: string }) {
+export function MemberGrid({ sp }: { sp: SpaceData }) {
+  const id = sp.t.id
   return (
     <>
       <div className="mt-8 grid grid-cols-3 gap-4">
-        {members.map((m) => (
+        {sp.members.map((m) => (
           <div key={m.id} className="rounded-[20px] p-5 shadow-[inset_0_0_0_1px_var(--color-line)]">
             <div className="flex gap-3.5">
               <Avatar name={displayName(m)} size={52} />
@@ -91,11 +94,10 @@ export function MemberGrid({ id }: { id: string }) {
 }
 
 /** 참여자 더보기 내용(프로필 보기 · 신고하기 · 차단하기) */
-export function MemberMenu({ m }: { m: Member }) {
+export function MemberMenu({ m, themeId, hostId }: { m: Member; themeId: string; hostId: string }) {
   const items: [IconName, string, string][] = [
-    ['user', '프로필 보기', m.me ? '/my' : m.host ? `/hosts/${m.id}` : `/users/${m.id}`],
+    ['user', '프로필 보기', m.me ? '/my' : m.host ? `/hosts/${hostId}` : `/users/${m.id}`],
     ['flag', '신고하기', `/report?user=${m.id}`],
-    ['shield', '차단하기', `/my/blocks?add=${m.id}`],
   ]
   return (
     <>
@@ -119,6 +121,7 @@ export function MemberMenu({ m }: { m: Member }) {
               {label}
             </Link>
           ))}
+        {!m.me && <BlockButton themeId={themeId} handle={m.id} />}
       </div>
     </>
   )

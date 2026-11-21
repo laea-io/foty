@@ -5,42 +5,49 @@ import { StopList } from '@/components/theme/parts'
 import { Icon } from '@/components/ui/icon'
 import { AvatarStack, Badge, ButtonLink, IconButton, Segmented, StepNo } from '@/components/ui/primitives'
 import type { Theme } from '@/lib/demo/themes'
-import { changeRequest, guests, history, host, members, type Space } from '@/lib/demo/trips'
 import { CourseToggle, ShareAction } from './actions'
+import { ConfirmChange } from './forms'
 import { RouteMap } from './route-map'
+import type { SpaceData } from './types'
 
 export type Tab = 'plan' | 'chat' | 'members'
 
-export const spaceTabs = (id: string) => [
-  { href: `/trips/${id}`, label: '일정' },
-  { href: `/trips/${id}/chat`, label: '대화' },
-  { href: `/trips/${id}/members`, label: `참여자 ${members.length}` },
+export const spaceTabs = (sp: SpaceData) => [
+  { href: `/trips/${sp.t.id}`, label: '일정' },
+  { href: `/trips/${sp.t.id}/chat`, label: '대화' },
+  { href: `/trips/${sp.t.id}/members`, label: `참여자 ${sp.members.length}` },
 ]
 const tabIndex: Record<Tab, number> = { plan: 0, chat: 1, members: 2 }
 
-const names = members.map((m) => m.name)
-const hostLine = `호스트 ${host.name} · 참여자 ${guests.length}명`
+const names = (sp: SpaceData) => sp.members.map((m) => m.name)
+const hostLine = (sp: SpaceData) =>
+  `호스트 ${sp.members.find((m) => m.host)?.name ?? ''} · 참여자 ${sp.members.filter((m) => !m.host).length}명`
 
 /** 모바일 공간 머리: 뒤로 · D-day · 제목 · 참여자 · 탭 */
-export function SpaceMobileHead({ s, t, tab }: { s: Space; t: Theme; tab: Tab }) {
-  const tabs = spaceTabs(t.id)
+export function SpaceMobileHead({ sp, tab }: { sp: SpaceData; tab: Tab }) {
+  const tabs = spaceTabs(sp)
+  const t = sp.t
   return (
     <>
-      <BackBar title="그룹 여행 공간" back="/trips" right={<IconButton icon="more" label="더보기" />} />
+      <BackBar
+        title="그룹 여행 공간"
+        back="/trips"
+        right={<IconButton icon="more" label="참여자" href={`/trips/${t.id}/members`} />}
+      />
       <div className="px-5 pt-1">
         <div className="flex items-center gap-2">
           <span className="text-[13px] font-bold">
-            {s.dday}{' '}
+            {sp.dday}{' '}
             <span className="font-normal text-sub">
               · {t.date} {t.start}
             </span>
           </span>
-          <Badge>{s.status}</Badge>
+          <Badge>{sp.status}</Badge>
         </div>
         <h1 className="mt-2 mb-0 text-[23px] leading-[30px] font-extrabold tracking-[-0.05em]">{t.title}</h1>
         <div className="mt-3 flex items-center gap-2">
-          <AvatarStack names={names} />
-          <span className="text-[12px] text-sub">{hostLine}</span>
+          <AvatarStack names={names(sp)} />
+          <span className="text-[12px] text-sub">{hostLine(sp)}</span>
         </div>
         <div className="mt-[18px]">
           <Segmented items={tabs} current={tabs[tabIndex[tab]].href} />
@@ -51,24 +58,25 @@ export function SpaceMobileHead({ s, t, tab }: { s: Space; t: Theme; tab: Tab })
 }
 
 /** 데스크톱 공간 머리: 왼쪽 제목, 오른쪽 탭 */
-export function SpaceDesktopHead({ s, t, tab }: { s: Space; t: Theme; tab: Tab }) {
-  const tabs = spaceTabs(t.id)
+export function SpaceDesktopHead({ sp, tab }: { sp: SpaceData; tab: Tab }) {
+  const tabs = spaceTabs(sp)
+  const t = sp.t
   return (
     <div className="flex items-end gap-6">
       <div className="grow">
         <div className="flex items-center gap-2">
           <span className="text-[14px] font-bold">
-            {s.dday}{' '}
+            {sp.dday}{' '}
             <span className="font-normal text-sub">
               · {t.date} {t.start}
             </span>
           </span>
-          <Badge>{s.status}</Badge>
+          <Badge>{sp.status}</Badge>
         </div>
         <h1 className="mt-2 mb-0 text-[30px] leading-[38px] font-extrabold tracking-[-0.05em]">{t.title}</h1>
         <div className="mt-3.5 flex items-center gap-2">
-          <AvatarStack names={names} size={32} />
-          <span className="text-[13px] text-sub">{hostLine}</span>
+          <AvatarStack names={names(sp)} size={32} />
+          <span className="text-[13px] text-sub">{hostLine(sp)}</span>
         </div>
       </div>
       <div className="w-[400px] flex-none">
@@ -79,8 +87,10 @@ export function SpaceDesktopHead({ s, t, tab }: { s: Space; t: Theme; tab: Tab }
 }
 
 /** 확인 요청 카드: 변경 확인 중 · 08:40 → 08:20 · 3 / 5명 확인 */
-export function ChangeCard({ id, from = 'space' }: { id: string; from?: 'space' | 'chat' }) {
-  const c = changeRequest
+export function ChangeCard({ sp, from = 'space' }: { sp: SpaceData; from?: 'space' | 'chat' }) {
+  const c = sp.change
+  if (!c) return null
+  const id = sp.t.id
   return (
     <div className="rounded-[16px] bg-face px-[18px] pt-4 pb-[18px]">
       <div className="flex items-center justify-between">
@@ -89,7 +99,7 @@ export function ChangeCard({ id, from = 'space' }: { id: string; from?: 'space' 
           변경 확인 중 · {c.label}
         </span>
         <span className="text-[12px] text-sub">
-          {c.confirmed.length} / {members.length}명 확인
+          {c.confirmed.length} / {c.total}명 확인
         </span>
       </div>
       <div className="mt-2 flex items-baseline gap-2">
@@ -98,13 +108,12 @@ export function ChangeCard({ id, from = 'space' }: { id: string; from?: 'space' 
         <span className="text-[12px] text-sub">{c.where}</span>
       </div>
       <div className="mt-2 text-[11px] text-sub">
-        확인: {c.confirmed.join(' · ')} <span className="text-muted">| 아직: {c.waiting.join(' · ')}</span>
+        확인: {c.confirmed.join(' · ') || '없음'}{' '}
+        {c.waiting.length > 0 && <span className="text-muted">| 아직: {c.waiting.join(' · ')}</span>}
       </div>
       {from === 'space' ? (
-        <div className="mt-3.5 flex gap-2">
-          <ButtonLink href={`/trips/${id}/history`} size="sm" className="flex-1">
-            확인했어요
-          </ButtonLink>
+        <div className="mt-3.5 flex items-end gap-2">
+          <ConfirmChange themeId={id} changeId={c.id} done={c.mine} />
           <ButtonLink href={`/trips/${id}/chat`} variant="outline" size="sm" className="flex-1">
             의견 남기기
           </ButtonLink>
@@ -120,13 +129,13 @@ export function ChangeCard({ id, from = 'space' }: { id: string; from?: 'space' 
   )
 }
 
-function CourseHead({ id, wide }: { id: string; wide?: boolean }) {
+function CourseHead({ sp, wide }: { sp: SpaceData; wide?: boolean }) {
   return (
     <>
       <div className={`mb-3 flex items-baseline justify-between ${wide ? 'mt-8' : 'mt-[30px]'}`}>
         <h2 className="m-0 text-[18px] font-extrabold tracking-[-0.04em]">코스</h2>
-        <Link href={`/trips/${id}/history`} className="text-[12px] text-sub no-underline">
-          변경 이력 {history.filter((h) => h.badge.tone !== 'warn').length}
+        <Link href={`/trips/${sp.t.id}/history`} className="text-[12px] text-sub no-underline">
+          변경 이력 {sp.historyCount}
         </Link>
       </div>
       <div className="mt-[-4px] mb-2.5 flex items-center gap-1.5 text-[12px] text-sub">
@@ -174,15 +183,16 @@ function SpaceActions({ t, wide }: { t: Theme; wide?: boolean }) {
 }
 
 /** 모바일 일정 탭 본문 */
-export function SpacePlanMobile({ t, change }: { t: Theme; change: boolean }) {
+export function SpacePlanMobile({ sp }: { sp: SpaceData }) {
+  const t = sp.t
   return (
     <div className="px-5">
-      {change && (
+      {sp.change && (
         <div className="mt-4">
-          <ChangeCard id={t.id} />
+          <ChangeCard sp={sp} />
         </div>
       )}
-      <CourseHead id={t.id} />
+      <CourseHead sp={sp} />
       <CourseToggle
         list={
           <>
@@ -192,28 +202,33 @@ export function SpacePlanMobile({ t, change }: { t: Theme; change: boolean }) {
         }
         map={<MapView t={t} />}
       />
-      <Link
-        href={`/trips/${t.id}/checkin`}
-        className="mt-4 flex items-center gap-3 rounded-[16px] bg-ink px-[18px] py-4 text-white no-underline"
-      >
-        <span className="grow">
-          <span className="block text-[15px] font-bold">현장 체크인</span>
-          <span className="mt-px block text-[12px] text-white/65">핵심 장소 {t.place}에서 QR을 찍어요</span>
-        </span>
-        <Icon name="chevron" size={14} weight={1.8} />
-      </Link>
+      {!sp.isHost && (
+        <Link
+          href={`/trips/${t.id}/checkin`}
+          className="mt-4 flex items-center gap-3 rounded-[16px] bg-ink px-[18px] py-4 text-white no-underline"
+        >
+          <span className="grow">
+            <span className="block text-[15px] font-bold">현장 체크인</span>
+            <span className="mt-px block text-[12px] text-white/65">
+              {sp.me?.checkedIn ? '체크인했어요 · 스탬프 보기' : `핵심 장소 ${t.place}에서 QR을 찍어요`}
+            </span>
+          </span>
+          <Icon name="chevron" size={14} weight={1.8} />
+        </Link>
+      )}
       <SpaceActions t={t} />
     </div>
   )
 }
 
 /** 데스크톱 일정 탭: 왼쪽 480px(확인 카드 · 코스) + 오른쪽(약도 또는 AI 도우미) */
-export function SpacePlanDesktop({ t, change, right }: { t: Theme; change: boolean; right?: ReactNode }) {
+export function SpacePlanDesktop({ sp, right }: { sp: SpaceData; right?: ReactNode }) {
+  const t = sp.t
   return (
     <div className="mt-8 flex items-start gap-10">
       <div className="w-[480px] flex-none">
-        {change && <ChangeCard id={t.id} />}
-        <CourseHead id={t.id} wide />
+        {sp.change && <ChangeCard sp={sp} />}
+        <CourseHead sp={sp} wide />
         <StopList stops={t.stops} className="-mt-2" />
         <SpaceActions t={t} wide />
       </div>

@@ -2,17 +2,19 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useEffect, useState, useTransition } from 'react'
+import { countThemesAction } from '@/app/actions/b-themes'
+import type { Day } from '@/components/home/home-view'
 import { Icon } from '@/components/ui/icon'
 import { Button, Chip } from '@/components/ui/primitives'
-import { filterThemes, type HomeQuery, parseQuery, toSearch } from '@/lib/demo/filters'
-import { activityList, budgets, origins, week } from '@/lib/demo/themes'
+import { type HomeQuery, parseQuery, toSearch } from '@/lib/demo/filters'
+import { activityList, budgets, origins } from '@/lib/demo/themes'
 
 /**
  * 조건 입력(어떤 테마를 찾으세요?). 홈과 같은 주소 쿼리를 읽고 쓴다 —
  * “테마 n개 보기”를 누르면 고른 조건을 붙여 홈(/)으로 간다. 닫으면 원래 조건 그대로.
  */
-export function FilterSheet({ q }: { q: HomeQuery }) {
+export function FilterSheet({ q, days, count }: { q: HomeQuery; days: Day[]; count: number }) {
   const close = `/${toSearch(q)}`
   return (
     <>
@@ -30,7 +32,7 @@ export function FilterSheet({ q }: { q: HomeQuery }) {
           className="absolute inset-x-0 top-10 bottom-0 mx-auto flex max-w-[560px] flex-col rounded-t-[20px] bg-white"
         >
           <i className="mx-auto mt-2.5 block h-1 w-9 flex-none rounded-[2px] bg-line" />
-          <FilterForm q={q} close={close} />
+          <FilterForm q={q} close={close} days={days} initial={count} />
         </div>
       </div>
       <div className="fixed inset-0 z-40 hidden items-start justify-center pt-[100px] lg:flex">
@@ -46,14 +48,26 @@ export function FilterSheet({ q }: { q: HomeQuery }) {
           aria-label="어떤 테마를 찾으세요?"
           className="relative flex max-h-[calc(100vh-160px)] w-[520px] flex-col rounded-[20px] bg-white pt-2"
         >
-          <FilterForm q={q} close={close} wide />
+          <FilterForm q={q} close={close} days={days} initial={count} wide />
         </div>
       </div>
     </>
   )
 }
 
-function FilterForm({ q, close, wide }: { q: HomeQuery; close: string; wide?: boolean }) {
+function FilterForm({
+  q,
+  close,
+  days,
+  initial,
+  wide,
+}: {
+  q: HomeQuery
+  close: string
+  days: Day[]
+  initial: number
+  wide?: boolean
+}) {
   const router = useRouter()
   const [d, setD] = useState<HomeQuery>(q)
   const [custom, setCustom] = useState(!!q.origin && !origins.includes(q.origin))
@@ -63,7 +77,20 @@ function FilterForm({ q, close, wide }: { q: HomeQuery; close: string; wide?: bo
     const next = acts.includes(a) ? acts.filter((x) => x !== a) : [...acts, a]
     set({ act: next.length ? next.join(',') : undefined })
   }
-  const count = filterThemes(d).length
+  // 고른 조건의 테마 수는 서버에 묻는다(DB)
+  const [count, setCount] = useState(initial)
+  const [, start] = useTransition()
+  const key = toSearch(d)
+  useEffect(() => {
+    let live = true
+    start(async () => {
+      const n = await countThemesAction(parseQuery(Object.fromEntries(new URLSearchParams(key))))
+      if (live) setCount(n)
+    })
+    return () => {
+      live = false
+    }
+  }, [key])
   const reset = () => {
     setD(parseQuery({}))
     setCustom(false)
@@ -83,7 +110,7 @@ function FilterForm({ q, close, wide }: { q: HomeQuery; close: string; wide?: bo
         className={`flex min-h-0 grow flex-col gap-[22px] overflow-y-auto pt-1.5 pb-2 ${wide ? 'px-7' : 'px-5'}`}
       >
         <Group title="날짜">
-          {week.slice(0, 2).map((w) => (
+          {days.map((w) => (
             <Chip
               key={w.day}
               selected={d.view !== 'next' && d.day === String(w.day)}

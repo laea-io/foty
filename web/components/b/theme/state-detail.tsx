@@ -13,15 +13,34 @@ import {
   Photo,
   Progress,
 } from '@/components/ui/primitives'
-import { hostById } from '@/lib/demo/people'
-import { hostThemes, meetFor, otherDates } from '@/lib/demo/theme-flow'
 import type { Theme } from '@/lib/demo/themes'
-import { members } from '@/lib/demo/trips'
+import type { OtherDate } from '@/lib/server/q/b-themes'
 import { ShareAction } from '../trips/actions'
 import { OtherDateRows, SectionHead, ThemeList } from './flow'
 import { NotifyDate } from './notify-date'
 
 export type DetailState = 'closed' | 'confirmed' | 'done'
+
+/** 상태별 화면이 DB에서 받는 것(app/themes/[id]/page.tsx가 모은다) */
+export type StateExtra = {
+  hostName: string
+  hostId: string
+  /** 같은 테마의 다른 날짜(모집 마감) */
+  dates: OtherDate[]
+  /** 이 호스트의 새 테마(여행 완료) */
+  hostList: Theme[]
+  /** 확정된 집결(일정 확정) */
+  meet: string
+  memberCount: number
+  /** 확인 중인 주요 변경이 없으면 true */
+  allConfirmed: boolean
+  historyCount: number
+  /** 내 참여 상태(여행 완료) */
+  attended: string | null
+  checkedIn: boolean
+  subscribed: boolean
+  loggedIn: boolean
+}
 
 const head: Record<DetailState, { label: string; tone: BadgeTone; back: string }> = {
   closed: { label: '모집 마감', tone: 'soft', back: '/' },
@@ -30,9 +49,8 @@ const head: Record<DetailState, { label: string; tone: BadgeTone; back: string }
 }
 
 /** 테마 상세의 상태별 화면: 모집 마감 · 일정 확정 · 여행 완료 */
-export function StateDetail({ t, state }: { t: Theme; state: DetailState }) {
+export function StateDetail({ t, state, x }: { t: Theme; state: DetailState; x: StateExtra }) {
   const h = head[state]
-  const host = hostById(t.hostId)
   const title = (
     <>
       <div className="flex items-center gap-2">
@@ -45,11 +63,12 @@ export function StateDetail({ t, state }: { t: Theme; state: DetailState }) {
       <div className="mt-1.5 flex items-center gap-1 text-[13px] text-sub">
         <Icon name="pin" size={15} />
         핵심 장소 · {t.place}
-        {host && ` · 호스트 ${host.name}`}
+        {` · 호스트 ${x.hostName}`}
       </div>
     </>
   )
-  const body = <Body t={t} state={state} />
+  const body = <Body t={t} state={state} x={x} />
+  const notify = <NotifyDate hostId={x.hostId} themeId={t.id} on={x.subscribed} loggedIn={x.loggedIn} />
   const space = (
     <ButtonLink href={`/trips/${t.id}`} size="lg" block>
       그룹 공간 열기
@@ -80,9 +99,7 @@ export function StateDetail({ t, state }: { t: Theme; state: DetailState }) {
           {state === 'closed' && (
             <>
               <ShareButton title={t.title} wide />
-              <div className="grow">
-                <NotifyDate />
-              </div>
+              <div className="grow">{notify}</div>
             </>
           )}
           {state === 'confirmed' && (
@@ -117,9 +134,7 @@ export function StateDetail({ t, state }: { t: Theme; state: DetailState }) {
               <div className="mt-[22px] flex gap-2">
                 {state === 'closed' && (
                   <>
-                    <div className="grow">
-                      <NotifyDate />
-                    </div>
+                    <div className="grow">{notify}</div>
                     <ShareButton title={t.title} wide />
                   </>
                 )}
@@ -144,7 +159,7 @@ export function StateDetail({ t, state }: { t: Theme; state: DetailState }) {
   )
 }
 
-function Body({ t, state }: { t: Theme; state: DetailState }) {
+function Body({ t, state, x }: { t: Theme; state: DetailState; x: StateExtra }) {
   if (state === 'closed')
     return (
       <>
@@ -155,7 +170,13 @@ function Body({ t, state }: { t: Theme; state: DetailState }) {
           신청을 더 받지 않아요. 같은 테마의 다른 날짜가 열리면 알려드릴 수 있어요.
         </Note>
         <SectionHead title="같은 테마의 다른 날짜" />
-        <OtherDateRows t={t} dates={otherDates(t, 'closed')} />
+        {x.dates.length ? (
+          <OtherDateRows dates={x.dates} />
+        ) : (
+          <div className="border-t border-line py-[15px] text-[13px] text-sub">
+            아직 열린 다른 날짜가 없어요.
+          </div>
+        )}
       </>
     )
   if (state === 'confirmed')
@@ -163,14 +184,16 @@ function Body({ t, state }: { t: Theme; state: DetailState }) {
       <>
         <div className="mt-[22px] rounded-[16px] bg-face p-[18px]">
           <div className="text-[12px] text-sub">확정된 집결</div>
-          <div className="mt-1 text-[20px] font-extrabold tracking-[-0.03em]">{meetFor(t, true)}</div>
-          <div className="mt-1.5 text-[12px] text-sub">참여자 {members.length}명 모두 확인했어요</div>
+          <div className="mt-1 text-[20px] font-extrabold tracking-[-0.03em]">{x.meet}</div>
+          <div className="mt-1.5 text-[12px] text-sub">
+            참여자 {x.memberCount}명{x.allConfirmed ? ' 모두 확인했어요' : ' · 확인 중인 변경이 있어요'}
+          </div>
         </div>
         <SectionHead
           title="확정 일정"
           aside={
             <Link href={`/trips/${t.id}/history`} className="text-[12px] text-sub no-underline">
-              변경 이력 2
+              변경 이력 {x.historyCount}
             </Link>
           }
         />
@@ -184,14 +207,14 @@ function Body({ t, state }: { t: Theme; state: DetailState }) {
   return (
     <>
       <div className="mt-[22px] flex border-y border-line py-[18px]">
-        <Fact label="참여" value="체크인 확인" />
+        <Fact label="참여" value={x.checkedIn ? '체크인 확인' : (x.attended ?? '확인 대기')} />
         <Fact label="다녀온 곳" value={`${t.stops.length}곳`} divider />
-        <Fact label="받은 스탬프" value={t.place} divider />
+        <Fact label="받은 스탬프" value={x.checkedIn ? t.place : '없음'} divider />
       </div>
       <SectionHead title="다녀온 코스" />
       <StopList stops={t.stops} className="-mt-2" />
       <SectionHead title="이 호스트의 새 테마" />
-      <ThemeList list={hostThemes(t)} />
+      <ThemeList list={x.hostList} />
     </>
   )
 }
