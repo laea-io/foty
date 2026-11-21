@@ -6,30 +6,22 @@ import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shel
 import { Icon } from '@/components/ui/icon'
 import { Mascot } from '@/components/ui/mascot'
 import { ButtonLink, DemoNote, Photo } from '@/components/ui/primitives'
-import { placeById, places, regionById, type StampPlace } from '@/lib/demo/stamps'
+import { db } from '@/lib/db'
+import { requireViewer } from '@/lib/server/auth'
+import { stampPlace } from '@/lib/server/q/a'
 
-export function generateStaticParams() {
-  return places.filter((p) => p.visits).map((p) => ({ place: p.id }))
-}
+export const metadata: Metadata = { title: '스탬프' }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ place: string }>
-}): Promise<Metadata> {
-  const p = placeById((await params).place)
-  return { title: p ? `${p.name} 스탬프` : '스탬프' }
-}
+type StampPlace = NonNullable<Awaited<ReturnType<typeof stampPlace>>>
 
 function Body({ p }: { p: StampPlace }) {
-  const region = regionById(p.region)
   return (
     <>
       <div className="flex flex-col items-center pt-7 text-center">
         <Mascot size={112} label={`${p.name} 스탬프`} />
         <div className="mt-[18px] text-[24px] font-extrabold tracking-[-0.04em]">{p.name}</div>
         <div className="mt-1 text-[13px] text-sub">
-          {region?.name} · 방문 {p.visits}회
+          {p.regionName} · 방문 {p.visits}회
         </div>
       </div>
       {p.image && (
@@ -43,10 +35,10 @@ function Body({ p }: { p: StampPlace }) {
         </div>
       )}
       <H2>방문 기록</H2>
-      {p.records?.map((r, i) => (
+      {p.records.map((r, i) => (
         <Link
-          key={r.title}
-          href={r.themeId ? `/themes/${r.themeId}?view=done` : '/trips/past'}
+          key={r.themeId}
+          href={`/themes/${r.themeId}?view=done`}
           className={`flex items-center gap-3 py-[15px] text-ink no-underline ${i ? 'border-t border-line' : ''}`}
         >
           <span className="grow">
@@ -79,8 +71,10 @@ function Buttons({ p }: { p: StampPlace }) {
 }
 
 export default async function StampDetailPage({ params }: { params: Promise<{ place: string }> }) {
-  const p = placeById((await params).place)
-  if (!p?.visits) notFound()
+  const id = (await params).place
+  const v = await requireViewer(`/my/stamps/${id}`)
+  const p = await stampPlace(db, v.id, id)
+  if (!p) notFound()
   return (
     <>
       <MobileFrame bottom>

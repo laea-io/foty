@@ -10,12 +10,15 @@ export function ChipPick({
   multi,
   label,
   gap = 8,
+  name,
 }: {
   options: string[]
   initial?: string[]
   multi?: boolean
   label: string
   gap?: number
+  /** 폼으로 보낼 이름(고른 값마다 hidden input + 이 묶음이 폼에 있었다는 표시 _keys) */
+  name?: string
 }) {
   const [picked, setPicked] = useState<string[]>(initial)
   const toggle = (o: string) =>
@@ -28,12 +31,20 @@ export function ChipPick({
           {o}
         </Chip>
       ))}
+      {name && (
+        <>
+          <input type="hidden" name="_keys" value={name} />
+          {picked.map((p) => (
+            <input key={p} type="hidden" name={name} value={p} />
+          ))}
+        </>
+      )}
     </div>
   )
 }
 
 /** MBTI 16칸 + 잘 모르겠어요 */
-export function MbtiPick({ initial }: { initial?: string }) {
+export function MbtiPick({ initial, name }: { initial?: string; name?: string }) {
   const types = [
     'ISTJ',
     'ISFJ',
@@ -78,6 +89,12 @@ export function MbtiPick({ initial }: { initial?: string }) {
           잘 모르겠어요
         </button>
       </div>
+      {name && (
+        <>
+          <input type="hidden" name="_keys" value={name} />
+          <input type="hidden" name={name} value={v ?? ''} />
+        </>
+      )}
     </>
   )
 }

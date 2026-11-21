@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { StampGroup } from '@/components/a/stamps'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote, Segmented } from '@/components/ui/primitives'
-import { me } from '@/lib/demo/people'
-import { regionCount, regionGroups, stampCount } from '@/lib/demo/stamps'
+import { db } from '@/lib/db'
+import { requireViewer } from '@/lib/server/auth'
+import { stampbook } from '@/lib/server/q/a'
 
 export const metadata: Metadata = { title: '스탬프북' }
 
@@ -12,12 +13,15 @@ const tabs = [
   { href: '/my/stamps/season', label: '계절 시리즈' },
 ]
 
-function Body({ cols }: { cols: number }) {
+type Book = Awaited<ReturnType<typeof stampbook>>
+
+function Body({ cols, name, book }: { cols: number; name: string; book: Book }) {
+  const { stampCount, regionCount, groups } = book
   return (
     <>
       <div className="mt-2.5 flex items-end justify-between">
         <div>
-          <div className="text-[13px] text-sub">{me.name} 님이 다녀온 남양주</div>
+          <div className="text-[13px] text-sub">{name} 님이 다녀온 남양주</div>
           <div className="mt-0.5 text-[28px] font-extrabold tracking-[-0.04em]">
             {stampCount}곳{' '}
             <span className="text-[15px] font-semibold tracking-normal text-sub">· 권역 {regionCount}곳</span>
@@ -27,7 +31,7 @@ function Body({ cols }: { cols: number }) {
       <div className="mt-4">
         <Segmented items={tabs} current="/my/stamps" />
       </div>
-      {regionGroups.map((g) => (
+      {groups.map((g) => (
         <StampGroup
           key={g.region.id}
           title={g.region.name}
@@ -44,20 +48,22 @@ function Body({ cols }: { cols: number }) {
   )
 }
 
-export default function StampbookPage() {
+export default async function StampbookPage() {
+  const v = await requireViewer('/my/stamps')
+  const book = await stampbook(db, v.id)
   return (
     <>
       <MobileFrame>
         <BackBar title="스탬프북" back="/my" />
         <div className="px-5">
-          <Body cols={3} />
+          <Body cols={3} name={v.name} book={book} />
         </div>
         <DemoNote className="pb-10" />
       </MobileFrame>
       <DesktopFrame>
         <div className="mx-auto max-w-[880px]">
           <h1 className="m-0 text-[30px] leading-[38px] font-extrabold tracking-[-0.05em]">스탬프북</h1>
-          <Body cols={6} />
+          <Body cols={6} name={v.name} book={book} />
         </div>
       </DesktopFrame>
     </>

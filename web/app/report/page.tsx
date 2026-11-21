@@ -1,38 +1,28 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import { reportAction } from '@/app/actions/a'
+import { ActionForm, FormError } from '@/components/a/action-form'
 import { Narrow, PageTitle } from '@/components/a/form'
 import { PickGroup } from '@/components/a/onboarding'
+import { ErrorBody } from '@/components/a/states'
 import { ToggleRow } from '@/components/a/toggle'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
-import { Avatar, ButtonLink, DemoNote } from '@/components/ui/primitives'
-import { hostById, personById } from '@/lib/demo/people'
-import { themeById } from '@/lib/demo/themes'
+import { Avatar, Button, ButtonLink, DemoNote } from '@/components/ui/primitives'
+import { db } from '@/lib/db'
+import { requireViewer } from '@/lib/server/auth'
+import { type ReportTarget, reportTarget } from '@/lib/server/q/a'
+import { rules } from '@/lib/server/rules'
 
 export const metadata: Metadata = { title: '신고' }
 
-type Target = { name: string; line: string; person: boolean; back: string }
+type SP = Record<string, string | string[] | undefined>
+const one = (sp: SP, k: string) => (Array.isArray(sp[k]) ? sp[k][0] : sp[k]) as string | undefined
 
-/** ?user=people id · ?theme=테마 id. 없으면 시연 기본(민재) */
-function targetFrom(sp: Record<string, string | string[] | undefined>): Target {
-  const one = (k: string) => (Array.isArray(sp[k]) ? sp[k][0] : sp[k]) as string | undefined
-  const t = themeById(one('theme') ?? '')
-  if (t) {
-    const h = hostById(t.hostId)
-    return { name: t.title, line: `${h?.name ?? ''} 호스트의 테마`, person: false, back: `/themes/${t.id}` }
-  }
-  const p = personById(one('user') ?? '')
-  if (p)
-    return { name: p.name, line: '로스터리에서 배우는 핸드드립 참여자', person: true, back: `/users/${p.id}` }
-  return {
-    name: '민재',
-    line: '로스터리에서 배우는 핸드드립 참여자',
-    person: true,
-    back: '/trips/gwangneung-morning/members',
-  }
-}
-
-function Body({ t }: { t: Target }) {
+function Body({ t }: { t: ReportTarget }) {
   return (
     <>
+      {t.handle && <input type="hidden" name="user" value={t.handle} />}
+      {t.themeId && <input type="hidden" name="theme" value={t.themeId} />}
       <PageTitle sub="신고 내용은 상대에게 공개되지 않고, 공개 후기와 따로 처리돼요.">
         무슨 일이 있었나요?
       </PageTitle>
@@ -46,15 +36,10 @@ function Body({ t }: { t: Target }) {
         </div>
       </div>
       <PickGroup
+        name="reason"
         title="신고 사유"
-        options={[
-          '약속에 나오지 않았어요',
-          '불쾌한 말이나 행동',
-          '개인 연락을 계속 요구해요',
-          '허위 정보',
-          '기타',
-        ]}
-        initial={[t.person ? '약속에 나오지 않았어요' : '허위 정보']}
+        options={rules.reportReasons}
+        initial={[t.person ? rules.reportReasons[0] : rules.reportReasons[rules.reportReasons.length - 1]]}
       />
       <label className="block">
         <span className="mt-[26px] mb-2.5 block text-[14px] font-semibold">
@@ -62,54 +47,115 @@ function Body({ t }: { t: Target }) {
         </span>
         <textarea
           name="detail"
-          defaultValue={t.person ? '집결 시간에 나오지 않았고 연락도 닿지 않았어요.' : ''}
-          className="block min-h-[110px] w-full resize-y rounded-[14px] border-0 bg-face px-4 py-3.5 text-[15px] leading-[23px] text-ink outline-none focus-visible:outline-2 focus-visible:outline-ink"
+          maxLength={1000}
+          placeholder={
+            t.person ? '집결 시간에 나오지 않았고 연락도 닿지 않았어요.' : '무슨 일이 있었는지 적어 주세요.'
+          }
+          className="block min-h-[110px] w-full resize-y rounded-[14px] border-0 bg-face px-4 py-3.5 text-[15px] leading-[23px] text-ink outline-none placeholder:text-muted focus-visible:outline-2 focus-visible:outline-ink"
         />
       </label>
       {t.person && (
         <div className="mt-[18px]">
-          <ToggleRow title="이 사람 차단하기" sub="서로의 프로필과 신청이 보이지 않아요" defaultOn />
+          <ToggleRow
+            name="block"
+            title="이 사람 차단하기"
+            sub="서로의 프로필과 신청이 보이지 않아요"
+            defaultOn
+          />
         </div>
       )}
       <div className="mt-4 text-[12px] leading-[18px] text-muted">
         운영팀이 확인한 뒤 처리 상태를 알려드려요. 급한 위험이 있으면 112에 먼저 연락해 주세요.
       </div>
+      <FormError className="mt-4" />
     </>
   )
 }
 
-export default async function ReportPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}) {
-  const t = targetFrom(await searchParams)
+function Done() {
+  return (
+    <ErrorBody
+      mascot
+      title="신고를 보냈어요"
+      body={
+        <>
+          운영팀이 확인한 뒤 처리 상태를 알림으로 알려드려요.
+          <br />
+          신고 내용은 상대에게 공개되지 않아요.
+        </>
+      }
+      actions={
+        <>
+          <ButtonLink href="/my/blocks" size="lg" block>
+            신고·차단 내역 보기
+          </ButtonLink>
+          <ButtonLink href="/" variant="outline" size="lg" block>
+            홈으로
+          </ButtonLink>
+        </>
+      }
+    />
+  )
+}
+
+export default async function ReportPage({ searchParams }: { searchParams: Promise<SP> }) {
+  const sp = await searchParams
+  const user = one(sp, 'user')
+  const theme = one(sp, 'theme')
+  const qs = new URLSearchParams()
+  if (user) qs.set('user', user)
+  if (theme) qs.set('theme', theme)
+  await requireViewer(`/report${qs.size ? `?${qs}` : ''}`)
+  if (one(sp, 'done')) {
+    return (
+      <>
+        <MobileFrame>
+          <BackBar title="신고" back="/my/blocks" />
+          <div className="px-5">
+            <Done />
+          </div>
+          <DemoNote className="pb-10" />
+        </MobileFrame>
+        <DesktopFrame>
+          <Narrow eyebrow="신고">
+            <Done />
+          </Narrow>
+        </DesktopFrame>
+      </>
+    )
+  }
+  const t = await reportTarget(db, { user, theme })
+  if (!t) notFound()
   return (
     <>
       <MobileFrame bottom>
         <BackBar title="신고" back={t.back} />
-        <div className="px-5">
-          <Body t={t} />
-        </div>
-        <DemoNote />
-        <BottomBar>
-          <div className="grow">
-            <ButtonLink href="/my/blocks" size="lg" block>
-              신고 보내기
-            </ButtonLink>
+        <ActionForm action={reportAction}>
+          <div className="px-5">
+            <Body t={t} />
           </div>
-        </BottomBar>
+          <DemoNote />
+          <BottomBar>
+            <div className="grow">
+              <Button type="submit" size="lg" block>
+                신고 보내기
+              </Button>
+            </div>
+          </BottomBar>
+        </ActionForm>
       </MobileFrame>
       <DesktopFrame>
         <Narrow eyebrow="신고">
-          <Body t={t} />
-          <div className="mt-8 flex gap-2.5">
-            <div className="grow">
-              <ButtonLink href="/my/blocks" size="lg" block>
-                신고 보내기
-              </ButtonLink>
+          <ActionForm action={reportAction}>
+            <Body t={t} />
+            <div className="mt-8 flex gap-2.5">
+              <div className="grow">
+                <Button type="submit" size="lg" block>
+                  신고 보내기
+                </Button>
+              </div>
             </div>
-          </div>
+          </ActionForm>
         </Narrow>
       </DesktopFrame>
     </>

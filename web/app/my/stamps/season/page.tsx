@@ -3,7 +3,9 @@ import { Narrow } from '@/components/a/form'
 import { StampGroup } from '@/components/a/stamps'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote, Segmented } from '@/components/ui/primitives'
-import { seasons } from '@/lib/demo/stamps'
+import { db } from '@/lib/db'
+import { requireViewer } from '@/lib/server/auth'
+import { seasonSeries } from '@/lib/server/q/a'
 
 export const metadata: Metadata = { title: '계절 시리즈' }
 
@@ -12,7 +14,7 @@ const tabs = [
   { href: '/my/stamps/season', label: '계절 시리즈' },
 ]
 
-function Body() {
+function Body({ seasons }: { seasons: Awaited<ReturnType<typeof seasonSeries>> }) {
   return (
     <>
       <div className="mt-2.5">
@@ -28,19 +30,21 @@ function Body() {
   )
 }
 
-export default function StampSeasonPage() {
+export default async function StampSeasonPage() {
+  const v = await requireViewer('/my/stamps/season')
+  const seasons = await seasonSeries(db, v.id)
   return (
     <>
       <MobileFrame>
         <BackBar title="스탬프북" back="/my" />
         <div className="px-5">
-          <Body />
+          <Body seasons={seasons} />
         </div>
         <DemoNote className="pb-10" />
       </MobileFrame>
       <DesktopFrame>
         <Narrow eyebrow="스탬프북">
-          <Body />
+          <Body seasons={seasons} />
         </Narrow>
       </DesktopFrame>
     </>

@@ -5,7 +5,12 @@ import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeRow, ThemeTile } from '@/components/theme/cards'
 import { Mascot } from '@/components/ui/mascot'
 import { ButtonLink, DemoNote, Segmented } from '@/components/ui/primitives'
-import { demoQuery, searchAll, suggestions } from '@/lib/demo/search'
+import { db } from '@/lib/db'
+import { getViewer } from '@/lib/server/auth'
+import { searchAll } from '@/lib/server/q/a'
+
+/** 결과가 없을 때 보여 줄 추천 검색어 */
+const suggestions = ['산책', '카페', '두물머리']
 
 export const metadata: Metadata = { title: '검색' }
 
@@ -43,8 +48,9 @@ export default async function SearchPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const raw = (await searchParams).q
-  const q = (Array.isArray(raw) ? raw[0] : raw) ?? demoQuery
-  const r = searchAll(q)
+  const q = ((Array.isArray(raw) ? raw[0] : raw) ?? '').slice(0, 60)
+  const viewer = await getViewer()
+  const r = await searchAll(db, q, { prefs: viewer?.prefs.activities })
   const enc = encodeURIComponent(q)
   const tabs = [
     { href: `/search?q=${enc}`, label: `테마 ${r.themes.length}` },

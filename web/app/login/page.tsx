@@ -1,10 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { LoginButtons } from '@/components/a/login-buttons'
+import { redirect } from 'next/navigation'
+import { demoLoginAction } from '@/app/actions/auth'
+import { DemoLogin, LoginButtons } from '@/components/a/login-buttons'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Mascot } from '@/components/ui/mascot'
 import { IconButton, Photo } from '@/components/ui/primitives'
 import { img } from '@/lib/demo/themes'
+import { env } from '@/lib/env'
+import { getViewer, safeNext } from '@/lib/server/auth'
 
 export const metadata: Metadata = { title: '로그인' }
 
@@ -20,7 +24,24 @@ function Brand({ lg }: { lg?: boolean }) {
   )
 }
 
-export default function LoginPage() {
+type SP = Promise<Record<string, string | string[] | undefined>>
+const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)
+
+function noticeFor(sp: Awaited<SP>) {
+  if (one(sp.kakao) === 'off') return '카카오 로그인은 준비 중이에요. 이메일로 계속해 주세요.'
+  if (one(sp.kakao) === 'fail')
+    return '카카오 로그인이 끝나지 않았어요. 다시 시도하거나 이메일로 계속해 주세요.'
+  if (one(sp.apple) === 'off') return 'Apple 로그인은 준비 중이에요. 이메일로 계속해 주세요.'
+  return undefined
+}
+
+export default async function LoginPage({ searchParams }: { searchParams: SP }) {
+  const sp = await searchParams
+  const next = safeNext(one(sp.next))
+  if (await getViewer()) redirect(next)
+  const notice = noticeFor(sp)
+  const demo = env.DEMO_MODE === '1'
+  const signup = `/signup/email${next !== '/' ? `?next=${encodeURIComponent(next)}` : ''}`
   return (
     <>
       {/* ── 모바일 ── */}
@@ -32,13 +53,14 @@ export default function LoginPage() {
           <Brand />
         </div>
         <div className="px-6 pt-14">
-          <LoginButtons recent emailHref="/login/email" />
+          <LoginButtons recent next={next} notice={notice} />
+          {demo && <DemoLogin action={demoLoginAction} next={next} />}
         </div>
         <div className="mt-6 flex justify-center gap-7 text-[13px] text-sub">
           <a href="#find-id" className="no-underline">
             아이디 찾기
           </a>
-          <Link href="/signup/email" className="no-underline">
+          <Link href={signup} className="no-underline">
             이메일 가입
           </Link>
         </div>
@@ -76,17 +98,18 @@ export default function LoginPage() {
             <div className="mx-auto flex w-[400px] flex-col items-center pt-[120px] pb-20 text-center">
               <Brand lg />
               <div className="mt-12 w-full">
-                <LoginButtons emailHref="/login/email" />
+                <LoginButtons next={next} notice={notice} />
               </div>
               <div className="mt-6 flex gap-7 text-[13px] text-sub">
                 <a href="#find-id" className="no-underline">
                   아이디 찾기
                 </a>
-                <Link href="/signup/email" className="no-underline">
+                <Link href={signup} className="no-underline">
                   이메일 가입
                 </Link>
                 <Link href="/">둘러보기</Link>
               </div>
+              {demo && <DemoLogin action={demoLoginAction} next={next} />}
               <div className="mt-[72px] text-[12px] text-muted">이용약관 | 개인정보 처리 방침 | 고객센터</div>
             </div>
           </div>
