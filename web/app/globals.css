@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* laea ink: 종이 위 먹. 밝은 바탕만 — 어두운 테마는 두지 않는다. */
+@theme {
+  --color-paper: #fbfaf7;
+  --color-ink: #111111;
+  --color-ink-2: #555555;
+  --color-rule: #d9d6cf;
+  --font-sans: ui-sans-serif, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+html {
+  color-scheme: light;
+}
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
