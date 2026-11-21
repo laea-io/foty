@@ -1,16 +1,18 @@
 import type { Metadata } from 'next'
 import { ResultHead, SectionHead, ThemeList } from '@/components/b/theme/flow'
-import { loadTheme, themeParams } from '@/components/b/theme/load'
+import { loadThemeCtx } from '@/components/b/theme/load'
 import { SimpleScreen } from '@/components/b/trips/simple'
 import { ThemeMini } from '@/components/theme/cards'
 import { ButtonLink } from '@/components/ui/primitives'
-import { similarThemes } from '@/lib/demo/theme-flow'
+import { requireViewer } from '@/lib/server/auth'
+import { similarThemes } from '@/lib/server/q/b-themes'
 
-export const generateStaticParams = themeParams
 export const metadata: Metadata = { title: '신청을 취소했어요' }
 
+/** 신청 취소 완료(취소는 cancelAction이 하고 여기로 온다) */
 export default async function CancelDonePage({ params }: { params: Promise<{ id: string }> }) {
-  const t = await loadTheme(params)
+  await requireViewer(`/themes/${(await params).id}/cancel-done`)
+  const { theme: t } = await loadThemeCtx(params)
   return (
     <SimpleScreen
       title="내 여행"
@@ -28,7 +30,7 @@ export default async function CancelDonePage({ params }: { params: Promise<{ id:
       </ResultHead>
       <ThemeMini t={t} />
       <SectionHead title="비슷한 테마" />
-      <ThemeList list={similarThemes(t)} />
+      <ThemeList list={await similarThemes(t)} />
     </SimpleScreen>
   )
 }

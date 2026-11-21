@@ -7,8 +7,11 @@ import { ThemeRow, ThemeTile } from '@/components/theme/cards'
 import { NoThemes } from '@/components/theme/empty'
 import { Icon } from '@/components/ui/icon'
 import { Button, Chip, DemoNote, Photo, Reason, TextTabs } from '@/components/ui/primitives'
-import { describe, filterThemes, type HomeQuery, toSearch } from '@/lib/demo/filters'
-import { activityList, budgets, img, origins, week } from '@/lib/demo/themes'
+import { type HomeQuery, toSearch } from '@/lib/demo/filters'
+import { activityList, budgets, img, origins, type Theme } from '@/lib/demo/themes'
+
+/** 달력 한 칸(weekStrip) */
+export type Day = { day: number; dow: string; date: string; iso: string }
 
 const tabsFor = (q: HomeQuery) => [
   { href: `/${toSearch({ ...q, view: 'weekend' })}`, label: '이번 주말 테마' },
@@ -16,9 +19,22 @@ const tabsFor = (q: HomeQuery) => [
   { href: `/${toSearch({ ...q, view: 'all', day: undefined })}`, label: '전체' },
 ]
 
-export function HomeView({ q }: { q: HomeQuery }) {
+/** 홈 · 조건 결과. 목록과 달력은 서버(homeData)가 DB에서 읽어 넘긴다 */
+export function HomeView({
+  q,
+  list,
+  week,
+  days,
+  conditions,
+}: {
+  q: HomeQuery
+  list: Theme[]
+  week: Day[]
+  /** 데스크톱 날짜 칩(이번 주말 토·일) */
+  days: Day[]
+  conditions: string
+}) {
   const router = useRouter()
-  const list = filterThemes(q)
   const set = (patch: Partial<HomeQuery>) =>
     router.replace(`/${toSearch({ ...q, ...patch })}`, { scroll: false })
   const tabs = tabsFor(q)
@@ -28,7 +44,7 @@ export function HomeView({ q }: { q: HomeQuery }) {
     const next = acts.includes(a) ? acts.filter((x) => x !== a) : [...acts, a]
     set({ act: next.length ? next.join(',') : undefined })
   }
-  const reason = list[0] ? '날짜가 맞고, 여유로운 산책을 선호해요' : null
+  const reason = list[0]?.reason ?? null
 
   return (
     <>
@@ -84,7 +100,7 @@ export function HomeView({ q }: { q: HomeQuery }) {
 
         <div className="px-5">
           {list.length === 0 ? (
-            <NoThemes conditions={describe(q)} filterHref={`/filter${toSearch(q)}`} />
+            <NoThemes conditions={conditions} filterHref={`/filter${toSearch(q)}`} />
           ) : (
             <>
               <Link
@@ -156,7 +172,7 @@ export function HomeView({ q }: { q: HomeQuery }) {
           <aside className="w-[260px] flex-none">
             <div className="pb-4 text-[18px] font-extrabold tracking-[-0.03em]">조건</div>
             <FilterGroup title="날짜">
-              {week.slice(0, 2).map((w) => (
+              {days.map((w) => (
                 <Chip
                   key={w.day}
                   selected={q.day === String(w.day)}
@@ -227,7 +243,7 @@ export function HomeView({ q }: { q: HomeQuery }) {
               </Link>
             </div>
             {list.length === 0 ? (
-              <NoThemes conditions={describe(q)} />
+              <NoThemes conditions={conditions} />
             ) : (
               <>
                 {reason && <Reason className="mt-3.5 text-[14px]">{reason}</Reason>}

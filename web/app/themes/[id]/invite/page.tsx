@@ -1,38 +1,61 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { SectionHead } from '@/components/b/theme/flow'
-import { CopyLink, KakaoShare } from '@/components/b/theme/invite'
-import { loadTheme, themeParams } from '@/components/b/theme/load'
+import { CopyLink, KakaoShare, SoloButton } from '@/components/b/theme/invite'
+import { loadThemeCtx } from '@/components/b/theme/load'
 import { SimpleScreen } from '@/components/b/trips/simple'
 import { ThemeMini } from '@/components/theme/cards'
-import { Avatar, Badge, ButtonLink, Note } from '@/components/ui/primitives'
-import { me } from '@/lib/demo/people'
-import { inviteDeadline, inviteLink } from '@/lib/demo/theme-flow'
+import { Avatar, Badge, Note } from '@/components/ui/primitives'
+import { db } from '@/lib/db'
+import { env } from '@/lib/env'
+import { requireViewer } from '@/lib/server/auth'
+import { invitedFriend } from '@/lib/server/b/writes'
+import { inviteSig } from '@/lib/server/checkin-token'
+import { inviteDeadline } from '@/lib/server/q/b-themes'
 
-export const generateStaticParams = themeParams
 export const metadata: Metadata = { title: '친구와 함께' }
 
+/** 친구와 함께 신청: 내 신청(2명)에 묶인 초대 링크. 친구가 링크에서 신청하면 친구 자리가 친구 신청으로 옮겨 간다 */
 export default async function InvitePage({ params }: { params: Promise<{ id: string }> }) {
-  const t = await loadTheme(params)
-  const link = inviteLink(t)
+  const id = (await params).id
+  const viewer = await requireViewer(`/themes/${id}/invite`)
+  const { theme: t, rel } = await loadThemeCtx(params)
+  const a = rel.application
+  if (!a || (rel.role !== 'applicant' && rel.role !== 'member')) redirect(`/themes/${id}/apply?party=2`)
+  const url = `${env.APP_URL}/themes/${t.id}/join?a=${a.id}&s=${inviteSig(a.id)}`
+  const friend = await invitedFriend(db, a.id)
   const rows = [
-    { name: `${me.name} (나)`, avatar: me.name, state: '신청 대기', badge: <Badge tone="ink">신청함</Badge> },
     {
-      name: '친구',
-      avatar: '친구',
-      state: '링크를 아직 열지 않았어요',
-      badge: <Badge tone="muted">대기</Badge>,
+      key: 'me',
+      name: `${viewer.name} (나)`,
+      avatar: viewer.name,
+      state: a.status,
+      badge: <Badge tone="ink">신청함</Badge>,
     },
+    friend
+      ? {
+          key: 'friend',
+          name: friend.name,
+          avatar: friend.name,
+          state: friend.a.status,
+          badge: <Badge tone="ink">신청함</Badge>,
+        }
+      : {
+          key: 'friend',
+          name: '친구',
+          avatar: '친구',
+          state: '아직 링크에서 신청하지 않았어요',
+          badge: <Badge tone="muted">대기</Badge>,
+        },
   ]
   return (
     <SimpleScreen
       title="친구와 함께"
-      back={`/themes/${t.id}/apply`}
+      back={`/themes/${t.id}`}
       bottom={
         <>
-          <KakaoShare title={t.title} link={link} />
-          <ButtonLink href={`/themes/${t.id}/applied`} variant="outline" size="lg">
-            혼자 신청으로 바꾸기
-          </ButtonLink>
+          <KakaoShare title={t.title} url={url} />
+          {!friend && a.party > 1 && <SoloButton themeId={t.id} />}
         </>
       }
     >
@@ -43,10 +66,10 @@ export default async function InvitePage({ params }: { params: Promise<{ id: str
         친구가 링크에서 신청하면 두 분이 함께 신청한 것으로 묶여요.
       </div>
       <ThemeMini t={t} className="mt-[18px]" />
-      <CopyLink link={link} />
+      <CopyLink url={url} />
       <SectionHead title="함께 신청" aside={<span className="text-[12px] text-sub">친구는 1명까지</span>} />
       {rows.map((r) => (
-        <div key={r.name} className="flex gap-3 border-t border-line py-4">
+        <div key={r.key} className="flex gap-3 border-t border-line py-4">
           <Avatar name={r.avatar} size={44} />
           <div className="min-w-0 grow">
             <div className="text-[15px] font-bold">{r.name}</div>

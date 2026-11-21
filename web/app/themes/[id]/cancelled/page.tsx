@@ -1,19 +1,17 @@
 import type { Metadata } from 'next'
 import { OtherDateRows, SectionHead, ThemeList } from '@/components/b/theme/flow'
-import { loadTheme, themeParams } from '@/components/b/theme/load'
+import { loadTheme } from '@/components/b/theme/load'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeRow } from '@/components/theme/cards'
 import { Badge, DemoNote } from '@/components/ui/primitives'
-import { otherDates, similarThemes } from '@/lib/demo/theme-flow'
+import { otherDates, similarThemes } from '@/lib/server/q/b-themes'
 
-export const generateStaticParams = themeParams
 export const metadata: Metadata = { title: '이번 테마는 취소됐어요' }
 
 /** 미성사 취소: 최소 인원이 모이지 않아 자동 취소된 테마 */
 export default async function CancelledPage({ params }: { params: Promise<{ id: string }> }) {
   const t = await loadTheme(params)
-  const dates = otherDates(t, 'cancelled')
-  const similar = similarThemes(t)
+  const [dates, similar] = await Promise.all([otherDates(t), similarThemes(t)])
   const why = `${t.min}명부터 성사인데 ${t.current}명이 신청했어요.`
   return (
     <>
@@ -34,7 +32,11 @@ export default async function CancelledPage({ params }: { params: Promise<{ id: 
             </div>
           </div>
           <SectionHead title="같은 테마의 다른 날짜" className="mt-7" />
-          <OtherDateRows t={t} dates={dates} firstBorder={false} />
+          {dates.length ? (
+            <OtherDateRows dates={dates} firstBorder={false} />
+          ) : (
+            <div className="py-[15px] text-[13px] text-sub">아직 열린 다른 날짜가 없어요.</div>
+          )}
           <SectionHead title="비슷한 테마" className="mt-7" />
           <ThemeList list={similar} />
           <DemoNote />
@@ -55,7 +57,13 @@ export default async function CancelledPage({ params }: { params: Promise<{ id: 
               {t.title} · {t.date} {t.start} · {why}
             </div>
             <SectionHead title="같은 테마의 다른 날짜" className="mt-10" />
-            <OtherDateRows t={t} dates={dates} wide />
+            {dates.length ? (
+              <OtherDateRows dates={dates} wide />
+            ) : (
+              <div className="border-t border-line py-4 text-[14px] text-sub">
+                아직 열린 다른 날짜가 없어요.
+              </div>
+            )}
           </div>
           <div className="w-[440px] flex-none">
             <div className="mb-1 text-[18px] font-extrabold tracking-[-0.03em]">비슷한 테마</div>

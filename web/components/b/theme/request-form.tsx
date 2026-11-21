@@ -1,27 +1,36 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { type FormEvent, useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
+import { requestAction } from '@/app/actions/b-themes'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Button, Chip, DemoNote } from '@/components/ui/primitives'
 import { activityList } from '@/lib/demo/themes'
 
 const days = ['이번 주말', '다음 주말', '평일도 좋아요']
 
-/** 테마 요청(이런 테마가 있으면 가고 싶어요) — 시연에서는 보내면 홈으로 */
+/** 테마 요청(이런 테마가 있으면 가고 싶어요) — theme_requests에 남기고 홈으로 */
 export function RequestForm() {
   const router = useRouter()
   const [acts, setActs] = useState<string[]>(['산책', '맛집'])
   const [day, setDay] = useState('다음 주말')
   const [text, setText] = useState('')
-  const [sent, setSent] = useState(false)
+  const [state, action, pending] = useActionState(requestAction, undefined)
+  const sent = !!state?.ok
   const toggle = (a: string) => setActs(acts.includes(a) ? acts.filter((x) => x !== a) : [...acts, a])
-  const submit = (e: FormEvent) => {
-    e.preventDefault()
-    setSent(true)
-    router.push('/')
-  }
+  useEffect(() => {
+    if (sent) router.push('/')
+  }, [sent, router])
   const label = sent ? '요청을 남겼어요' : '요청 남기기'
+  const error = state?.error ? <div className="mb-2 text-[13px] text-warn">{state.error}</div> : null
+  const hidden = (
+    <>
+      {acts.map((a) => (
+        <input key={a} type="hidden" name="tags" value={a} />
+      ))}
+      <input type="hidden" name="when" value={day} />
+    </>
+  )
 
   const fields = (wide: boolean) => (
     <div className={`flex flex-col ${wide ? 'mt-9 gap-7' : 'mt-[26px] gap-6'}`}>
@@ -51,6 +60,7 @@ export function RequestForm() {
         </label>
         <textarea
           id={wide ? 'req-text-w' : 'req-text'}
+          name="body"
           value={text}
           onChange={(e) => setText(e.target.value)}
           maxLength={300}
@@ -70,7 +80,8 @@ export function RequestForm() {
     <>
       <MobileFrame bottom>
         <BackBar title="테마 요청" />
-        <form id="request-m" onSubmit={submit} className="px-5">
+        <form id="request-m" action={action} className="px-5">
+          {hidden}
           <h1 className="mt-4 mb-1 text-[22px] leading-[29px] font-extrabold tracking-[-0.04em]">
             이런 테마가 있으면
             <br />
@@ -82,7 +93,8 @@ export function RequestForm() {
         </form>
         <BottomBar>
           <div className="grow">
-            <Button type="submit" form="request-m" size="lg" block disabled={sent}>
+            {error}
+            <Button type="submit" form="request-m" size="lg" block disabled={sent || pending}>
               {label}
             </Button>
           </div>
@@ -90,14 +102,16 @@ export function RequestForm() {
       </MobileFrame>
 
       <DesktopFrame>
-        <form onSubmit={submit} className="mx-auto max-w-[560px]">
+        <form action={action} className="mx-auto max-w-[560px]">
+          {hidden}
           <h1 className="m-0 text-[30px] leading-[38px] font-extrabold tracking-[-0.05em]">
             이런 테마가 있으면 가고 싶어요
           </h1>
           <div className="mt-2 text-[15px] text-sub">남양주의 호스트가 요청을 보고 테마를 열 수 있어요.</div>
           {fields(true)}
           <div className="mt-7">
-            <Button type="submit" size="lg" block disabled={sent}>
+            {error}
+            <Button type="submit" size="lg" block disabled={sent || pending}>
               {label}
             </Button>
           </div>

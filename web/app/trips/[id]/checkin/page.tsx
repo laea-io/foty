@@ -1,26 +1,43 @@
 import type { Metadata } from 'next'
 import { ToggleButton } from '@/components/b/trips/actions'
-import { loadSpace, spaceParams } from '@/components/b/trips/load'
+import { AskHost, DemoCheckin } from '@/components/b/trips/forms'
+import { loadSpace } from '@/components/b/trips/load'
+import { displayName } from '@/components/b/trips/types'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
 import { Avatar, Badge, ButtonLink, Photo } from '@/components/ui/primitives'
-import { displayName, guests } from '@/lib/demo/trips'
+import { env } from '@/lib/env'
 
 type Props = { params: Promise<{ id: string }> }
 
-export const generateStaticParams = spaceParams
 export const metadata: Metadata = { title: '현장 체크인' }
 
-const done = guests.filter((g) => g.checkedIn).length
 const note = '체크인하면 참여가 확인되고, 여행이 끝난 뒤 후기와 평가를 남길 수 있어요.'
 
 export default async function CheckinPage({ params }: Props) {
-  const { t } = loadSpace((await params).id)
+  const sp = await loadSpace(params, '/checkin')
+  const t = sp.t
   const core = t.stops.find((s) => s.fixed) ?? t.stops[0]
-  const help = `/trips/${t.id}/checkin/done`
+  const guests = sp.members.filter((m) => !m.host)
+  const done = guests.filter((g) => g.checkedIn).length
+  const me = sp.me && !sp.isHost ? sp.me : null
+  // 시연(DEMO_MODE=1): 카메라 없이 같은 체크인 동작
+  const demo =
+    env.DEMO_MODE === '1' && me && !me.checkedIn ? (
+      <div className="mt-3 text-center">
+        <DemoCheckin themeId={t.id} />
+      </div>
+    ) : null
+  const action = me?.checkedIn ? (
+    <ButtonLink href={`/trips/${t.id}/checkin/done`} variant="outline" block className="h-[52px]">
+      체크인 완료 · 스탬프 보기
+    </ButtonLink>
+  ) : me ? (
+    <AskHost themeId={t.id} />
+  ) : null
   return (
     <>
-      <MobileFrame bottom>
+      <MobileFrame bottom={!!action}>
         <BackBar title="현장 체크인" back={`/trips/${t.id}`} />
         <div className="px-5">
           <div className="pt-2 pb-[18px]">
@@ -36,9 +53,10 @@ export default async function CheckinPage({ params }: Props) {
             />
             <div className="absolute top-1/2 left-1/2 -mt-[90px] -ml-[90px] h-[180px] w-[180px] rounded-[16px] shadow-[inset_0_0_0_3px_#ffffff]" />
             <div className="absolute inset-x-0 bottom-[18px] text-center text-[12px] text-white/85">
-              호스트가 보여주는 QR을 비춰 주세요
+              호스트가 보여주는 QR을 휴대폰 카메라로 찍어 주세요
             </div>
           </div>
+          {demo}
           <div className="mt-7 mb-3 flex items-baseline justify-between">
             <h2 className="m-0 text-[18px] font-extrabold tracking-[-0.04em]">체크인한 참여자</h2>
             <span className="text-[12px] text-sub">
@@ -62,13 +80,11 @@ export default async function CheckinPage({ params }: Props) {
           </div>
           <div className="mt-[22px] text-[12px] leading-[18px] text-muted">{note}</div>
         </div>
-        <BottomBar>
-          <div className="grow">
-            <ButtonLink href={help} variant="outline" block className="h-[52px]">
-              QR이 안 돼요 · 호스트에게 확인 요청
-            </ButtonLink>
-          </div>
-        </BottomBar>
+        {action && (
+          <BottomBar>
+            <div className="grow">{action}</div>
+          </BottomBar>
+        )}
       </MobileFrame>
 
       <DesktopFrame>
@@ -81,17 +97,24 @@ export default async function CheckinPage({ params }: Props) {
             <div className="mt-2 text-[15px] text-sub">
               현장 체크인은 휴대폰에서 해요. 호스트가 보여주는 QR을 휴대폰 카메라로 비춰 주세요.
             </div>
-            <div className="mt-7 flex gap-2">
-              <ToggleButton
-                label="내 휴대폰으로 링크 보내기"
-                done="휴대폰으로 보냈어요"
-                variant="primary"
-                size="md"
-              />
-              <ButtonLink href={help} variant="outline">
-                QR이 안 돼요 · 호스트에게 확인 요청
-              </ButtonLink>
+            <div className="mt-7 flex items-end gap-2">
+              {me?.checkedIn ? (
+                <ButtonLink href={`/trips/${t.id}/checkin/done`} variant="outline">
+                  체크인 완료 · 스탬프 보기
+                </ButtonLink>
+              ) : me ? (
+                <>
+                  <ToggleButton
+                    label="내 휴대폰으로 링크 보내기"
+                    done="휴대폰에서 이 화면을 열어 주세요"
+                    variant="primary"
+                    size="md"
+                  />
+                  <AskHost themeId={t.id} wide />
+                </>
+              ) : null}
             </div>
+            {demo && <div className="mt-4 text-left">{demo}</div>}
             <div className="mt-5 text-[13px] text-muted">{note}</div>
           </div>
           <div className="w-[420px] flex-none">

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { loadSpace, spaceParams } from '@/components/b/trips/load'
+import { loadSpace } from '@/components/b/trips/load'
 import {
   SpaceDesktopHead,
   SpaceMobileHead,
@@ -8,29 +8,29 @@ import {
 } from '@/components/b/trips/space'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote } from '@/components/ui/primitives'
+import { themeDetail } from '@/lib/server/q/themes'
 
 type Props = { params: Promise<{ id: string }> }
 
-export const generateStaticParams = spaceParams
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { t } = loadSpace((await params).id)
-  return { title: `${t.title} · 그룹 여행 공간` }
+  const d = await themeDetail((await params).id)
+  return { title: d ? `${d.theme.title} · 그룹 여행 공간` : '그룹 여행 공간' }
 }
 
+/** 그룹 여행 공간(일정) — 성사된 테마의 참여자 · 호스트만 */
 export default async function SpacePage({ params }: Props) {
-  const { s, t, change } = loadSpace((await params).id)
+  const sp = await loadSpace(params)
   return (
     <>
       <MobileFrame>
-        <SpaceMobileHead s={s} t={t} tab="plan" />
-        <SpacePlanMobile t={t} change={change} />
+        <SpaceMobileHead sp={sp} tab="plan" />
+        <SpacePlanMobile sp={sp} />
         <DemoNote />
         <div className="h-8" />
       </MobileFrame>
       <DesktopFrame>
-        <SpaceDesktopHead s={s} t={t} tab="plan" />
-        <SpacePlanDesktop t={t} change={change} />
+        <SpaceDesktopHead sp={sp} tab="plan" />
+        <SpacePlanDesktop sp={sp} />
       </DesktopFrame>
     </>
   )

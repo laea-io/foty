@@ -3,8 +3,8 @@ import type { ReactNode } from 'react'
 import { ThemeRow } from '@/components/theme/cards'
 import { Mascot, type MascotTone } from '@/components/ui/mascot'
 import { Badge } from '@/components/ui/primitives'
-import type { OtherDate } from '@/lib/demo/theme-flow'
 import type { Theme } from '@/lib/demo/themes'
+import type { OtherDate } from '@/lib/server/q/b-themes'
 
 /** 결과 화면 머리: 마스코트 72px + 큰 제목 + 설명(신청 완료 · 성사 · 취소 완료 · 초대) */
 export function ResultHead({
@@ -64,12 +64,10 @@ export function SectionHead({
 
 /** 같은 테마의 다른 날짜 목록 */
 export function OtherDateRows({
-  t,
   dates,
   wide,
   firstBorder = true,
 }: {
-  t: Theme
   dates: OtherDate[]
   wide?: boolean
   firstBorder?: boolean
@@ -78,8 +76,8 @@ export function OtherDateRows({
     <div>
       {dates.map((d, i) => (
         <Link
-          key={d.label}
-          href={`/themes/${t.id}`}
+          key={d.id}
+          href={`/themes/${d.id}`}
           className={`flex items-center gap-3 text-ink no-underline ${wide ? 'py-4' : 'py-[15px]'} ${
             i || firstBorder ? 'border-t border-line' : ''
           }`}

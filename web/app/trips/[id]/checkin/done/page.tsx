@@ -1,19 +1,26 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { loadSpace, spaceParams } from '@/components/b/trips/load'
+import { redirect } from 'next/navigation'
+import { loadSpace } from '@/components/b/trips/load'
 import { SimpleScreen } from '@/components/b/trips/simple'
 import { ThemeMini } from '@/components/theme/cards'
 import { Mascot } from '@/components/ui/mascot'
 import { ButtonLink } from '@/components/ui/primitives'
+import { requireViewer } from '@/lib/server/auth'
+import { myCheckin } from '@/lib/server/q/b-trips'
+import { dayLabel } from '@/lib/server/time'
 
 type Props = { params: Promise<{ id: string }> }
 
-export const generateStaticParams = spaceParams
 export const metadata: Metadata = { title: '체크인 완료' }
 
+/** 체크인 완료 — 실제 체크인 기록(시각 · 장소 · 방문 횟수 · 권역) */
 export default async function CheckinDonePage({ params }: Props) {
-  const { s, t } = loadSpace((await params).id)
-  const core = t.stops.find((st) => st.fixed) ?? t.stops[0]
+  const sp = await loadSpace(params, '/checkin/done')
+  const viewer = await requireViewer(`/trips/${sp.t.id}/checkin/done`)
+  const t = sp.t
+  const c = await myCheckin(t.id, viewer.id)
+  if (!c) redirect(`/trips/${t.id}/checkin`)
   return (
     <SimpleScreen
       title="현장 체크인"
@@ -34,15 +41,15 @@ export default async function CheckinDonePage({ params }: Props) {
           스탬프를 받았어요
         </div>
         <div className="mt-2 text-[14px] leading-[21px] text-sub">
-          {t.date} {s.checkinAt} · {core.name}
+          {dayLabel(c.day)} {c.time} · {c.place}
         </div>
       </div>
       <ThemeMini t={t} />
       <div className="mt-4 flex items-center gap-3 rounded-[16px] px-4 py-3.5 shadow-[inset_0_0_0_1px_var(--color-line)]">
         <Mascot size={40} />
         <div className="grow">
-          <div className="text-[14px] font-bold">{t.place} 스탬프</div>
-          <div className="mt-px text-[12px] text-sub">{s.stampNote}</div>
+          <div className="text-[14px] font-bold">{c.place} 스탬프</div>
+          <div className="mt-px text-[12px] text-sub">{c.note}</div>
         </div>
         <Link href="/my/stamps" className="text-[13px] font-semibold text-ink no-underline">
           스탬프북 ›

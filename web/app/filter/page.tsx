@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { FilterSheet } from '@/components/b/theme/filter-sheet'
 import { HomeView } from '@/components/home/home-view'
 import { parseQuery } from '@/lib/demo/filters'
+import { homeData } from '@/lib/server/q/b-themes'
 
 export const metadata: Metadata = { title: '조건 입력' }
 
@@ -12,10 +13,11 @@ export default async function FilterPage({
   searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const q = parseQuery(await searchParams)
+  const d = await homeData(q)
   return (
     <>
-      <HomeView q={q} />
-      <FilterSheet q={q} />
+      <HomeView q={q} list={d.list} week={d.week} days={d.days} conditions={d.conditions} />
+      <FilterSheet q={q} days={d.days} count={d.list.length} />
     </>
   )
 }

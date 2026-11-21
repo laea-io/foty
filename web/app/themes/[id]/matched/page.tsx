@@ -1,18 +1,24 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { ResultHead } from '@/components/b/theme/flow'
-import { loadTheme, themeParams } from '@/components/b/theme/load'
+import { loadThemeCtx } from '@/components/b/theme/load'
 import { ShareAction } from '@/components/b/trips/actions'
 import { SimpleScreen } from '@/components/b/trips/simple'
 import { ThemeMini } from '@/components/theme/cards'
 import { AvatarStack, ButtonLink } from '@/components/ui/primitives'
-import { matchedPeople, meetFor } from '@/lib/demo/theme-flow'
+import { requireViewer } from '@/lib/server/auth'
+import { groupPeople, meetFor } from '@/lib/server/q/b-themes'
 
-export const generateStaticParams = themeParams
 export const metadata: Metadata = { title: '테마가 성사됐어요' }
 
+/** 성사 — 집결은 성사 뒤 그 테마의 참여자 · 호스트에게만 보인다 */
 export default async function MatchedPage({ params }: { params: Promise<{ id: string }> }) {
-  const t = await loadTheme(params)
-  const p = matchedPeople(t)
+  const id = (await params).id
+  await requireViewer(`/themes/${id}/matched`)
+  const { theme: t, rel } = await loadThemeCtx(params)
+  if ((rel.role !== 'member' && rel.role !== 'host') || !t.matched) redirect(`/themes/${id}`)
+  const p = await groupPeople(t)
+  const space = rel.role === 'host' ? `/host/themes/${t.id}/space` : `/trips/${t.id}`
   return (
     <SimpleScreen
       title="내 여행"
@@ -21,7 +27,7 @@ export default async function MatchedPage({ params }: { params: Promise<{ id: st
         <>
           <ShareAction label="가족에게 일정 공유" title={t.title} variant="outline" size="lg" />
           <div className="grow">
-            <ButtonLink href={`/trips/${t.id}`} size="lg" block>
+            <ButtonLink href={space} size="lg" block>
               그룹 공간 열기
             </ButtonLink>
           </div>
