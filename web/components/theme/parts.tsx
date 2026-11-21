@@ -41,7 +41,7 @@ export function StopList({ stops, className }: { stops: Stop[]; className?: stri
 
 /**
  * 코스 약도. 실제 지도가 아니라 장소 순서를 보여 주는 그림이다
- * (지도 연동 전 — 실시간 지도라고 표현하지 않는다).
+ * (지도 연동 전 — 실시간 지도라고 표현하지 않는다). 높이가 커지면 그림도 세로로 늘린다.
  */
 export function MapSketch({
   count,
@@ -52,11 +52,14 @@ export function MapSketch({
   height?: number
   className?: string
 }) {
+  const k = Math.max(1, height / 260) // 세로 배율(디자인: 260 · 430 · 640)
+  const y = (v: number) => Math.round(v * k)
+  const vh = y(260)
   const pts = [
-    [110, 70],
-    [240, 130],
-    [390, 180],
-    [460, 110],
+    [110, y(70)],
+    [240, y(130)],
+    [390, y(180)],
+    [460, y(110)],
   ].slice(0, Math.max(1, Math.min(4, count)))
   return (
     <div
@@ -64,18 +67,18 @@ export function MapSketch({
       style={{ height }}
     >
       <svg
-        viewBox="0 0 520 260"
+        viewBox={`0 0 520 ${vh}`}
         preserveAspectRatio="xMidYMid slice"
         aria-hidden="true"
         className="block h-full w-full"
       >
         <path
-          d="M-10 195C120 182 200 117 280 99S420 52 540 68"
+          d={`M-10 ${y(195)}C120 ${y(182)} 200 ${y(117)} 280 ${y(99)}S420 ${y(52)} 540 ${y(68)}`}
           fill="none"
           stroke="#ffffff"
           strokeWidth="14"
         />
-        <path d="M300 270C330 195 400 161 540 156V270z" fill="#d5dde3" />
+        <path d={`M300 ${vh + 10}C330 ${y(195)} 400 ${y(161)} 540 ${y(156)}V${vh + 10}z`} fill="#d5dde3" />
         <path
           d={`M${pts.map((p) => p.join(' ')).join('L')}`}
           fill="none"
@@ -84,10 +87,10 @@ export function MapSketch({
           strokeDasharray="1 8"
           strokeLinecap="round"
         />
-        {pts.map(([x, y], i) => (
-          <g key={`${x}-${y}`}>
-            <circle cx={x} cy={y} r="14" fill="#0b0d12" />
-            <text x={x} y={y + 5} fill="#ffffff" fontSize="13" fontWeight="600" textAnchor="middle">
+        {pts.map(([x, py], i) => (
+          <g key={`${x}-${py}`}>
+            <circle cx={x} cy={py} r="14" fill="#0b0d12" />
+            <text x={x} y={py + 5} fill="#ffffff" fontSize="13" fontWeight="600" textAnchor="middle">
               {i + 1}
             </text>
           </g>

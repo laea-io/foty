@@ -13,7 +13,7 @@ export const img = {
   cafe: { src: '/images/cafe.jpg', alt: '카페', bg: '#e6e1d8' },
   byeollae: { src: '/images/byeollae-cafe.jpg', alt: '별내 카페거리', bg: '#e6e1d8' },
 } as const
-export type Img = (typeof img)[keyof typeof img]
+export type Img = { src: string; alt: string; bg: string }
 
 /** 6장 상태 모델의 테마 상태 */
 export type ThemeStatus = '모집 중' | '모집 마감' | '일정 조율 중' | '일정 확정' | '여행 완료' | '취소'

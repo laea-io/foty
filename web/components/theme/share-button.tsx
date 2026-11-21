@@ -5,7 +5,15 @@ import { Icon } from '@/components/ui/icon'
 import { buttonClass } from '@/components/ui/primitives'
 
 /** 공유: 휴대폰은 시스템 공유 시트, 아니면 주소 복사 */
-export function ShareButton({ title, wide }: { title: string; wide?: boolean }) {
+export function ShareButton({
+  title,
+  wide,
+  className,
+}: {
+  title: string
+  wide?: boolean
+  className?: string
+}) {
   const [copied, setCopied] = useState(false)
   const share = async () => {
     const url = window.location.href
@@ -22,7 +30,7 @@ export function ShareButton({ title, wide }: { title: string; wide?: boolean }) 
   }
   if (wide)
     return (
-      <button type="button" onClick={share} className={buttonClass('outline', 'lg')}>
+      <button type="button" onClick={share} className={buttonClass('outline', 'lg', className)}>
         <Icon name={copied ? 'check' : 'share'} size={16} weight={1.8} />
         {copied ? '복사됨' : '공유'}
       </button>
