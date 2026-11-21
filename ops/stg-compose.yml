@@ -1,0 +1,30 @@
+# foty 스테이징(시연 데이터) — gamma runner. Tailscale에서 http://10.10.10.14:4060
+# 운영 데이터·비밀값 없음. AUTH_SECRET은 runner의 ~/stg/foty/.env(처음 한 번 만든 무작위 값).
+# 내리기: docker compose -f ~/stg/foty/compose.yml down -v  (데이터·사진까지 지움)
+name: foty-stg
+services:
+  db:
+    image: postgres:17-alpine
+    environment: { POSTGRES_USER: foty, POSTGRES_PASSWORD: foty-stg, POSTGRES_DB: foty }
+    volumes: ["db:/var/lib/postgresql/data"]
+    mem_limit: 256m
+    restart: unless-stopped
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U foty"], interval: 5s, retries: 10 }
+  web:
+    image: foty-web:stg-REV
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://foty:foty-stg@db:5432/foty
+      DATABASE_SSL: disable
+      APP_URL: http://10.10.10.14:4060
+      DEMO_MODE: "1"
+      JOBS: "1"
+    volumes: ["uploads:/data/uploads"]
+    ports: ["10.10.10.14:4060:4060"]
+    depends_on: { db: { condition: service_healthy } }
+    mem_limit: 384m
+    restart: unless-stopped
+    logging: { driver: json-file, options: { max-size: "10m", max-file: "3" } }
+volumes:
+  db:
+  uploads:

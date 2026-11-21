@@ -23,6 +23,9 @@ COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/public ./public
 COPY --from=builder --chown=node:node /app/drizzle ./drizzle
+# 후기 사진(UPLOAD_DIR) — 도커 볼륨으로 붙인다
+RUN mkdir -p /data/uploads && chown node:node /data/uploads
+ENV UPLOAD_DIR=/data/uploads
 USER node
 EXPOSE 4060
 # robots.txt — DB를 부르지 않는 가벼운 경로라 web 프로세스가 살아 있는지만 본다(DB까지는 /api/health).
