@@ -49,8 +49,16 @@ export type Prefs = {
   plan?: string
   walk?: string
   food?: string
+  /** 주로 타는 것: 대중교통 · 자차 */
+  transport?: string
 }
-export type Privacy = { profilePublic?: boolean; tripsPublic?: boolean; photosPublic?: boolean }
+export type Privacy = {
+  profilePublic?: boolean
+  tripsPublic?: boolean
+  photosPublic?: boolean
+  /** 내가 쓴 후기 공개 */
+  reviewsPublic?: boolean
+}
 
 export const users = pgTable(
   'users',
