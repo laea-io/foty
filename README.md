@@ -1,6 +1,6 @@
-# newapp (임시 이름)
+# foty
 
-> 2026-11-21 서버 뼈대. 서비스 이름·내용이 정해지면 `newapp`을 한 번에 바꾼다(아래 "이름 바꾸기").
+> 2026-11-21 서버 뼈대. 남양주 당일 테마 여행 서비스 — 기획: 「foty 서비스 디자인 기획안」(2026-11-21, 강현).
 
 ## 구성 한눈에
 
@@ -8,10 +8,10 @@
 브라우저 ──https──▶ Cloudflare(주황) ──▶ gate nginx (TLS·차단·Umami 주입)
                                            │ 사설망 172.26.x
                                            ▼
-                                  beta:4060  newapp-web (Next.js standalone, 384m)
+                                  beta:4060  foty-web (Next.js standalone, 384m)
                                            │ TLS
                                            ▼
-                                  cortie-db (Postgres) · newapp_db / newapp_app
+                                  cortie-db (Postgres) · foty_db / foty_app
 ```
 
 | 층 | 선택 | 이유 |
@@ -55,12 +55,11 @@ pnpm db:generate --name <무엇>                        # schema.ts 바꾼 뒤 �
 
 ## 운영에 올리기 (사용자가 할 때 — `cortie-infra/docs/new-service.md` 순서)
 
-- [ ] 이름 정하기 → 아래 "이름 바꾸기"
-- [ ] cortie-db: `newapp_app` 계정 + `newapp_db` (REVOKE PUBLIC, GRANT cortie_backup 잊지 말 것)
-- [ ] 비밀값: `sudo laea-secret set newapp DATABASE_URL …` → `apply newapp` → `web/.env.docker` (예시는 `web/.env.docker.example`)
+- [ ] cortie-db: `foty_app` 계정 + `foty_db` (REVOKE PUBLIC, GRANT cortie_backup 잊지 말 것)
+- [ ] 비밀값: `sudo laea-secret set foty DATABASE_URL …` → `apply foty` → `web/.env.docker` (예시는 `web/.env.docker.example`)
 - [ ] beta 방화벽: `ufw allow from 172.26.13.215 to any port 4060 proto tcp`
-- [ ] `laea svc deploy newapp` → `curl beta 127.0.0.1:4060/api/health` = 200
-- [ ] Cloudflare `newapp` A → gate, 주황 → `laea gate domain add newapp.laea.io beta:4060 --name newapp`
+- [ ] `laea svc deploy foty` → `curl beta 127.0.0.1:4060/api/health` = 200
+- [ ] Cloudflare `foty` A → gate, 주황 → `laea gate domain add foty.laea.io beta:4060 --name foty`
 - [ ] `inventory/services.yaml` 한 줄 · `products.md` · `laea infra collect && push`
 - [ ] GitHub 비공개 저장소 연결 여부 결정(지금은 로컬 git만)
 
@@ -69,11 +68,3 @@ pnpm db:generate --name <무엇>                        # schema.ts 바꾼 뒤 �
 - gamma runner: `pnpm install --frozen-lockfile` · `tsc` · Biome · `next build` 통과, standalone에 `drizzle/` 포함
 - alpha `laea-heavy`로 이미지 빌드(303MB) → 임시 postgres 17과 붙여 실행: 시작 시 마이그레이션 적용(`items` 생성), `/api/health` 200, `/` 200, DB를 끄면 `/api/health` 503, 메모리 41MiB
 - 운영(beta·gate·cortie-db)에는 아무것도 하지 않음
-
-## 이름 바꾸기
-
-```bash
-grep -rl newapp --exclude-dir={node_modules,.next,.git} . | xargs sed -i 's/newapp/<새이름>/g'
-cd .. && mv newapp <새이름>
-```
-포트 4060은 그대로 써도 된다(beta에서 비어 있음을 11-21에 확인).

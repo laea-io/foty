@@ -5,5 +5,5 @@ export async function register() {
   if (process.env.MIGRATE_ON_START === '0') return
   const { runMigrations } = await import('@/lib/db/migrate')
   await runMigrations()
-  console.log('[newapp] migrations up to date')
+  console.log('[foty] migrations up to date')
 }

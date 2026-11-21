@@ -1,14 +1,14 @@
 # 로컬 개발용 postgres만. 127.0.0.1에만 연다. 운영 데이터는 절대 넣지 않는다.
-name: newapp-dev
+name: foty-dev
 services:
-  newapp-db:
+  foty-db:
     image: postgres:17-alpine
     environment:
-      POSTGRES_USER: newapp
-      POSTGRES_PASSWORD: newapp
-      POSTGRES_DB: newapp
+      POSTGRES_USER: foty
+      POSTGRES_PASSWORD: foty
+      POSTGRES_DB: foty
     ports: ["127.0.0.1:54060:5432"]
-    volumes: ["newapp-dev-db:/var/lib/postgresql/data"]
+    volumes: ["foty-dev-db:/var/lib/postgresql/data"]
     mem_limit: 256m
 volumes:
-  newapp-dev-db:
+  foty-dev-db:

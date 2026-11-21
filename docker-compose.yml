@@ -1,11 +1,11 @@
-# 운영 위치: beta (172.26.4.90). 소스와 빌드는 alpha에서, 배포는 alpha에서 `laea svc deploy newapp`.
+# 운영 위치: beta (172.26.4.90). 소스와 빌드는 alpha에서, 배포는 alpha에서 `laea svc deploy foty`.
 # 포트는 127.0.0.1과 beta 사설 IP에만 연다 — 외부 요청은 gate만 들어온다.
-# newapp.laea.io → gate nginx → beta:4060. DB는 cortie-db의 전용 DB(newapp_db / newapp_app).
-name: newapp
+# foty.laea.io → gate nginx → beta:4060. DB는 cortie-db의 전용 DB(foty_db / foty_app).
+name: foty
 services:
-  newapp-web:
+  foty-web:
     build: ./web
-    image: cortie/newapp-web:latest
+    image: cortie/foty-web:latest
     env_file: ./web/.env.docker
     ports:
       - "127.0.0.1:4060:4060"
