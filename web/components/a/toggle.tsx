@@ -33,10 +33,13 @@ export function ToggleRow({
   title,
   sub,
   defaultOn = false,
+  name,
 }: {
   title: string
   sub?: string
   defaultOn?: boolean
+  /** 폼으로 보낼 이름(켜져 있으면 "on") */
+  name?: string
 }) {
   const [on, setOn] = useState(defaultOn)
   return (
@@ -46,6 +49,7 @@ export function ToggleRow({
         {sub && <div className="mt-0.5 text-[12px] text-sub">{sub}</div>}
       </div>
       <Switch on={on} onChange={setOn} label={title} />
+      {name && on && <input type="hidden" name={name} value="on" />}
     </div>
   )
 }

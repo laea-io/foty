@@ -1,42 +1,20 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { Narrow, PageTitle } from '@/components/a/form'
+import { SubscribeButton } from '@/components/a/live-toggles'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeRow } from '@/components/theme/cards'
-import { NotifyButton } from '@/components/theme/notify-button'
 import { Mascot } from '@/components/ui/mascot'
 import { ButtonLink, DemoNote } from '@/components/ui/primitives'
-import { placeById, places, recruitingFor, regionById, regions } from '@/lib/demo/stamps'
+import { db } from '@/lib/db'
+import { getViewer } from '@/lib/server/auth'
+import { regionThemes } from '@/lib/server/q/a'
 
-export function generateStaticParams() {
-  return [
-    ...regions.map((r) => ({ region: r.id })),
-    ...places.filter((p) => !p.visits).map((p) => ({ region: p.id })),
-  ]
-}
+export const metadata: Metadata = { title: '모집 중인 테마' }
 
-/** 주소의 값은 권역 id(이 권역의 다른 테마 보기) 또는 빈 칸 장소 id */
-function resolve(key: string) {
-  const place = placeById(key)
-  const region = regionById(place ? place.region : key)
-  if (!region) return null
-  const ids = place
-    ? (place.themeIds ?? [])
-    : places.filter((p) => p.region === region.id).flatMap((p) => p.themeIds ?? [])
-  const hasStamp = places.some((p) => p.region === region.id && p.visits)
-  return { place, region, list: recruitingFor(ids), hasStamp }
-}
+type R = NonNullable<Awaited<ReturnType<typeof regionThemes>>>
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ region: string }>
-}): Promise<Metadata> {
-  const r = resolve((await params).region)
-  return { title: r ? `${r.region.name} 모집 중인 테마` : '권역' }
-}
-
-function Found({ r }: { r: NonNullable<ReturnType<typeof resolve>> }) {
+function Found({ r }: { r: R }) {
   return (
     <>
       <PageTitle
@@ -62,7 +40,7 @@ function Found({ r }: { r: NonNullable<ReturnType<typeof resolve>> }) {
   )
 }
 
-function Empty({ r }: { r: NonNullable<ReturnType<typeof resolve>> }) {
+function Empty({ r, signedIn, here }: { r: R; signedIn: boolean; here: string }) {
   return (
     <>
       <div className="flex flex-col items-center pt-[72px] text-center">
@@ -78,17 +56,39 @@ function Empty({ r }: { r: NonNullable<ReturnType<typeof resolve>> }) {
         <ButtonLink href="/request" className="h-[52px]">
           이런 테마 요청하기
         </ButtonLink>
-        <NotifyButton />
+        {signedIn ? (
+          <SubscribeButton kind="place" k={r.subKey} initial={r.subscribed} className="h-[52px]" />
+        ) : (
+          <ButtonLink
+            href={`/login?next=${encodeURIComponent(here)}`}
+            variant="outline"
+            icon="bell"
+            className="h-[52px]"
+          >
+            새 테마 알림 받기
+          </ButtonLink>
+        )}
       </div>
     </>
   )
 }
 
-export default async function StampRegionPage({ params }: { params: Promise<{ region: string }> }) {
-  const r = resolve((await params).region)
+export default async function StampRegionPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ region: string }>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
+}) {
+  const region = (await params).region
+  const raw = (await searchParams).place
+  const place = Array.isArray(raw) ? raw[0] : raw
+  const v = await getViewer()
+  const r = await regionThemes(db, region, place || undefined, v?.id)
   if (!r) notFound()
+  const here = `/my/stamps/region/${region}${place ? `?place=${encodeURIComponent(place)}` : ''}`
   const title = r.list.length ? r.region.name : (r.place?.name ?? r.region.name)
-  const body = r.list.length ? <Found r={r} /> : <Empty r={r} />
+  const body = r.list.length ? <Found r={r} /> : <Empty r={r} signedIn={!!v} here={here} />
   return (
     <>
       <MobileFrame>

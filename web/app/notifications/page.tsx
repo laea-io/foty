@@ -1,9 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Narrow, PageTitle } from '@/components/a/form'
+import { MarkAllRead } from '@/components/a/live-toggles'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote } from '@/components/ui/primitives'
-import { desktopNotices, type Notice, notices } from '@/lib/demo/notifications'
+import { db } from '@/lib/db'
+import { requireViewer } from '@/lib/server/auth'
+import { notificationsOf } from '@/lib/server/q/a'
+
+type Notice = Awaited<ReturnType<typeof notificationsOf>>[number]
 
 export const metadata: Metadata = { title: '알림' }
 
@@ -12,6 +17,9 @@ function List({ items }: { items: Notice[] }) {
     <>
       <PageTitle>알림</PageTitle>
       <div className="mt-4">
+        {!items.length && (
+          <div className="border-t border-line py-4 text-[13px] text-sub">아직 받은 알림이 없어요</div>
+        )}
         {items.map((n) => (
           <Link
             key={n.id}
@@ -35,9 +43,12 @@ function List({ items }: { items: Notice[] }) {
   )
 }
 
-export default function NotificationsPage() {
+export default async function NotificationsPage() {
+  const v = await requireViewer('/notifications')
+  const notices = await notificationsOf(db, v.id)
   return (
     <>
+      <MarkAllRead any={notices.some((n) => n.unread)} />
       <MobileFrame>
         <BackBar title="알림" back="/" />
         <div className="px-5">
@@ -47,7 +58,7 @@ export default function NotificationsPage() {
       </MobileFrame>
       <DesktopFrame>
         <Narrow eyebrow="알림">
-          <List items={desktopNotices} />
+          <List items={notices} />
         </Narrow>
       </DesktopFrame>
     </>

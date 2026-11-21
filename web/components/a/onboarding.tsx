@@ -24,8 +24,11 @@ export function PickGroup({
   initial,
   multi,
   small,
+  name,
 }: {
   title: string
+  /** 폼으로 보낼 이름 */
+  name?: string
   options: string[]
   initial: string[]
   multi?: boolean
@@ -35,12 +38,12 @@ export function PickGroup({
   return small ? (
     <div>
       <div className="mb-2.5 text-[13px] font-semibold">{title}</div>
-      <ChipPick label={title} options={options} initial={initial} multi={multi} />
+      <ChipPick label={title} options={options} initial={initial} multi={multi} name={name} />
     </div>
   ) : (
     <>
       <div className="mt-[26px] mb-2.5 text-[14px] font-semibold">{title}</div>
-      <ChipPick label={title} options={options} initial={initial} multi={multi} gap={6} />
+      <ChipPick label={title} options={options} initial={initial} multi={multi} gap={6} name={name} />
     </>
   )
 }
