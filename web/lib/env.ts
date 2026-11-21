@@ -24,6 +24,8 @@ const schema = z.object({
 
 export const env = schema.parse(process.env)
 
-if (env.NODE_ENV === 'production' && env.AUTH_SECRET.startsWith('dev-only') && env.DEMO_MODE !== '1') {
-  throw new Error('AUTH_SECRET을 운영 값으로 넣어 주세요')
+/** 서버가 뜰 때(instrumentation) 부른다 — 빌드 중에는 검사하지 않는다 */
+export function assertRuntimeEnv() {
+  if (env.NODE_ENV === 'production' && env.AUTH_SECRET.startsWith('dev-only') && env.DEMO_MODE !== '1')
+    throw new Error('AUTH_SECRET을 운영 값으로 넣어 주세요')
 }

@@ -1,0 +1,92 @@
+// 코스 제안 — 검토된 장소 목록 안에서만 고른다(실시간 검색 아님 · 기획안 원칙 3·5).
+// 지금은 규칙 기반: 같은 권역 · 덜 알려진 장소 먼저 · 식사/카페 1곳 이상. 나중에 LLM을 붙여도 이 입출력을 지킨다.
+import { and, eq, inArray, ne } from 'drizzle-orm'
+import * as s from '@/lib/db/schema'
+import type { AnyDb } from './domain/types'
+
+export type Place = typeof s.places.$inferSelect
+export type Ask = '카페 한 곳 더' | '덜 걷는 코스로' | '실내 장소로' | '예산 줄이기' | '점심 먹을 곳' | string
+
+const EAT = ['맛집']
+const CAFE = ['카페']
+
+/** 핵심 장소와 같은 권역의 검토된 장소(핵심·집결 제외) */
+async function nearby(db: AnyDb, core: Place) {
+  const rows = await db
+    .select()
+    .from(s.places)
+    .where(
+      and(
+        ne(s.places.id, core.id),
+        core.region ? eq(s.places.region, core.region) : undefined,
+        ne(s.places.group, '기타'),
+      ),
+    )
+  // 스탬프 칸이 아닌(덜 알려진) 장소를 먼저
+  return rows.sort((a, b) => Number(a.stamp) - Number(b.stamp) || a.name.localeCompare(b.name, 'ko'))
+}
+
+/** AI 도우미·코스 바꾸기 요청 → 대안 장소(최대 n) */
+export async function suggestPlaces(
+  db: AnyDb,
+  input: { corePlaceId: string; ask: Ask; exclude?: string[]; n?: number },
+) {
+  const [core] = await db.select().from(s.places).where(eq(s.places.id, input.corePlaceId))
+  if (!core) return { places: [] as Place[], understood: false }
+  let list = (await nearby(db, core)).filter((p) => !input.exclude?.includes(p.id))
+  const ask = input.ask
+  let understood = true
+  if (ask.includes('카페') || ask.includes('차')) list = list.filter((p) => CAFE.includes(p.group))
+  else if (ask.includes('점심') || ask.includes('밥') || ask.includes('식사'))
+    list = list.filter((p) => EAT.includes(p.group))
+  else if (ask.includes('실내')) list = list.filter((p) => p.indoor)
+  else if (ask.includes('예산') || ask.includes('싸'))
+    list = [...list].sort((a, b) => a.cost - b.cost).filter((p) => p.cost <= 10000)
+  else if (ask.includes('덜 걷') || ask.includes('걷'))
+    list = list.filter((p) => p.indoor || p.group !== '자연')
+  else understood = false
+  return { places: list.slice(0, input.n ?? 2), understood }
+}
+
+/** 핵심 장소 하나로 하루 코스 초안: 앞 1곳 + 핵심 + 뒤 1~2곳(식사나 카페 포함) */
+export async function draftCourse(db: AnyDb, input: { corePlaceId: string; start: string; ask?: Ask }) {
+  const [core] = await db.select().from(s.places).where(eq(s.places.id, input.corePlaceId))
+  if (!core) return []
+  const near = await nearby(db, core)
+  const pick = (pred: (p: Place) => boolean, used: Set<string>) =>
+    near.find((p) => !used.has(p.id) && pred(p))
+  const used = new Set<string>()
+  const coreIsEat = EAT.includes(core.group)
+  const before = pick((p) => p.group === '문화 공간' || p.group === '자연', used)
+  if (before) used.add(before.id)
+  const after1 = pick((p) => (coreIsEat ? p.group === '자연' : EAT.includes(p.group)), used)
+  if (after1) used.add(after1.id)
+  const after2 = input.ask?.includes('카페') === false ? undefined : pick((p) => CAFE.includes(p.group), used)
+  const seq = [before, core, after1, ...(input.ask === '덜 걷는 코스로' ? [] : [after2])].filter(
+    (p): p is Place => !!p,
+  )
+  // 시간: 핵심 장소를 start에 맞추고 앞뒤를 붙인다
+  const toMin = (hm: string) => Number(hm.slice(0, 2)) * 60 + Number(hm.slice(3))
+  const fmt = (m: number) =>
+    `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
+  const stay = (p: Place) =>
+    p.id === core.id ? 80 : EAT.includes(p.group) ? 70 : CAFE.includes(p.group) ? 50 : 50
+  const coreIdx = seq.findIndex((p) => p.id === core.id)
+  const times: number[] = []
+  times[coreIdx] = toMin(input.start)
+  for (let i = coreIdx - 1; i >= 0; i--) times[i] = times[i + 1] - stay(seq[i]) - 20
+  for (let i = coreIdx + 1; i < seq.length; i++) times[i] = times[i - 1] + stay(seq[i - 1]) + 20
+  return seq.map((p, i) => ({
+    placeId: p.id,
+    time: fmt(times[i]),
+    stayMin: stay(p),
+    next: i < seq.length - 1 ? (i % 2 ? '버스 12분' : '도보 8분') : null,
+    fixed: p.id === core.id,
+    place: p,
+  }))
+}
+
+export async function placesByIds(db: AnyDb, ids: string[]) {
+  if (!ids.length) return []
+  return db.select().from(s.places).where(inArray(s.places.id, ids))
+}

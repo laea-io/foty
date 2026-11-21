@@ -861,19 +861,17 @@ export async function seedDemo(db: AnyDb, opts: { now?: Date; force?: boolean } 
       scheduleVersion: t.id === 'gwangneung-morning' ? 3 : 1,
       createdAt: at(addDays(t.day, -10), '09:00'),
     })
-    await db
-      .insert(s.themeStops)
-      .values(
-        t.stops.map(([placeId, time, stayMin, next, fixed], ord) => ({
-          themeId: t.id,
-          ord,
-          placeId,
-          time,
-          stayMin,
-          next,
-          fixed: !!fixed,
-        })),
-      )
+    await db.insert(s.themeStops).values(
+      t.stops.map(([placeId, time, stayMin, next, fixed], ord) => ({
+        themeId: t.id,
+        ord,
+        placeId,
+        time,
+        stayMin,
+        next,
+        fixed: !!fixed,
+      })),
+    )
     const apps = Object.entries(t.apps)
     if (apps.length)
       await db.insert(s.applications).values(
@@ -902,15 +900,13 @@ export async function seedDemo(db: AnyDb, opts: { now?: Date; force?: boolean } 
       const done = new Set(t.checkins ?? [])
       const accepted = apps.filter(([, [st]]) => st === '수락').map(([h]) => h)
       if (accepted.length)
-        await db
-          .insert(s.attendance)
-          .values(
-            accepted.map((h) => ({
-              themeId: t.id,
-              userId: uid(h),
-              status: done.has(h) ? ('참여 확인' as const) : ('검토 중' as const),
-            })),
-          )
+        await db.insert(s.attendance).values(
+          accepted.map((h) => ({
+            themeId: t.id,
+            userId: uid(h),
+            status: done.has(h) ? ('참여 확인' as const) : ('검토 중' as const),
+          })),
+        )
     }
   }
 
