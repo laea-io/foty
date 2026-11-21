@@ -3,6 +3,7 @@
 import { useActionState, useState } from 'react'
 import { hostReviewAction } from '@/app/actions/c'
 import { Avatar } from '@/components/ui/primitives'
+import { keep } from '@/lib/client/keep-form'
 
 const behavior = ['시간을 잘 지켜요', '변경 사항을 잘 알려줘요', '서로를 배려해요']
 
@@ -20,7 +21,7 @@ export function HostReviewForm({ id, themeId, rows }: { id: string; themeId: str
   const pill = (on: boolean) =>
     `inline-flex h-11 items-center rounded-full border-0 px-4 text-[14px] ${on ? 'bg-ink font-semibold text-white' : 'bg-face font-medium text-label'}`
   return (
-    <form id={id} action={send} className="mt-4">
+    <form id={id} onSubmit={keep(send)} className="mt-4">
       <input type="hidden" name="theme" value={themeId} />
       {rows.map((r) => (
         <div key={r.id} className="border-t border-line py-4">

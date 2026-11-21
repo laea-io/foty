@@ -4,6 +4,7 @@
 import { eq, sql } from 'drizzle-orm'
 import type { AnyDb } from '@/lib/server/domain/types'
 import { hashPassword } from '@/lib/server/password'
+import { bookableSaturday } from '@/lib/server/time'
 import * as s from './schema'
 
 export const DEMO_PASSWORD = 'foty-demo'
@@ -14,18 +15,9 @@ const addDays = (day: string, n: number) => {
   return iso(new Date(Date.UTC(y, m - 1, d + n)))
 }
 const at = (day: string, hm: string) => new Date(`${day}T${hm}:00+09:00`)
-const kstToday = (now: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(now)
 
-/** 마감(금 18:00)이 지나지 않은 가장 가까운 토요일 */
-export function demoSaturday(now = new Date()) {
-  let day = kstToday(now)
-  for (let i = 0; i < 14; i++) {
-    const dow = new Date(`${day}T00:00:00Z`).getUTCDay()
-    if (dow === 6 && at(addDays(day, -1), '18:00') > now) return day
-    day = addDays(day, 1)
-  }
-  return day
-}
+/** 마감(금 18:00)이 지나지 않은 가장 가까운 토요일 — 홈의 "이번 주말"과 같은 규칙 */
+export const demoSaturday = bookableSaturday
 
 // ── 사람 ─────────────────────────────────────────────
 const people = [

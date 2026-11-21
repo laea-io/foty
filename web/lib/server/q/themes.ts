@@ -4,7 +4,7 @@ import { db, schema as s } from '@/lib/db'
 import type { HomeQuery } from '@/lib/demo/filters'
 import { getViewer } from '../auth'
 import { loadTheme, loadThemes, relation, type ThemeView } from '../domain/read'
-import { addDays, dayLabel, parts, today } from '../time'
+import { addDays, bookableSaturday, dayLabel, parts, today } from '../time'
 
 export type { ThemeView }
 
@@ -13,16 +13,18 @@ export const LISTED = ['모집 중', '모집 마감', '일정 조율 중', '일�
 
 /** 이번 주말(토·일) — 오늘이 일요일이면 오늘만 */
 export function weekend(now = new Date()) {
-  const t = today(now)
-  const dow = new Date(`${t}T00:00:00Z`).getUTCDay()
-  const sat = dow === 0 ? addDays(t, -1) : addDays(t, 6 - dow)
-  return { sat, sun: addDays(sat, 1), from: dow === 0 ? t : t }
+  const sat = bookableSaturday(now)
+  return { sat, sun: addDays(sat, 1), from: today(now) }
 }
 
 /** 홈 달력 7칸(오늘부터) */
 export function weekStrip(now = new Date()) {
   const t = today(now)
-  return Array.from({ length: 7 }, (_, i) => {
+  // 오늘부터 7칸, 이번 주말(신청 가능한 주말)이 더 뒤면 그 일요일까지(최대 9칸)
+  const sun = weekend(now).sun
+  const span =
+    Math.round((new Date(`${sun}T00:00:00Z`).getTime() - new Date(`${t}T00:00:00Z`).getTime()) / 86400000) + 1
+  return Array.from({ length: Math.min(9, Math.max(7, span)) }, (_, i) => {
     const day = addDays(t, i)
     const p = parts(day)
     return { day: p.d, dow: i === 0 ? '오늘' : p.dow, date: dayLabel(day), iso: day }

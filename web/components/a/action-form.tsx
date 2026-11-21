@@ -1,6 +1,7 @@
 'use client'
 
 import { createContext, type ReactNode, useActionState, useContext } from 'react'
+import { keep } from '@/lib/client/keep-form'
 
 type State = { error?: string } | undefined
 const Ctx = createContext<{ state: State; pending: boolean }>({ state: undefined, pending: false })
@@ -18,7 +19,7 @@ export function ActionForm({
   const [state, formAction, pending] = useActionState(action, undefined)
   return (
     <Ctx.Provider value={{ state, pending }}>
-      <form action={formAction} className={className}>
+      <form onSubmit={keep(formAction)} className={className}>
         <fieldset disabled={pending} className="contents">
           {children}
         </fieldset>

@@ -82,3 +82,14 @@ export function won(n: number) {
   if (n >= 10000) return `${Number((n / 10000).toFixed(1))}만원`
   return `${n.toLocaleString('ko-KR')}원`
 }
+
+/** 이번 주말 = 모집 마감(금 18:00)이 아직 남은 가장 가까운 토요일. 금요일 저녁부터는 다음 주말 */
+export function bookableSaturday(now = new Date()) {
+  let day = today(now)
+  for (let i = 0; i < 14; i++) {
+    const dow = new Date(`${day}T00:00:00Z`).getUTCDay()
+    if (dow === 6 && kst(addDays(day, -1), '18:00') > now) return day
+    day = addDays(day, 1)
+  }
+  return day
+}

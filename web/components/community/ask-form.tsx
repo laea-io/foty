@@ -5,6 +5,7 @@ import { useActionState, useState } from 'react'
 import { writePostAction } from '@/app/actions/c'
 import { ChipGroup, FieldLabel, TextArea, TextInput } from '@/components/c/form'
 import { Note } from '@/components/ui/primitives'
+import { keep } from '@/lib/client/keep-form'
 
 /** 질문 · 코스 공유 쓰기. 여행 후기를 고르면 후기 화면(체크인한 테마)으로 */
 export function AskForm({ id, places }: { id: string; places: { id: string; name: string }[] }) {
@@ -12,7 +13,7 @@ export function AskForm({ id, places }: { id: string; places: { id: string; name
   const [state, send] = useActionState(writePostAction, undefined)
   const [place, setPlace] = useState(places[0]?.id ?? '')
   return (
-    <form id={id} action={send}>
+    <form id={id} onSubmit={keep(send)}>
       <h1 className="mt-4 mb-0 text-[22px] leading-[30px] font-extrabold tracking-[-0.04em]">
         무엇이 궁금한가요?
       </h1>

@@ -8,6 +8,7 @@ import { ThemeMini } from '@/components/theme/cards'
 import { Icon } from '@/components/ui/icon'
 import { Mascot } from '@/components/ui/mascot'
 import { Button, Note, Photo } from '@/components/ui/primitives'
+import { keep } from '@/lib/client/keep-form'
 import type { ThemeView } from '@/lib/server/q/themes'
 
 /** 후기 남기기 — 체크인한 테마에만. 사진은 서버에 저장된다 */
@@ -23,7 +24,7 @@ export function ReviewForm({
   const [state, send, pending] = useActionState(writePostAction, undefined)
   const [files, setFiles] = useState<string[]>([])
   return (
-    <form action={send} id={id}>
+    <form onSubmit={keep(send)} id={id}>
       <input type="hidden" name="kind" value="여행 후기" />
       <input type="hidden" name="theme" value={t.id} />
       <input type="hidden" name="themeTitle" value={t.title} />
