@@ -26,7 +26,7 @@ const bare = (p: string) => p === '/login'
 export function DesktopHeader() {
   const path = usePathname()
   if (bare(path)) return null
-  const host = path.startsWith('/host') && !path.startsWith('/host/join')
+  const host = (path === '/host' || path.startsWith('/host/')) && !path.startsWith('/host/join')
   const nav = host ? hostNav : guestNav
   return (
     <header className="hidden border-b border-line lg:block">
