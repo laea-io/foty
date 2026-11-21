@@ -1,0 +1,206 @@
+import Link from 'next/link'
+import type { ReactNode } from 'react'
+import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { StopList } from '@/components/theme/parts'
+import { ShareButton } from '@/components/theme/share-button'
+import { Icon } from '@/components/ui/icon'
+import {
+  Badge,
+  type BadgeTone,
+  ButtonLink,
+  DemoNote,
+  Note,
+  Photo,
+  Progress,
+} from '@/components/ui/primitives'
+import { hostById } from '@/lib/demo/people'
+import { hostThemes, meetFor, otherDates } from '@/lib/demo/theme-flow'
+import type { Theme } from '@/lib/demo/themes'
+import { members } from '@/lib/demo/trips'
+import { ShareAction } from '../trips/actions'
+import { OtherDateRows, SectionHead, ThemeList } from './flow'
+import { NotifyDate } from './notify-date'
+
+export type DetailState = 'closed' | 'confirmed' | 'done'
+
+const head: Record<DetailState, { label: string; tone: BadgeTone; back: string }> = {
+  closed: { label: '모집 마감', tone: 'soft', back: '/' },
+  confirmed: { label: '일정 확정', tone: 'ink', back: '/trips' },
+  done: { label: '여행 완료', tone: 'ink', back: '/trips' },
+}
+
+/** 테마 상세의 상태별 화면: 모집 마감 · 일정 확정 · 여행 완료 */
+export function StateDetail({ t, state }: { t: Theme; state: DetailState }) {
+  const h = head[state]
+  const host = hostById(t.hostId)
+  const title = (
+    <>
+      <div className="flex items-center gap-2">
+        <span className="text-[14px] font-bold">
+          {t.date} {t.start}
+        </span>
+        <Badge tone={h.tone}>{h.label}</Badge>
+      </div>
+      <h1 className="mt-2 mb-0 text-[26px] leading-[33px] font-extrabold tracking-[-0.05em]">{t.title}</h1>
+      <div className="mt-1.5 flex items-center gap-1 text-[13px] text-sub">
+        <Icon name="pin" size={15} />
+        핵심 장소 · {t.place}
+        {host && ` · 호스트 ${host.name}`}
+      </div>
+    </>
+  )
+  const body = <Body t={t} state={state} />
+  const space = (
+    <ButtonLink href={`/trips/${t.id}`} size="lg" block>
+      그룹 공간 열기
+    </ButtonLink>
+  )
+  const review = (
+    <ButtonLink href={`/trips/${t.id}/review`} variant="outline" size="lg">
+      평가하기
+    </ButtonLink>
+  )
+  const write = (
+    <ButtonLink href={`/community/write?theme=${t.id}`} size="lg" block>
+      후기 남기기
+    </ButtonLink>
+  )
+
+  return (
+    <>
+      <MobileFrame bottom>
+        <BackBar title="테마" back={h.back} />
+        <div className="px-5">
+          <Photo src={t.image.src} alt={t.image.alt} bg={t.image.bg} className="-mx-5 h-[240px]" />
+          <div className="mt-5">{title}</div>
+          {body}
+          <DemoNote />
+        </div>
+        <BottomBar>
+          {state === 'closed' && (
+            <>
+              <ShareButton title={t.title} wide />
+              <div className="grow">
+                <NotifyDate />
+              </div>
+            </>
+          )}
+          {state === 'confirmed' && (
+            <>
+              <ShareAction label="가족에게 공유" title={t.title} variant="outline" size="lg" />
+              <div className="grow">{space}</div>
+            </>
+          )}
+          {state === 'done' && (
+            <>
+              {review}
+              <div className="grow">{write}</div>
+            </>
+          )}
+        </BottomBar>
+      </MobileFrame>
+
+      <DesktopFrame>
+        <div className="flex items-start gap-14">
+          <div className="min-w-0 flex-1">
+            <Photo
+              src={t.image.src}
+              alt={t.image.alt}
+              bg={t.image.bg}
+              className="h-[380px] w-full rounded-[20px]"
+            />
+            <div className="mt-2">{body}</div>
+          </div>
+          <div className="sticky top-6 w-[400px] flex-none">
+            <div className="rounded-[20px] p-6 shadow-[inset_0_0_0_1px_var(--color-line)]">
+              {title}
+              <div className="mt-[22px] flex gap-2">
+                {state === 'closed' && (
+                  <>
+                    <div className="grow">
+                      <NotifyDate />
+                    </div>
+                    <ShareButton title={t.title} wide />
+                  </>
+                )}
+                {state === 'confirmed' && (
+                  <>
+                    <div className="grow">{space}</div>
+                    <ShareButton title={t.title} wide />
+                  </>
+                )}
+                {state === 'done' && (
+                  <>
+                    <div className="grow">{write}</div>
+                    {review}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </DesktopFrame>
+    </>
+  )
+}
+
+function Body({ t, state }: { t: Theme; state: DetailState }) {
+  if (state === 'closed')
+    return (
+      <>
+        <div className="mt-[22px]">
+          <Progress current={t.current} max={t.max} min={t.min} deadline="정원이 찼어요" deadlinePrefix="" />
+        </div>
+        <Note className="mt-4">
+          신청을 더 받지 않아요. 같은 테마의 다른 날짜가 열리면 알려드릴 수 있어요.
+        </Note>
+        <SectionHead title="같은 테마의 다른 날짜" />
+        <OtherDateRows t={t} dates={otherDates(t, 'closed')} />
+      </>
+    )
+  if (state === 'confirmed')
+    return (
+      <>
+        <div className="mt-[22px] rounded-[16px] bg-face p-[18px]">
+          <div className="text-[12px] text-sub">확정된 집결</div>
+          <div className="mt-1 text-[20px] font-extrabold tracking-[-0.03em]">{meetFor(t, true)}</div>
+          <div className="mt-1.5 text-[12px] text-sub">참여자 {members.length}명 모두 확인했어요</div>
+        </div>
+        <SectionHead
+          title="확정 일정"
+          aside={
+            <Link href={`/trips/${t.id}/history`} className="text-[12px] text-sub no-underline">
+              변경 이력 2
+            </Link>
+          }
+        />
+        <div className="-mt-1 mb-2.5 flex items-center gap-1.5 text-[12px] text-sub">
+          <Icon name="people" size={16} />
+          이동 · 대중교통으로 함께 가요 (차량 동승 없음)
+        </div>
+        <StopList stops={t.stops} className="-mt-2" />
+      </>
+    )
+  return (
+    <>
+      <div className="mt-[22px] flex border-y border-line py-[18px]">
+        <Fact label="참여" value="체크인 확인" />
+        <Fact label="다녀온 곳" value={`${t.stops.length}곳`} divider />
+        <Fact label="받은 스탬프" value={t.place} divider />
+      </div>
+      <SectionHead title="다녀온 코스" />
+      <StopList stops={t.stops} className="-mt-2" />
+      <SectionHead title="이 호스트의 새 테마" />
+      <ThemeList list={hostThemes(t)} />
+    </>
+  )
+}
+
+function Fact({ label, value, divider }: { label: string; value: ReactNode; divider?: boolean }) {
+  return (
+    <div className={`flex-1 ${divider ? 'border-l border-line pl-4' : ''}`}>
+      <div className="text-[12px] text-muted">{label}</div>
+      <div className="mt-[3px] text-[17px] font-bold">{value}</div>
+    </div>
+  )
+}

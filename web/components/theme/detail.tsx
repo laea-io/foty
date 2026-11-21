@@ -9,8 +9,11 @@ import { ShareButton } from './share-button'
 
 const statusTone = (s: Theme['status']) => (s === '일정 확정' ? 'ink' : s === '취소' ? 'muted' : 'soft')
 
-/** 테마 상세 — 모집 중(기본). 다른 상태(마감·확정·완료·비로그인)는 이 틀을 바탕으로 덧붙인다. */
-export function ThemeDetail({ t }: { t: Theme }) {
+/**
+ * 테마 상세 — 모집 중(기본). guest: 로그인 없이 보는 화면(위 안내 띠 + “가입하고 신청하기”).
+ * 모집 마감·일정 확정·여행 완료는 components/b/theme/state-detail.tsx.
+ */
+export function ThemeDetail({ t, guest }: { t: Theme; guest?: boolean }) {
   const host = hostById(t.hostId)
   const left = t.min - t.current
   const matched = left <= 0
@@ -22,11 +25,26 @@ export function ThemeDetail({ t }: { t: Theme }) {
     ['취소', '성사 전에는 언제든 취소할 수 있어요. 최소 인원이 안 차면 자동 취소돼요.'],
   ]
   const headline = matched ? '성사됐어요' : `성사까지 ${left}명`
+  const cta = () =>
+    guest ? (
+      <ButtonLink href={`/login?next=/themes/${t.id}/apply`} variant="accent" size="lg" block>
+        가입하고 신청하기
+      </ButtonLink>
+    ) : open ? (
+      <ButtonLink href={`/themes/${t.id}/apply`} variant="accent" size="lg" block scroll={false}>
+        참여 신청
+      </ButtonLink>
+    ) : (
+      <ButtonLink href="/" variant="soft" size="lg" block aria-disabled>
+        {t.status === '모집 마감' ? '모집이 마감됐어요' : t.status}
+      </ButtonLink>
+    )
 
   return (
     <>
       {/* ── 모바일 ── */}
       <MobileFrame bottom>
+        {guest && <GuestBanner />}
         <div className="relative h-80 overflow-hidden">
           <Photo src={t.image.src} alt={t.image.alt} bg={t.image.bg} className="h-80 w-full" />
           <div className="absolute inset-x-0 top-0 h-[100px] bg-[linear-gradient(180deg,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0)_100%)]" />
@@ -103,21 +121,12 @@ export function ThemeDetail({ t }: { t: Theme }) {
         </div>
         <BottomBar>
           <ShareButton title={t.title} />
-          <div className="grow">
-            {open ? (
-              <ButtonLink href={`/themes/${t.id}/apply`} variant="accent" size="lg" block>
-                참여 신청
-              </ButtonLink>
-            ) : (
-              <ButtonLink href="/" variant="soft" size="lg" block aria-disabled>
-                {t.status === '모집 마감' ? '모집이 마감됐어요' : t.status}
-              </ButtonLink>
-            )}
-          </div>
+          <div className="grow">{cta()}</div>
         </BottomBar>
       </MobileFrame>
 
       {/* ── 데스크톱 ── */}
+      {guest && <GuestBanner wide />}
       <DesktopFrame>
         <div className="grid h-[420px] grid-cols-[2fr_1fr] gap-2">
           <Photo
@@ -195,17 +204,7 @@ export function ThemeDetail({ t }: { t: Theme }) {
               </div>
               <Reason className="mt-4">{t.reason}</Reason>
               <div className="mt-5 flex gap-2">
-                <div className="grow">
-                  {open ? (
-                    <ButtonLink href={`/themes/${t.id}/apply`} variant="accent" size="lg" block>
-                      참여 신청
-                    </ButtonLink>
-                  ) : (
-                    <ButtonLink href="/" variant="soft" size="lg" block aria-disabled>
-                      {t.status === '모집 마감' ? '모집이 마감됐어요' : t.status}
-                    </ButtonLink>
-                  )}
-                </div>
+                <div className="grow">{cta()}</div>
                 <ShareButton title={t.title} wide />
               </div>
               <div className="mt-3.5 text-center">
@@ -218,6 +217,24 @@ export function ThemeDetail({ t }: { t: Theme }) {
         </div>
       </DesktopFrame>
     </>
+  )
+}
+
+/** 비로그인 안내 띠 */
+function GuestBanner({ wide }: { wide?: boolean }) {
+  return (
+    <div
+      className={
+        wide
+          ? 'hidden items-center justify-center gap-2.5 bg-ink px-8 py-3 text-[13px] text-white lg:flex'
+          : 'flex items-center gap-2.5 bg-ink px-5 py-2.5 text-[13px] text-white'
+      }
+    >
+      <span className={wide ? '' : 'grow'}>로그인 없이 보고 있어요. 신청하려면 가입이 필요해요.</span>
+      <Link href="/login" className="font-bold text-white">
+        가입
+      </Link>
+    </div>
   )
 }
 
