@@ -3,8 +3,11 @@ import { DesktopFrame, MobileFrame, MobileTopBar } from '@/components/shell/mobi
 import { ThemeRow } from '@/components/theme/cards'
 import { Icon } from '@/components/ui/icon'
 import { Avatar, ButtonLink, DemoNote, Photo } from '@/components/ui/primitives'
-import type { Post, PostKind } from '@/lib/demo/community'
-import { themes } from '@/lib/demo/themes'
+import type { PostView as Post } from '@/lib/server/q/c'
+import type { ThemeView } from '@/lib/server/q/themes'
+
+type PostKind = Post['kind']
+
 import { PostActions } from './post-actions'
 
 const kinds: ('전체' | PostKind)[] = ['전체', '여행 후기', '코스 공유', '질문']
@@ -31,7 +34,7 @@ function KindChips({ current }: { current: string }) {
   )
 }
 
-export function CommunityView({ list, kind }: { list: Post[]; kind: string }) {
+export function CommunityView({ list, kind, open }: { list: Post[]; kind: string; open: ThemeView[] }) {
   return (
     <>
       <MobileFrame tabbar>
@@ -129,12 +132,9 @@ export function CommunityView({ list, kind }: { list: Post[]; kind: string }) {
           </div>
           <div className="sticky top-6 w-[380px] flex-none">
             <div className="mb-1 text-[16px] font-extrabold tracking-[-0.03em]">이번 주말 열린 테마</div>
-            {themes
-              .filter((t) => t.status === '모집 중')
-              .slice(0, 3)
-              .map((t) => (
-                <ThemeRow key={t.id} t={t} />
-              ))}
+            {open.map((t) => (
+              <ThemeRow key={t.id} t={t} />
+            ))}
           </div>
         </div>
       </DesktopFrame>

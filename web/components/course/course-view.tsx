@@ -4,7 +4,7 @@ import { ThemeRow } from '@/components/theme/cards'
 import { MapSketch, StopList } from '@/components/theme/parts'
 import { Icon } from '@/components/ui/icon'
 import { Badge, DemoNote, Photo, Segmented } from '@/components/ui/primitives'
-import type { Course } from '@/lib/demo/courses'
+import type { CourseData as Course } from '@/lib/server/q/c'
 import { CourseActions } from './course-actions'
 
 /** 코스 — 일정(기본) / 지도. 모바일은 탭 전환, 데스크톱은 왼쪽 일정 + 오른쪽 지도 */
@@ -73,7 +73,7 @@ export function CourseView({ c, view }: { c: Course; view: 'list' | 'map' }) {
             </>
           )}
           <div className="mt-2">
-            <CourseActions title={title} />
+            <CourseActions title={title} c={c} />
           </div>
           {view === 'list' && <OpenThemes c={c} />}
           <DemoNote />
@@ -90,7 +90,7 @@ export function CourseView({ c, view }: { c: Course; view: 'list' | 'map' }) {
             <Facts c={c} wide />
             <StopList stops={c.stops} className="mt-1" />
             <div className="mt-2.5">
-              <CourseActions title={title} wide />
+              <CourseActions title={title} c={c} wide />
             </div>
             <OpenThemes c={c} wide />
           </div>

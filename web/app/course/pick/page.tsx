@@ -2,13 +2,14 @@ import type { Metadata } from 'next'
 import { CorePick } from '@/components/course/core-pick'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote } from '@/components/ui/primitives'
-import { openThemeCount, places } from '@/lib/demo/courses'
+import { corePlaces } from '@/lib/server/q/c'
 
 export const metadata: Metadata = { title: '핵심 장소 고르기' }
 
 export default async function CorePickPage({ searchParams }: { searchParams: Promise<{ place?: string }> }) {
   const { place } = await searchParams
-  const counts = Object.fromEntries(places.map((p) => [p.id, openThemeCount(p)]))
+  const places = await corePlaces()
+  const counts = Object.fromEntries(places.map((p) => [p.id, p.open]))
   const head = (
     <>
       <h1 className="mt-4 mb-0 text-[22px] leading-[30px] font-extrabold tracking-[-0.04em]">

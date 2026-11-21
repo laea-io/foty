@@ -1,69 +1,78 @@
 import type { Metadata } from 'next'
+import { editHostAction } from '@/app/actions/c'
 import { Field, TextArea, TextInput } from '@/components/c/form'
+import { ActionForm } from '@/components/host/action-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
-import { Avatar, ButtonLink, DemoNote } from '@/components/ui/primitives'
-import { myHost } from '@/lib/demo/host'
+import { Avatar, Button, DemoNote } from '@/components/ui/primitives'
+import { requireHost, type Viewer } from '@/lib/server/auth'
+import { dayLabel, today } from '@/lib/server/time'
 
 export const metadata: Metadata = { title: '프로필 편집' }
 
-function Body() {
+type H = NonNullable<Viewer['host']>
+
+function Body({ h, id }: { h: H; id: string }) {
+  const biz = h.kind === 'business'
+  const mark = biz ? '사업장 확인' : '남양주 주민 인증'
   return (
-    <>
+    <ActionForm id={id} action={editHostAction}>
       <div className="mt-4 flex flex-col items-center">
-        <Avatar name={myHost.name} size={84} />
-        <label className="mt-2.5 cursor-pointer text-[13px] font-semibold">
-          사진 바꾸기
-          <input type="file" accept="image/*" className="sr-only" />
-        </label>
+        <Avatar name={h.name} size={84} />
       </div>
       <div className="mt-6 flex flex-col gap-[18px]">
-        <Field label="상호" htmlFor="name">
-          <TextInput id="name" defaultValue={myHost.name} />
+        <Field label={biz ? '상호' : '이름'} htmlFor={`${id}-name`}>
+          <TextInput id={`${id}-name`} name="name" defaultValue={h.name} readOnly={!biz} required />
         </Field>
-        <Field label="위치" htmlFor="loc">
+        <Field label={biz ? '위치' : '사는 동네'} htmlFor={`${id}-loc`}>
           <div className="relative">
             <Icon name="pin" size={18} className="absolute top-4 left-4 text-sub" />
-            <TextInput id="loc" defaultValue={`남양주시 ${myHost.area}`} className="pl-11" />
+            <TextInput
+              id={`${id}-loc`}
+              name="area"
+              defaultValue={`남양주시 ${h.area}`}
+              className="pl-11"
+              required
+            />
           </div>
         </Field>
-        <Field label="소개" htmlFor="intro">
-          <TextArea
-            id="intro"
-            rows={3}
-            defaultValue="두물머리 근처에서 20년째 한정식을 차려요. 토요일 점심에 자리를 비워 둘게요."
-          />
+        <Field label="소개" htmlFor={`${id}-intro`}>
+          <TextArea id={`${id}-intro`} name="intro" rows={3} defaultValue={h.intro} maxLength={200} />
         </Field>
-        <Field label="담당자 연락 수단" htmlFor="contact">
-          <TextInput id="contact" defaultValue="카카오톡 채널" />
+        <Field label="담당자 연락 수단" htmlFor={`${id}-contact`}>
+          <TextInput id={`${id}-contact`} name="contact" defaultValue={h.contact} />
           <div className="mt-1.5 text-[12px] text-muted">참여자에게는 보이지 않아요</div>
         </Field>
       </div>
       <div className="mt-6 flex items-start gap-2.5 rounded-[16px] bg-face px-4 py-3.5">
         <Icon name="shield" size={18} className="mt-0.5" />
         <div className="text-[13px] leading-5">
-          <b>사업장 확인</b> 11월 20일 확인 ·{' '}
-          <span className="text-sub">상호나 위치를 바꾸면 다시 확인해요</span>
+          <b>{mark}</b>{' '}
+          {h.status === '확인 완료' && h.verifiedAt ? `${dayLabel(today(h.verifiedAt))} 확인` : h.status} ·{' '}
+          <span className="text-sub">
+            {biz ? '상호나 위치를 바꾸면 다시 확인해요' : '동네를 바꾸면 운영팀이 다시 확인할 수 있어요'}
+          </span>
         </div>
       </div>
-    </>
+    </ActionForm>
   )
 }
 
-export default function HostEditPage() {
+export default async function HostEditPage() {
+  const v = await requireHost('/host/profile/edit')
   return (
     <>
       <MobileFrame bottom>
         <BackBar title="프로필 편집" back="/host" />
         <div className="px-5">
-          <Body />
+          <Body h={v.host} id="edit-m" />
           <DemoNote />
         </div>
         <BottomBar>
           <div className="grow">
-            <ButtonLink href="/host" size="lg" block>
+            <Button type="submit" form="edit-m" size="lg" block>
               저장하기
-            </ButtonLink>
+            </Button>
           </div>
         </BottomBar>
       </MobileFrame>
@@ -71,11 +80,11 @@ export default function HostEditPage() {
         <div className="mx-auto max-w-[600px]">
           <div className="mb-2 text-[14px] text-sub">호스트</div>
           <h1 className="m-0 text-[22px] font-extrabold tracking-[-0.04em]">프로필 편집</h1>
-          <Body />
+          <Body h={v.host} id="edit-d" />
           <div className="mt-6">
-            <ButtonLink href="/host" size="lg" block>
+            <Button type="submit" form="edit-d" size="lg" block>
               저장하기
-            </ButtonLink>
+            </Button>
           </div>
         </div>
       </DesktopFrame>

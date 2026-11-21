@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { DesktopFrame, MobileFrame, MobileTopBar } from '@/components/shell/mobile'
 import { ButtonLink, DemoNote, Photo, Segmented } from '@/components/ui/primitives'
-import { type SavedCourse, savedCourses } from '@/lib/demo/courses'
+import { getViewer } from '@/lib/server/auth'
+import { savedCourses as loadSaved, type SavedRow as SavedCourse } from '@/lib/server/q/c'
 
 export const metadata: Metadata = { title: '저장한 코스' }
 
@@ -14,7 +16,7 @@ function Rows({ rows, size }: { rows: Row[]; size: string }) {
       {rows.map((r, i) => (
         <Link
           key={r.id}
-          href={`/course?place=${r.id}`}
+          href={`/course?place=${r.placeId}`}
           className={`flex items-center gap-3.5 py-3.5 text-ink no-underline ${i ? 'border-t border-line' : ''}`}
         >
           <Photo src={r.image.src} alt={r.image.alt} bg={r.image.bg} className={`rounded-[12px] ${size}`} />
@@ -33,6 +35,9 @@ export default async function SavedCoursesPage({
 }: {
   searchParams: Promise<{ tab?: string }>
 }) {
+  const viewer = await getViewer()
+  if (!viewer) redirect('/login?next=/course/saved')
+  const savedCourses = await loadSaved(viewer.id)
   const imported = (await searchParams).tab === 'imported'
   const tabs = [
     { href: '/course/saved', label: `내가 만든 코스 ${savedCourses.mine.length}` },

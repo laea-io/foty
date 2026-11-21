@@ -1,6 +1,6 @@
 // 코스 제안 — 검토된 장소 목록 안에서만 고른다(실시간 검색 아님 · 기획안 원칙 3·5).
 // 지금은 규칙 기반: 같은 권역 · 덜 알려진 장소 먼저 · 식사/카페 1곳 이상. 나중에 LLM을 붙여도 이 입출력을 지킨다.
-import { and, eq, inArray, ne } from 'drizzle-orm'
+import { and, eq, inArray, ne, or } from 'drizzle-orm'
 import * as s from '@/lib/db/schema'
 import type { AnyDb } from './domain/types'
 
@@ -12,16 +12,14 @@ const CAFE = ['카페']
 
 /** 핵심 장소와 같은 권역의 검토된 장소(핵심·집결 제외) */
 async function nearby(db: AnyDb, core: Place) {
+  // 같은 권역이거나 같은 읍·면(걸어서·버스로 닿는 거리)
+  const sameArea = core.region
+    ? or(eq(s.places.region, core.region), eq(s.places.area, core.area))
+    : eq(s.places.area, core.area)
   const rows = await db
     .select()
     .from(s.places)
-    .where(
-      and(
-        ne(s.places.id, core.id),
-        core.region ? eq(s.places.region, core.region) : undefined,
-        ne(s.places.group, '기타'),
-      ),
-    )
+    .where(and(ne(s.places.id, core.id), sameArea, ne(s.places.group, '기타')))
   // 스탬프 칸이 아닌(덜 알려진) 장소를 먼저
   return rows.sort((a, b) => Number(a.stamp) - Number(b.stamp) || a.name.localeCompare(b.name, 'ko'))
 }
@@ -53,18 +51,26 @@ export async function draftCourse(db: AnyDb, input: { corePlaceId: string; start
   const [core] = await db.select().from(s.places).where(eq(s.places.id, input.corePlaceId))
   if (!core) return []
   const near = await nearby(db, core)
+  const ask = input.ask ?? ''
+  // 요청 조건(실내 · 예산)에 맞는 곳을 먼저, 없으면 조건 없이
+  const ok = (p: Place) =>
+    (ask.includes('실내') ? p.indoor : true) && (ask.includes('예산') ? p.cost <= 10000 : true)
   const pick = (pred: (p: Place) => boolean, used: Set<string>) =>
-    near.find((p) => !used.has(p.id) && pred(p))
+    near.find((p) => !used.has(p.id) && pred(p) && ok(p)) ?? near.find((p) => !used.has(p.id) && pred(p))
   const used = new Set<string>()
   const coreIsEat = EAT.includes(core.group)
   const before = pick((p) => p.group === '문화 공간' || p.group === '자연', used)
   if (before) used.add(before.id)
-  const after1 = pick((p) => (coreIsEat ? p.group === '자연' : EAT.includes(p.group)), used)
-  if (after1) used.add(after1.id)
-  const after2 = input.ask?.includes('카페') === false ? undefined : pick((p) => CAFE.includes(p.group), used)
-  const seq = [before, core, after1, ...(input.ask === '덜 걷는 코스로' ? [] : [after2])].filter(
-    (p): p is Place => !!p,
+  const after1 = pick(
+    (p) => (coreIsEat ? p.group === '자연' || p.group === '문화 공간' : EAT.includes(p.group)),
+    used,
   )
+  if (after1) used.add(after1.id)
+  const after2 = pick((p) => CAFE.includes(p.group), used)
+  if (after2) used.add(after2.id)
+  const extraCafe = ask.includes('카페') ? pick((p) => CAFE.includes(p.group), used) : undefined
+  const walkLess = ask.includes('덜 걷')
+  const seq = [walkLess ? undefined : before, core, after1, after2, extraCafe].filter((p): p is Place => !!p)
   // 시간: 핵심 장소를 start에 맞추고 앞뒤를 붙인다
   const toMin = (hm: string) => Number(hm.slice(0, 2)) * 60 + Number(hm.slice(3))
   const fmt = (m: number) =>

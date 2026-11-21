@@ -912,13 +912,14 @@ export async function seedDemo(db: AnyDb, opts: { now?: Date; force?: boolean } 
 
   // 그룹 공간: 대화 · 변경 제안(광릉숲)
   const g = 'gwangneung-morning'
-  const t0 = at(addDays(sat, -1), '10:12')
+  // 대화·변경은 지금 기준(미래 시각이 되지 않게)
+  const t0 = new Date(now.getTime() - 3 * 3600000)
   await db.insert(s.messages).values([
     {
       themeId: g,
       userId: null,
       body: '최소 인원이 모여 테마가 성사됐어요. 집결과 일정을 함께 정해요.',
-      createdAt: at(addDays(sat, -3), '21:00'),
+      createdAt: new Date(now.getTime() - 26 * 3600000),
     },
     {
       themeId: g,
@@ -951,7 +952,7 @@ export async function seedDemo(db: AnyDb, opts: { now?: Date; force?: boolean } 
       major: true,
       status: '변경 확인 중',
       payload: { meet: '08:20 · 상봉역 1번 출구' },
-      createdAt: at(addDays(sat, -1), '09:00'),
+      createdAt: new Date(now.getTime() - 60 * 60000),
     })
     .returning()
   await db
@@ -968,7 +969,7 @@ export async function seedDemo(db: AnyDb, opts: { now?: Date; force?: boolean } 
       source: 'AI 대안',
       status: '제안됨',
       payload: { ord: 2, placeId: 'tofu-house' },
-      createdAt: at(addDays(sat, -1), '11:00'),
+      createdAt: new Date(now.getTime() - 40 * 60000),
     },
     {
       themeId: g,
@@ -978,8 +979,8 @@ export async function seedDemo(db: AnyDb, opts: { now?: Date; force?: boolean } 
       fromText: '국립수목원',
       toText: '봉선사',
       status: '반영됨',
-      createdAt: at(addDays(sat, -3), '09:00'),
-      decidedAt: at(addDays(sat, -3), '10:00'),
+      createdAt: new Date(now.getTime() - 30 * 3600000),
+      decidedAt: new Date(now.getTime() - 29 * 3600000),
     },
   ])
 

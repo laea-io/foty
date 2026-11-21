@@ -25,33 +25,93 @@ export function KindPicker({ current }: { current: 'business' | 'resident' }) {
   )
 }
 
-export function BusinessFields() {
+export function BusinessFields({
+  d,
+  readOnly,
+}: {
+  d?: { name: string; area: string; contact: string }
+  readOnly?: boolean
+}) {
   return (
     <div className="mt-[22px] flex flex-col gap-[18px]">
+      <input type="hidden" name="kind" value="business" />
       <Field label="상호" htmlFor="biz-name">
-        <TextInput id="biz-name" defaultValue="다산 한정식" />
+        <TextInput
+          id="biz-name"
+          name="name"
+          defaultValue={d?.name}
+          placeholder="다산 한정식"
+          readOnly={readOnly}
+          required
+        />
       </Field>
       <Field label="위치" htmlFor="biz-loc">
         <div className="relative">
           <Icon name="pin" size={18} className="absolute top-4 left-4 text-sub" />
-          <TextInput id="biz-loc" defaultValue="남양주시 조안면" className="pl-11" />
+          <TextInput
+            id="biz-loc"
+            name="area"
+            defaultValue={d ? `남양주시 ${d.area}` : ''}
+            placeholder="남양주시 조안면"
+            className="pl-11"
+            readOnly={readOnly}
+            required
+          />
         </div>
       </Field>
       <Field label="담당자 연락 수단" htmlFor="biz-contact">
-        <TextInput id="biz-contact" defaultValue="카카오톡 채널" />
+        <TextInput
+          id="biz-contact"
+          name="contact"
+          defaultValue={d?.contact}
+          placeholder="카카오톡 채널 · 전화"
+          readOnly={readOnly}
+        />
       </Field>
     </div>
   )
 }
 
-const steps = [
-  { title: '정보 제출', desc: '11월 19일 제출했어요', state: 'done' },
-  { title: '운영팀 확인 중', desc: '영업 중인 사업장인지 확인하고 있어요', state: 'now' },
-  { title: '호스트 권한', desc: '확인되면 프로필에 사업장 확인이 표시돼요', state: 'next' },
-] as const
+type Step = { title: string; desc: string; state: 'done' | 'now' | 'next' }
 
-/** 확인 진행 상태(1 제출 → 2 확인 중 → 3 권한) */
-export function JoinProgress() {
+/** 확인 진행 상태(1 제출 → 2 확인 중 → 3 권한). status = hosts.status, 없으면 아직 제출 전 */
+export function JoinProgress({
+  status,
+  submitted,
+  kind = 'business',
+}: {
+  status?: '확인 대기' | '확인 완료' | '보류' | '정지' | null
+  submitted?: string
+  kind?: 'business' | 'resident'
+}) {
+  const what = kind === 'business' ? '영업 중인 사업장인지' : '남양주 주민인지'
+  const mark = kind === 'business' ? '사업장 확인' : '남양주 주민 인증'
+  const steps: Step[] = !status
+    ? [
+        { title: '정보 제출', desc: '아래 정보를 적어 보내 주세요', state: 'now' },
+        { title: '운영팀 확인', desc: `${what} 확인해요`, state: 'next' },
+        { title: '호스트 권한', desc: `확인되면 프로필에 ${mark}이 표시돼요`, state: 'next' },
+      ]
+    : status === '확인 완료'
+      ? [
+          { title: '정보 제출', desc: `${submitted ?? ''} 제출했어요`, state: 'done' },
+          { title: '운영팀 확인', desc: '확인됐어요', state: 'done' },
+          { title: '호스트 권한', desc: `프로필에 ${mark}이 표시돼요`, state: 'done' },
+        ]
+      : [
+          { title: '정보 제출', desc: `${submitted ?? ''} 제출했어요`, state: 'done' },
+          {
+            title: status === '보류' ? '확인 보류' : status === '정지' ? '권한 정지' : '운영팀 확인 중',
+            desc:
+              status === '보류'
+                ? '운영팀이 연락드릴 거예요'
+                : status === '정지'
+                  ? '신고 확인으로 테마 등록이 멈췄어요'
+                  : `${what} 확인하고 있어요`,
+            state: 'now',
+          },
+          { title: '호스트 권한', desc: `확인되면 프로필에 ${mark}이 표시돼요`, state: 'next' },
+        ]
   return (
     <div className="rounded-[16px] px-[18px] py-1.5 shadow-[inset_0_0_0_1px_var(--color-line)]">
       {steps.map((s, i) => (

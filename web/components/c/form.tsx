@@ -46,14 +46,18 @@ export function SwitchRow({
   title,
   desc,
   defaultOn = true,
+  name,
 }: {
   title: string
   desc?: string
   defaultOn?: boolean
+  /** 폼으로 보낼 때: 켜져 있으면 'on' */
+  name?: string
 }) {
   const [on, setOn] = useState(defaultOn)
   return (
     <div className="flex items-center gap-3 border-t border-line py-4">
+      {name && <input type="hidden" name={name} value={on ? 'on' : ''} />}
       <div className="grow">
         <div className="text-[15px] font-semibold">{title}</div>
         {desc && <div className="mt-0.5 text-[12px] text-sub">{desc}</div>}
@@ -79,17 +83,26 @@ export function ChipGroup({
   options,
   defaultValue,
   multiple,
+  name,
+  onChange,
 }: {
   options: string[]
   defaultValue?: string | string[]
   multiple?: boolean
+  /** 폼으로 보낼 때(여럿이면 쉼표로) */
+  name?: string
+  onChange?: (v: string[]) => void
 }) {
   const init = Array.isArray(defaultValue) ? defaultValue : defaultValue ? [defaultValue] : []
   const [sel, setSel] = useState<string[]>(init)
-  const toggle = (o: string) =>
-    setSel((s) => (multiple ? (s.includes(o) ? s.filter((x) => x !== o) : [...s, o]) : [o]))
+  const toggle = (o: string) => {
+    const next = multiple ? (sel.includes(o) ? sel.filter((x) => x !== o) : [...sel, o]) : [o]
+    setSel(next)
+    onChange?.(next)
+  }
   return (
     <div className="flex flex-wrap gap-1.5">
+      {name && <input type="hidden" name={name} value={sel.join(',')} />}
       {options.map((o) => {
         const on = sel.includes(o)
         return (
@@ -137,17 +150,20 @@ export function Stepper({
   min = 1,
   max = 12,
   unit = '명',
+  name,
 }: {
   label: string
   value: number
   min?: number
   max?: number
   unit?: string
+  name?: string
 }) {
   const [n, setN] = useState(value)
   const btn = 'h-[34px] w-[34px] rounded-full border-0 bg-white text-[16px] disabled:opacity-40'
   return (
     <div className="flex-1">
+      {name && <input type="hidden" name={name} value={n} />}
       <div className="mb-1.5 text-[12px] text-sub">{label}</div>
       <div className="flex h-[50px] items-center justify-between rounded-[14px] bg-face px-2">
         <button

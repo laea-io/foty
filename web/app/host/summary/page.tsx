@@ -2,7 +2,10 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Badge, DemoNote, Note, Segmented } from '@/components/ui/primitives'
-import { hostStats, pastThemes } from '@/lib/demo/host'
+import { requireHost } from '@/lib/server/auth'
+import { hostSummary } from '@/lib/server/q/c'
+
+type Sum = Awaited<ReturnType<typeof hostSummary>>
 
 export const metadata: Metadata = { title: '방문 요약' }
 
@@ -11,13 +14,11 @@ const periods = [
   { href: '/host/summary?p=last', label: '지난 달' },
   { href: '/host/summary?p=all', label: '전체' },
 ]
-// 테마별 줄은 날짜 오름차순(디자인 순서)
-const rows = [pastThemes[2], pastThemes[0], pastThemes[1], pastThemes[3]]
 
-function Stats({ wide }: { wide?: boolean }) {
+function Stats({ wide, stats }: { wide?: boolean; stats: Sum['stats'] }) {
   return (
     <div className={`grid gap-y-6 ${wide ? 'grid-cols-4' : 'grid-cols-2'} mt-6`}>
-      {hostStats.map((s) => (
+      {stats.map((s) => (
         <div key={s.label}>
           <div className="text-[34px] leading-[38px] font-extrabold tracking-[-0.05em]">
             {s.value}
@@ -30,16 +31,21 @@ function Stats({ wide }: { wide?: boolean }) {
   )
 }
 
-function Rows() {
+function Rows({ rows }: { rows: Sum['rows'] }) {
   return (
     <>
       <h2 className="mt-9 mb-3 text-[18px] font-extrabold tracking-[-0.04em]">테마별</h2>
+      {!rows.length && (
+        <div className="border-t border-line py-6 text-center text-[13px] text-sub">
+          이 기간에 끝난 테마가 없어요
+        </div>
+      )}
       {rows.map((r) => (
         <div key={r.id} className="flex items-center gap-3 border-t border-line py-3.5">
           <div className="min-w-0 grow">
             <div className="truncate text-[15px] font-semibold">{r.title}</div>
             <div className="mt-0.5 text-[12px] text-sub">
-              {r.when.split(' ').slice(0, 2).join(' ')} · {r.cap}
+              {r.when} · {r.cap}
             </div>
           </div>
           {r.status === '취소' ? (
@@ -56,16 +62,18 @@ function Rows() {
         남양주 전체 방문 요약 보기 <span className="font-normal text-sub">›</span>
       </Link>
       <Note className="mt-4">
-        방문은 현장 체크인으로만 세요. 신청이나 저장은 방문으로 집계하지 않아요. 이 화면의 숫자는 시연용
-        예시예요.
+        방문은 현장 체크인으로만 세요. 신청이나 저장은 방문으로 집계하지 않아요. 지금 숫자는 시연 데이터에서
+        나왔어요.
       </Note>
     </>
   )
 }
 
 export default async function HostSummaryPage({ searchParams }: { searchParams: Promise<{ p?: string }> }) {
+  const v = await requireHost('/host/summary')
   const p = (await searchParams).p
   const current = p === 'last' ? periods[1].href : p === 'all' ? periods[2].href : periods[0].href
+  const sum = await hostSummary(v.host.id, p === 'last' ? 'last' : p === 'all' ? 'all' : 'month')
   return (
     <>
       <MobileFrame>
@@ -74,8 +82,8 @@ export default async function HostSummaryPage({ searchParams }: { searchParams: 
           <div className="mt-2">
             <Segmented items={periods} current={current} />
           </div>
-          <Stats />
-          <Rows />
+          <Stats stats={sum.stats} />
+          <Rows rows={sum.rows} />
           <DemoNote />
         </div>
       </MobileFrame>
@@ -85,8 +93,8 @@ export default async function HostSummaryPage({ searchParams }: { searchParams: 
           <div className="mt-5 max-w-[420px]">
             <Segmented items={periods} current={current} />
           </div>
-          <Stats wide />
-          <Rows />
+          <Stats wide stats={sum.stats} />
+          <Rows rows={sum.rows} />
         </div>
       </DesktopFrame>
     </>

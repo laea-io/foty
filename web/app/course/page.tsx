@@ -1,9 +1,17 @@
 import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import { CourseView } from '@/components/course/course-view'
-import { courseFor } from '@/lib/demo/courses'
+import { courseFor } from '@/lib/server/q/c'
 
 export const metadata: Metadata = { title: '코스' }
 
-export default async function CoursePage({ searchParams }: { searchParams: Promise<{ place?: string }> }) {
-  return <CourseView c={courseFor((await searchParams).place)} view="list" />
+export default async function CoursePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ place?: string; ask?: string }>
+}) {
+  const sp = await searchParams
+  const c = await courseFor(sp.place, sp.ask)
+  if (!c) notFound()
+  return <CourseView c={c} view="list" />
 }

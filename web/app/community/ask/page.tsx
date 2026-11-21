@@ -1,58 +1,40 @@
 import type { Metadata } from 'next'
-import { ChipGroup, FieldLabel, TextArea, TextInput } from '@/components/c/form'
+import { redirect } from 'next/navigation'
+import { AskForm } from '@/components/community/ask-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
-import { ButtonLink, DemoNote, Note } from '@/components/ui/primitives'
+import { Button, DemoNote } from '@/components/ui/primitives'
+import { getViewer } from '@/lib/server/auth'
+import { corePlaces } from '@/lib/server/q/c'
 
 export const metadata: Metadata = { title: '질문하기' }
 
-function Form() {
-  return (
-    <>
-      <h1 className="mt-4 mb-0 text-[22px] leading-[30px] font-extrabold tracking-[-0.04em]">
-        무엇이 궁금한가요?
-      </h1>
-      <FieldLabel>종류</FieldLabel>
-      <ChipGroup options={['여행 후기', '코스 공유', '질문']} defaultValue="질문" />
-      <FieldLabel htmlFor="title">제목</FieldLabel>
-      <TextInput id="title" defaultValue="운길산역에서 수종사까지 얼마나 걸리나요?" />
-      <FieldLabel htmlFor="body">내용</FieldLabel>
-      <TextArea
-        id="body"
-        className="min-h-[140px]"
-        defaultValue="오르막이 꽤 있다고 들었는데 운동화로 충분할까요?"
-      />
-      <FieldLabel optional>관련 장소</FieldLabel>
-      <ChipGroup options={['수종사', '운길산역', '+ 장소 추가']} defaultValue="수종사" multiple />
-      <Note className="mt-4">개인 연락처나 다른 사람의 얼굴이 담긴 사진은 올리지 말아 주세요.</Note>
-    </>
-  )
-}
-
-export default function AskPage() {
+export default async function AskPage() {
+  if (!(await getViewer())) redirect('/login?next=/community/ask')
+  const places = (await corePlaces()).slice(0, 6).map((p) => ({ id: p.id, name: p.name }))
   return (
     <>
       <MobileFrame bottom>
         <BackBar title="질문하기" back="/community" />
         <div className="px-5">
-          <Form />
+          <AskForm id="ask-m" places={places} />
           <DemoNote />
         </div>
         <BottomBar>
           <div className="grow">
-            <ButtonLink href="/community?kind=질문" size="lg" block>
+            <Button type="submit" form="ask-m" size="lg" block>
               질문 올리기
-            </ButtonLink>
+            </Button>
           </div>
         </BottomBar>
       </MobileFrame>
       <DesktopFrame>
         <div className="mx-auto max-w-[600px]">
           <div className="mb-2 text-[14px] text-sub">질문하기</div>
-          <Form />
+          <AskForm id="ask-d" places={places} />
           <div className="mt-6">
-            <ButtonLink href="/community?kind=질문" size="lg" block>
+            <Button type="submit" form="ask-d" size="lg" block>
               질문 올리기
-            </ButtonLink>
+            </Button>
           </div>
         </div>
       </DesktopFrame>

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { Icon } from '@/components/ui/icon'
 import { Badge, Chip, Note, Photo } from '@/components/ui/primitives'
-import type { Place } from '@/lib/demo/courses'
+import type { PlaceItem as Place } from '@/lib/server/q/c'
 
 const groups = ['전체', '자연', '카페', '맛집', '문화 공간'] as const
 

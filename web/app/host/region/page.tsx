@@ -1,35 +1,21 @@
 import type { Metadata } from 'next'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote, Note, Segmented } from '@/components/ui/primitives'
+import { getViewer, requireAdmin, requireHost } from '@/lib/server/auth'
+import { regionSummary } from '@/lib/server/q/c'
+
+type R = Awaited<ReturnType<typeof regionSummary>>
 
 export const metadata: Metadata = { title: '지역 방문 요약' }
 
-const stats = [
-  { value: '64', unit: '명', label: '외부 방문객' },
-  { value: '41', unit: '명', label: '남양주 첫 방문' },
-  { value: '14 / 21', unit: '', label: '성사된 테마' },
-  { value: '9', unit: '명', label: '두 번째 방문' },
-]
-const origin = [
-  ['상봉·중랑', 22],
-  ['잠실·송파', 15],
-  ['구리', 13],
-  ['청량리', 9],
-  ['하남', 5],
-] as const
-const arrive = [
-  ['조안면', 27],
-  ['진접읍', 21],
-  ['별내동', 16],
-] as const
-const periods = [
-  { href: '/host/region', label: '11월' },
-  { href: '/host/region?p=10', label: '10월' },
+const periodsFor = (r: R) => [
+  { href: '/host/region', label: `${r.months[0]}월` },
+  { href: '/host/region?p=last', label: `${r.months[1]}월` },
   { href: '/host/region?p=all', label: '전체' },
 ]
 
-function Bars({ title, rows }: { title: string; rows: readonly (readonly [string, number])[] }) {
-  const max = Math.max(...rows.map((r) => r[1]))
+function Bars({ title, rows }: { title: string; rows: [string, number][] }) {
+  const max = Math.max(1, ...rows.map((r) => r[1]))
   return (
     <>
       <h2 className="mt-9 mb-3 text-[18px] font-extrabold tracking-[-0.04em]">{title}</h2>
@@ -48,7 +34,7 @@ function Bars({ title, rows }: { title: string; rows: readonly (readonly [string
   )
 }
 
-function Body({ current, wide }: { current: string; wide?: boolean }) {
+function Body({ current, wide, r }: { current: string; wide?: boolean; r: R }) {
   return (
     <>
       <h1
@@ -60,10 +46,10 @@ function Body({ current, wide }: { current: string; wide?: boolean }) {
         지자체·상인회 협의용 자료예요. 이 화면의 숫자는 시연용 예시예요.
       </div>
       <div className={`mt-5 ${wide ? 'max-w-[420px]' : ''}`}>
-        <Segmented items={periods} current={current} />
+        <Segmented items={periodsFor(r)} current={current} />
       </div>
       <div className={`mt-6 grid gap-y-6 ${wide ? 'grid-cols-4' : 'grid-cols-2'}`}>
-        {stats.map((s) => (
+        {r.stats.map((s) => (
           <div key={s.label}>
             <div className="text-[34px] leading-[38px] font-extrabold tracking-[-0.05em]">
               {s.value}
@@ -75,35 +61,40 @@ function Body({ current, wide }: { current: string; wide?: boolean }) {
       </div>
       <div className={wide ? 'grid grid-cols-2 gap-14' : ''}>
         <div>
-          <Bars title="출발 권역별" rows={origin} />
+          <Bars title="출발 권역별" rows={r.origin} />
         </div>
         <div>
-          <Bars title="도착 권역별" rows={arrive} />
+          <Bars title="도착 권역별" rows={r.arrive} />
         </div>
       </div>
       <Note className="mt-5">
-        방문은 핵심 장소의 현장 체크인으로만 세요. 두 개 이상 권역의 스탬프를 가진 참여자는 12명이에요(재방문
-        보조 지표). 지출과 경제 효과는 이 표에 넣지 않았어요.
+        방문은 핵심 장소의 현장 체크인으로만 세요. 두 개 이상 권역의 스탬프를 가진 참여자는 {r.multiRegion}
+        명이에요(재방문 보조 지표). 지출과 경제 효과는 이 표에 넣지 않았어요.
       </Note>
     </>
   )
 }
 
 export default async function RegionSummaryPage({ searchParams }: { searchParams: Promise<{ p?: string }> }) {
+  // 지역 요약은 호스트와 운영팀이 본다
+  const viewer = await getViewer()
+  if (viewer?.role === 'admin') await requireAdmin()
+  else await requireHost('/host/region')
   const p = (await searchParams).p
-  const current = p === '10' ? periods[1].href : p === 'all' ? periods[2].href : periods[0].href
+  const r = await regionSummary(p === 'last' ? 'last' : p === 'all' ? 'all' : 'month')
+  const current = p === 'last' ? '/host/region?p=last' : p === 'all' ? '/host/region?p=all' : '/host/region'
   return (
     <>
       <MobileFrame>
         <BackBar title="지역 요약" back="/host/summary" />
         <div className="px-5">
-          <Body current={current} />
+          <Body current={current} r={r} />
           <DemoNote />
         </div>
       </MobileFrame>
       <DesktopFrame>
         <div className="mx-auto max-w-[880px]">
-          <Body current={current} wide />
+          <Body current={current} wide r={r} />
         </div>
       </DesktopFrame>
     </>

@@ -1,13 +1,15 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import { Applicants } from '@/components/host/applicants'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote, Photo, Progress } from '@/components/ui/primitives'
-import { type Theme, themeById } from '@/lib/demo/themes'
+import { applicantsOf } from '@/lib/server/q/c'
+import { ownTheme } from '@/lib/server/q/own'
+import type { ThemeView } from '@/lib/server/q/themes'
 
 export const metadata: Metadata = { title: '신청 현황' }
 
-function Body({ t }: { t: Theme }) {
+async function Body({ t }: { t: ThemeView }) {
+  const list = await applicantsOf(t.id)
   return (
     <>
       <div className="mt-2 flex items-center gap-3">
@@ -22,14 +24,14 @@ function Body({ t }: { t: Theme }) {
       <div className="mt-4">
         <Progress current={t.current} max={t.max} min={t.min} deadline={t.deadline} />
       </div>
-      <Applicants min={t.min} />
+      <Applicants themeId={t.id} list={list} min={t.min} current={t.current} />
     </>
   )
 }
 
 export default async function ApplicantsPage({ params }: { params: Promise<{ id: string }> }) {
-  const t = themeById((await params).id)
-  if (!t) notFound()
+  const { id } = await params
+  const { t } = await ownTheme(id, `/host/themes/${id}/applicants`)
   return (
     <>
       <MobileFrame>
