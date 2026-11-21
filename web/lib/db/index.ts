@@ -16,4 +16,6 @@ export const sql =
   })
 if (env.NODE_ENV !== 'production') g.pg = sql
 
-export const db = drizzle(sql, { schema })
+export const db = drizzle(sql, { schema, casing: 'snake_case' })
+export type Db = typeof db
+export { schema }
