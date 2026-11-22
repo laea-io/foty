@@ -8,3 +8,4 @@ next-env.d.ts
 *.log
 design/shots/
 ops/places/.cache/
+ops/themes/.cache/

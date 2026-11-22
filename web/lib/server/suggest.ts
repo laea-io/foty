@@ -12,8 +12,37 @@ export type Ask = '카페 한 곳 더' | '덜 걷는 코스로' | '실내 장소
 const EAT = ['맛집']
 const CAFE = ['카페']
 
-/** 핵심 장소와 같은 권역의 검토된 장소(핵심·집결 제외) */
+const dist = (a: Place, b: Place) => {
+  if (!a.lat || !a.lng || !b.lat || !b.lng) return null
+  const r = (d: number) => (d * Math.PI) / 180
+  const h =
+    Math.sin(r(b.lat - a.lat) / 2) ** 2 +
+    Math.cos(r(a.lat)) * Math.cos(r(b.lat)) * Math.sin(r(b.lng - a.lng) / 2) ** 2
+  return 6371 * 2 * Math.asin(Math.sqrt(h))
+}
+
+/** 두 장소 사이 이동(직선거리로 어림): 1km 안은 도보, 6km 넘으면 차, 그 사이는 버스 */
+export function moveText(a: Place, b: Place) {
+  const d = dist(a, b)
+  if (d == null) return '이동 10분'
+  if (d < 0.9) return `도보 ${Math.max(3, Math.round(d * 14))}분`
+  if (d > 6) return `차로 ${Math.max(5, Math.round(d * 2.2 + 4))}분`
+  return `버스 ${Math.max(8, Math.round(d * 3 + 6))}분`
+}
+
+/** 핵심 장소 가까이의 검토된 장소(핵심 제외). 좌표가 있으면 8km 안을 가까운 순으로, 없으면 같은 권역 */
 async function nearby(db: AnyDb, core: Place) {
+  if (core.lat && core.lng) {
+    const rows = await db
+      .select()
+      .from(s.places)
+      .where(and(ne(s.places.id, core.id), ne(s.places.group, '기타')))
+    return rows
+      .map((p) => ({ p, d: dist(core, p) }))
+      .filter((x): x is { p: Place; d: number } => x.d != null && x.d <= 8)
+      .sort((a, b) => a.d - b.d)
+      .map((x) => x.p)
+  }
   // 같은 권역이거나 같은 읍·면(걸어서·버스로 닿는 거리)
   const sameArea = core.region
     ? or(eq(s.places.region, core.region), eq(s.places.area, core.area))
@@ -122,13 +151,16 @@ export async function draftCourse(db: AnyDb, input: { corePlaceId: string; start
   const coreIdx = seq.findIndex((p) => p.id === core.id)
   const times: number[] = []
   times[coreIdx] = toMin(input.start)
-  for (let i = coreIdx - 1; i >= 0; i--) times[i] = times[i + 1] - stay(seq[i]) - 20
-  for (let i = coreIdx + 1; i < seq.length; i++) times[i] = times[i - 1] + stay(seq[i - 1]) + 20
+  // 머무는 시간 + 이동 시간 + 여유 5분, 5분 단위
+  const gap = (a: Place, b: Place) => Math.ceil((Number(moveText(a, b).match(/\d+/)?.[0] ?? 15) + 5) / 5) * 5
+  for (let i = coreIdx - 1; i >= 0; i--) times[i] = times[i + 1] - stay(seq[i]) - gap(seq[i], seq[i + 1])
+  for (let i = coreIdx + 1; i < seq.length; i++)
+    times[i] = times[i - 1] + stay(seq[i - 1]) + gap(seq[i - 1], seq[i])
   return seq.map((p, i) => ({
     placeId: p.id,
     time: fmt(times[i]),
     stayMin: stay(p),
-    next: i < seq.length - 1 ? (i % 2 ? '버스 12분' : '도보 8분') : null,
+    next: i < seq.length - 1 ? moveText(p, seq[i + 1]) : null,
     fixed: p.id === core.id,
     place: p,
   }))

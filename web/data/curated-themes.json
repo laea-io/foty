@@ -1,0 +1,2147 @@
+{
+  "made": "2026-11-22",
+  "themes": [
+    {
+      "id": "c-304812-1128",
+      "corePlaceId": "tour-304812",
+      "day": "2026-11-28",
+      "start": "10:00",
+      "end": "14:10",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "묘적사 팔각칠층석탑과 숯불고기",
+      "intro": "10시에 묘적사에 들러 사찰의 고요한 분위기를 보고, 대웅전 앞 팔각칠층석탑도 함께 살펴봐요. 이어서 덕소숯불고기 본점에서 점심을 먹고, 아인슈페너에서 창고형 카페 분위기를 즐겨요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-304812",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "버스 18분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2862611",
+          "time": "11:45",
+          "stayMin": 70,
+          "next": "차로 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2839560",
+          "time": "13:20",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-129770-1129",
+      "corePlaceId": "tour-129770",
+      "day": "2026-11-29",
+      "start": "11:00",
+      "end": "15:10",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "조각미술관 보고 숯불갈비",
+      "intro": "모란미술관에서 조각과 동시대 미술 전시를 보고 마석의 숯불갈비 식당으로 이동해 점심을 먹어요. 이후 화도읍 금남리의 아쿠아리움 카페 블루문에서 음료를 마시며 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-129770",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 14분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2836681",
+          "time": "12:40",
+          "stayMin": 70,
+          "next": "버스 24분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830222",
+          "time": "14:20",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-125546-1205",
+      "corePlaceId": "tour-125546",
+      "day": "2026-12-05",
+      "start": "11:00",
+      "end": "14:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "광릉의 동원이강릉을 보고 가요",
+      "intro": "11시에 남양주 광릉에서 조선 왕릉의 동원이강릉 형식을 보고 시작해요. 이어 광릉한옥점에서 숯불고기 메밀쌈 점심을 먹고, 댕그라미에서 수제 밀크티와 디저트로 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-125546",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 13분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2869033",
+          "time": "12:40",
+          "stayMin": 70,
+          "next": "버스 9분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2857487",
+          "time": "14:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-130709-1206",
+      "corePlaceId": "tour-130709",
+      "day": "2026-12-06",
+      "start": "11:00",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "서호미술관 전시 보고 물김치국수",
+      "intro": "서호미술관에서 전시를 보고 금남멧돼지에서 식사한 뒤 블루문으로 이동해요. 전시 관람과 식사, 아쿠아리움 카페를 차례로 즐기는 흐름이에요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·현장 결제",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-130709",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "도보 3분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-802310",
+          "time": "12:30",
+          "stayMin": 70,
+          "next": "버스 11분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830222",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-776530-1212",
+      "corePlaceId": "tour-776530",
+      "day": "2026-12-12",
+      "start": "10:30",
+      "end": "14:25",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "봉인사 사리탑과 다송 밥상",
+      "intro": "봉인사에서 사리탑과 절의 이야기를 보고, 다송으로 이동해 한식으로 점심을 먹어요. 식사 뒤에는 카페실버팟에서 오남호수뷰를 보며 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장에서 각자 결제",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-776530",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "버스 18분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2876998",
+          "time": "12:15",
+          "stayMin": 70,
+          "next": "도보 5분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "13:35",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-126806-1213",
+      "corePlaceId": "tour-126806",
+      "day": "2026-12-13",
+      "start": "11:00",
+      "end": "15:10",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "정약용유적지 들러 초계국수 먹기",
+      "intro": "정약용유적지에서 다산 정약용의 고향을 둘러보고 시작해요. 이어서 팔당초계국수본점에서 초계국수와 메뉴를 즐기고, 마지막에 앳더팔당 루프탑 카페로 이동해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-126806",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 20분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2845766",
+          "time": "12:45",
+          "stayMin": 70,
+          "next": "버스 16분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2863127",
+          "time": "14:20",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3013977-1219",
+      "corePlaceId": "tour-3013977",
+      "day": "2026-12-19",
+      "start": "10:00",
+      "end": "14:00",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "소달구지 체험 후 제철 한정식",
+      "intro": "소소리농장에서 자연 체험을 즐기고 소달구지 체험까지 해요. 이후 이가네자연밥상에서 제철 한정식을 맛보고 아지오1011에서 차 한 잔으로 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장 결제",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3013977",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "버스 10분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2870331",
+          "time": "11:35",
+          "stayMin": 70,
+          "next": "버스 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2850245",
+          "time": "13:10",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-780768-1220",
+      "corePlaceId": "tour-780768",
+      "day": "2026-12-20",
+      "start": "10:00",
+      "end": "13:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "피아노폭포와 멧돼지 숯불구이",
+      "intro": "화도푸른물센터의 피아노폭포를 먼저 보고 이동해요. 이어서 금남멧돼지에서 식사하고 라온숨에서 카페 시간을 보내요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장에서 각자 결제",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-780768",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "도보 6분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-802310",
+          "time": "11:35",
+          "stayMin": 70,
+          "next": "버스 12분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2829105",
+          "time": "13:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3013816-1226",
+      "corePlaceId": "tour-3013816",
+      "day": "2026-12-26",
+      "start": "10:30",
+      "end": "14:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 35,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "궁집 안채와 사랑채 둘러보기",
+      "intro": "궁집에서 조선시대 사대부가 배치를 살펴보고, 점심으로 덕소숯불고기 본점에서 숯불고기를 맛봐요. 이후 카페실버팟에서 오남호수 인근 카페 시간을 보내고 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3013816",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "버스 22분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2862611",
+          "time": "12:20",
+          "stayMin": 70,
+          "next": "차로 28분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "14:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2633910-1227",
+      "corePlaceId": "tour-2633910",
+      "day": "2026-12-27",
+      "start": "10:00",
+      "end": "14:15",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "물맑음수목원 걷고 추어탕 점심",
+      "intro": "물맑음수목원에서 자연 속 산책과 체험을 즐겨요. 이후 논골추어탕에서 점심을 먹고 카페실버팟으로 이동해 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 입장료는 현장에서 각자 결제해요.",
+      "activities": ["자연", "산책", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-2633910",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "버스 21분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2863171",
+          "time": "11:50",
+          "stayMin": 70,
+          "next": "차로 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "13:25",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-125453-1128",
+      "corePlaceId": "tour-125453",
+      "day": "2026-11-28",
+      "start": "11:00",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "천마산 오르고 통추어탕 먹어요",
+      "intro": "천마산 시립공원에서 걷고 남양주의 한가운데 솟은 산의 분위기를 느껴봐요. 이후 논골추어탕에서 점심을 먹고 화수분제빵소 남양주점으로 이어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장에서 각자 결제해요",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-125453",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "도보 8분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2863171",
+          "time": "12:35",
+          "stayMin": 70,
+          "next": "도보 9분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2767431",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3085157-1129",
+      "corePlaceId": "tour-3085157",
+      "day": "2026-11-29",
+      "start": "11:00",
+      "end": "15:05",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "딸기 따고 송어회 맛보는 하루",
+      "intro": "별마을딸기체험농장에서 딸기 따기 체험을 하고 수사골로 이동해 송어회 전문점 점심을 즐겨요. 이후 카페실버팟에서 오남호수 인근 카페 시간을 보내요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 체험비, 식사·음료는 현장 결제",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3085157",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 18분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2876677",
+          "time": "12:45",
+          "stayMin": 70,
+          "next": "도보 11분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "14:15",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-1910439-1205",
+      "corePlaceId": "tour-1910439",
+      "day": "2026-12-05",
+      "start": "10:00",
+      "end": "13:45",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "서양악기 전시와 낙지볶음 점심",
+      "intro": "국내 최초의 서양악기 박물관인 프라움악기박물관에서 상설전시를 보고 시작해요. 이후 힘찬낙지에서 낙지요리를 맛보고, 팔숲에서 차분하게 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 입장료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-1910439",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "도보 3분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2867829",
+          "time": "11:30",
+          "stayMin": 70,
+          "next": "버스 9분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2867787",
+          "time": "12:55",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3012121-1206",
+      "corePlaceId": "tour-3012121",
+      "day": "2026-12-06",
+      "start": "10:30",
+      "end": "14:30",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 35,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "이석영광장에서 독립운동을 기억해요",
+      "intro": "이석영광장에서 독립운동의 뜻을 먼저 둘러봐요. 다람쥐마을에서 한정식으로 점심을 먹고 커피에리어로 이동해 한강이 보이는 카페 시간을 보내요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장 결제",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3012121",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "버스 19분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2860371",
+          "time": "12:15",
+          "stayMin": 70,
+          "next": "버스 10분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2855336",
+          "time": "13:40",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-482079-1212",
+      "corePlaceId": "tour-482079",
+      "day": "2026-12-12",
+      "start": "10:00",
+      "end": "13:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 30,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "천보사 오르고 한우 부위 고르기",
+      "intro": "불암산 중턱 천보사에서 잠깐 들러 걸어보고, 별내동 싱싱목장으로 이동해 한우와 한돈 부위를 직접 골라요. 이후 카페파즈에서 음료와 디저트를 즐기며 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장에서 각자 결제",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-482079",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "버스 10분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2864414",
+          "time": "11:35",
+          "stayMin": 70,
+          "next": "버스 11분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840817",
+          "time": "13:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-317082-1213",
+      "corePlaceId": "tour-317082",
+      "day": "2026-12-13",
+      "start": "10:00",
+      "end": "14:05",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "봉영사 원찰 둘러보고 한우암소 육회",
+      "intro": "봉영사에서 원찰로 바뀐 사찰의 이야기를 먼저 만나고 한우암소 메뉴가 있는 우정한우명가로 이동해요. 이후 오남호수공원 인근 카페실버팟에서 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장 결제해요",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-317082",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "버스 13분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2766563",
+          "time": "11:40",
+          "stayMin": 70,
+          "next": "버스 19분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "13:15",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-1213516-1219",
+      "corePlaceId": "tour-1213516",
+      "day": "2026-12-19",
+      "start": "10:30",
+      "end": "14:15",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "몽골 전통예술 보고 점심해요",
+      "intro": "몽골문화촌에서 몽골 전통예술 공연과 전시를 보고 시작해요. 건너편 식당에서 점심을 먹은 뒤 더에이 카페로 이동해 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-1213516",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "도보 3분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-135451",
+          "time": "12:00",
+          "stayMin": 70,
+          "next": "버스 9분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2940879",
+          "time": "13:25",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-125528-1220",
+      "corePlaceId": "tour-125528",
+      "day": "2026-12-20",
+      "start": "11:00",
+      "end": "14:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 30,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "흥국사 둘러보고 생선구이 먹어요",
+      "intro": "수락산 흥국사에서 먼저 둘러보고, 별내동 생선시절로 이동해 생선구이를 먹어요. 식사 뒤에는 이구동성로스터리카페에서 커피와 함께 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-125528",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 13분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2864362",
+          "time": "12:40",
+          "stayMin": 70,
+          "next": "도보 10분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2839589",
+          "time": "14:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-250408-1226",
+      "corePlaceId": "tour-250408",
+      "day": "2026-12-26",
+      "start": "10:30",
+      "end": "14:40",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "사릉 둘러보고 한정식과 카페",
+      "intro": "사릉에서 정순왕후의 능을 둘러본 뒤 물맑은집으로 이동해요. 식사 후에는 카페실버팟에서 오남호수 근처 카페 시간을 보내요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장 결제해요",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-250408",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "버스 15분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2836700",
+          "time": "12:10",
+          "stayMin": 70,
+          "next": "차로 21분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "13:50",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2772196-1227",
+      "corePlaceId": "tour-2772196",
+      "day": "2026-12-27",
+      "start": "10:30",
+      "end": "14:35",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "열상산수폭포 산책 뒤 곰탕 점심",
+      "intro": "다산중앙공원에서 열상산수폭포와 산책로를 둘러보고 여유 있게 걸어보는 일정이에요. 이후 전주곰탕고산로54에서 곰탕 점심을 먹고 어나더쥬얼리에서 한강뷰와 함께 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장에서 각자 결제",
+      "activities": ["자연", "산책", "맛집"],
+      "stops": [
+        {
+          "placeId": "tour-2772196",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "버스 17분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2862658",
+          "time": "12:15",
+          "stayMin": 70,
+          "next": "도보 12분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830252",
+          "time": "13:45",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3014207-1128",
+      "corePlaceId": "tour-3014207",
+      "day": "2026-11-28",
+      "start": "11:00",
+      "end": "15:10",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "도자기 원데이와 보리밥 점심",
+      "intro": "마이포터리에서 손작업이나 물레작업으로 도자기 원데이 클래스를 즐겨요. 김삿갓밥집에서 보리밥 정식을 먹고 블루문에서 해수어를 보며 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 도자기 체험비, 식사·음료는 현장에서 각자 결제",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3014207",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 22분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2877273",
+          "time": "12:50",
+          "stayMin": 70,
+          "next": "버스 13분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830222",
+          "time": "14:20",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2765241-1129",
+      "corePlaceId": "tour-2765241",
+      "day": "2026-11-29",
+      "start": "10:00",
+      "end": "14:10",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "묘적사계곡 산길과 숯불고기",
+      "intro": "묘적사계곡의 상시 개방된 산길과 물줄기를 따라 가볍게 걷고, 덕소숯불고기 본점에서 점심을 먹어요. 식사 뒤에는 창고형 카페 아인슈페너로 이동해 여유롭게 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장 결제",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-2765241",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "버스 18분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2862611",
+          "time": "11:45",
+          "stayMin": 70,
+          "next": "차로 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2839560",
+          "time": "13:20",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-317505-1205",
+      "corePlaceId": "tour-317505",
+      "day": "2026-12-05",
+      "start": "10:00",
+      "end": "13:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 30,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "불암사 석씨원류 목판 보기",
+      "intro": "불암사에서 보물로 지정된 석씨원류 목판을 보고 시작해요. 이어서 싱싱목장에서 고기를 고르고, 카페파즈에서 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장 결제",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-317505",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "버스 9분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2864414",
+          "time": "11:35",
+          "stayMin": 70,
+          "next": "버스 11분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840817",
+          "time": "13:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3017985-1206",
+      "corePlaceId": "tour-3017985",
+      "day": "2026-12-06",
+      "start": "10:00",
+      "end": "14:00",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "딸기 수확하고 한정식 점심",
+      "intro": "초록향기에서 농작물 수확체험과 전통문화체험을 즐겨요. 이후 이가네자연밥상에서 제철 한정식을 먹고 아벨에서 디저트와 커피로 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 체험비, 식사·음료는 현장에서 각자 결제해요.",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3017985",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "버스 10분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2870331",
+          "time": "11:35",
+          "stayMin": 70,
+          "next": "차로 19분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2765471",
+          "time": "13:10",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-127818-1212",
+      "corePlaceId": "tour-127818",
+      "day": "2026-12-12",
+      "start": "10:00",
+      "end": "14:00",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "축령산 잣나무 숲 산책과 식사",
+      "intro": "축령산자연휴양림에서 울창한 잣나무 숲과 등산로를 따라 가볍게 둘러봐요. 이어서 은행나무가든에서 오리 요리와 토종닭 메뉴로 식사하고, 더에이에서 음료와 함께 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료는 현장에서 각자 결제해요.",
+      "activities": ["자연", "산책", "맛집"],
+      "stops": [
+        {
+          "placeId": "tour-127818",
+          "time": "10:00",
+          "stayMin": 80,
+          "next": "도보 11분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-135875",
+          "time": "11:40",
+          "stayMin": 70,
+          "next": "버스 13분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2940879",
+          "time": "13:10",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3007678-1213",
+      "corePlaceId": "tour-3007678",
+      "day": "2026-12-13",
+      "start": "10:30",
+      "end": "14:35",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "밤섬유원지 걷고 돼지불백 먹어요",
+      "intro": "왕숙천 유역에 형성된 밤섬유원지에서 먼저 산책해요. 이후 안마을돼지불백에서 돼지불백을 먹고 카페실버팟으로 이동해요.",
+      "include": "코스 안내만 포함돼요.",
+      "exclude": "교통비, 식사·음료는 현장에서 각자 결제해요.",
+      "activities": ["자연", "산책", "맛집"],
+      "stops": [
+        {
+          "placeId": "tour-3007678",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "도보 6분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2876737",
+          "time": "12:05",
+          "stayMin": 70,
+          "next": "버스 22분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "13:45",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3007648-1219",
+      "corePlaceId": "tour-3007648",
+      "day": "2026-12-19",
+      "start": "10:30",
+      "end": "14:20",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 30,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "용암천 벚꽃길 걷고 백숙 점심",
+      "intro": "에코랜드에서 용암천을 따라 이어진 벚꽃길 순환도를 둘러보고요. 서궁관에서 백숙으로 점심을 먹은 뒤 카페보리에서 한옥 분위기를 느껴요.",
+      "include": "코스 안내만 포함돼요.",
+      "exclude": "교통비, 식사·음료, 현장 결제는 각자예요.",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3007648",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "버스 10분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2836831",
+          "time": "12:05",
+          "stayMin": 70,
+          "next": "버스 9분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2836039",
+          "time": "13:30",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3080045-1220",
+      "corePlaceId": "tour-3080045",
+      "day": "2026-12-20",
+      "start": "11:00",
+      "end": "14:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "비스타밸리 승마체험 뒤 추어탕 점심",
+      "intro": "비스타밸리에서 승마체험으로 첫 일정을 시작해요. 이후 논골추어탕에서 점심을 먹고 화수분제빵소 남양주점으로 이동해요.",
+      "include": "코스 안내만 포함돼요.",
+      "exclude": "교통비, 식사·음료는 현장에서 각자 결제해요.",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3080045",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 14분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2863171",
+          "time": "12:40",
+          "stayMin": 70,
+          "next": "도보 9분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2767431",
+          "time": "14:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2765519-1226",
+      "corePlaceId": "tour-2765519",
+      "day": "2026-12-26",
+      "start": "11:00",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 35,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "미호박물관 보고 한우 점심",
+      "intro": "미호박물관에서 지구의 역사와 화석 전시를 둘러본 뒤 식사하러 이동해요. 한우 점심을 먹고 한강632스트릿에서 음료와 디저트를 즐겨요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 입장료, 식사·음료 현장 결제",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-2765519",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "도보 7분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2876634",
+          "time": "12:35",
+          "stayMin": 70,
+          "next": "버스 10분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2862046",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2773766-1227",
+      "corePlaceId": "tour-2773766",
+      "day": "2026-12-27",
+      "start": "11:00",
+      "end": "14:40",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "작품과 나를 읽는 한강뮤지엄",
+      "intro": "한강뮤지엄에서 작품과 나 사이의 해석과 소통을 살펴보고 시작해요. 이후 일심본가콩요리에서 콩요리를 맛본 뒤 브레드쏭 팔당에서 한강뷰 카페 시간을 보내요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-2773766",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "도보 5분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2841462",
+          "time": "12:30",
+          "stayMin": 70,
+          "next": "도보 3분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2836724",
+          "time": "13:50",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3085172-1128",
+      "corePlaceId": "tour-3085172",
+      "day": "2026-11-28",
+      "start": "11:00",
+      "end": "15:00",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "구암산 수련 후 보리밥 정식",
+      "intro": "국제광림비전랜드에서 사계절 수련시설을 둘러보고 남양주로 이동해요. 김삿갓밥집에서 보리밥 정식을 먹고 베이커리 씨어터에서 북한강 앞 카페 시간을 보내요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장 결제",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3085172",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 11분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2877273",
+          "time": "12:40",
+          "stayMin": 70,
+          "next": "버스 11분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2735135",
+          "time": "14:10",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2733839-1129",
+      "corePlaceId": "tour-2733839",
+      "day": "2026-11-29",
+      "start": "11:00",
+      "end": "14:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 35,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "한우등심채끝모듬과 삼패한강공원 산책",
+      "intro": "삼패한강공원에서 한강과 북한강을 따라 산책하고 자전거길과 수변공원을 둘러봐요. 점심에는 우렁찬한우명품에서 한우등심채끝모듬을 맛보고, 이어서 커피에리어에서 한강 뷰를 보며 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·현장 결제",
+      "activities": ["산책", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-2733839",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "도보 10분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2876634",
+          "time": "12:35",
+          "stayMin": 70,
+          "next": "버스 13분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2855336",
+          "time": "14:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-129868-1205",
+      "corePlaceId": "tour-129868",
+      "day": "2026-12-05",
+      "start": "10:30",
+      "end": "14:30",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 35,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "정약용 문화제와 한정식 점심",
+      "intro": "남양주문화원에서 정약용 문화제를 비롯한 지역 문화 이야기를 살펴보고 시작해요. 이어서 다람쥐마을에서 한정식을 먹고 커피에리어에서 한강이 보이는 카페 시간을 보내요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료 현장 결제",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-129868",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "버스 17분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2860371",
+          "time": "12:15",
+          "stayMin": 70,
+          "next": "버스 10분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2855336",
+          "time": "13:40",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2734937-1206",
+      "corePlaceId": "tour-2734937",
+      "day": "2026-12-06",
+      "start": "11:00",
+      "end": "15:15",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "왕숙천 산책하고 한식뷔페 먹는 날",
+      "intro": "다산수변공원에서 왕숙천 산책로를 따라 가볍게 걷고 점심은 두부마을에서 한식뷔페로 즐겨요. 식사 뒤에는 카페수석동198에서 한강 뷰를 보며 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료 현장 결제",
+      "activities": ["산책", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-2734937",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 17분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2847343",
+          "time": "12:45",
+          "stayMin": 70,
+          "next": "차로 23분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2855288",
+          "time": "14:25",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3085198-1212",
+      "corePlaceId": "tour-3085198",
+      "day": "2026-12-12",
+      "start": "10:30",
+      "end": "14:30",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "딸기 따기와 수제 잼 체험",
+      "intro": "한사랑딸기체험농장에서 딸기 따기와 수제 딸기잼 체험을 하고 가요. 점심으로 이가네자연밥상에서 제철 한정식을 먹은 뒤 아지오1011에서 차 한 잔 하며 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 체험비는 현장에서 각자 결제해요",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3085198",
+          "time": "10:30",
+          "stayMin": 80,
+          "next": "도보 9분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2870331",
+          "time": "12:05",
+          "stayMin": 70,
+          "next": "버스 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2850245",
+          "time": "13:40",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2602619-1213",
+      "corePlaceId": "tour-2602619",
+      "day": "2026-12-13",
+      "start": "11:00",
+      "end": "15:00",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "뱃나들이교 건너 강변산책",
+      "intro": "물의 정원에서 뱃나들이교를 건너 강변산책로를 따라 걸어요. 점심은 이가네자연밥상에서 제철 한정식을 먹고, 아지오1011에서 차와 디저트를 즐겨요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장 결제",
+      "activities": ["자연", "산책", "맛집"],
+      "stops": [
+        {
+          "placeId": "tour-2602619",
+          "time": "11:00",
+          "stayMin": 80,
+          "next": "버스 10분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-2870331",
+          "time": "12:35",
+          "stayMin": 70,
+          "next": "버스 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2850245",
+          "time": "14:10",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3336950-1219",
+      "corePlaceId": "tour-3336950",
+      "day": "2026-12-19",
+      "start": "11:20",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 55,
+      "transit": false,
+      "costWon": 23000,
+      "meet": "각자 차로 첫 장소에서 만나요. 상세 위치는 성사 후 공개돼요.",
+      "title": "북한강 산책길 걷는 아유 스페이스",
+      "intro": "문안산에서 가볍게 산행한 뒤 백단목간장게장에서 점심을 먹어요. 이후 아유 스페이스로 이동해 북한강 옆 산책길과 카페를 즐겨요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["산책", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-127577",
+          "time": "11:20",
+          "stayMin": 60,
+          "next": "버스 15분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2876721",
+          "time": "12:40",
+          "stayMin": 70,
+          "next": "도보 4분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-3336950",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": true
+        }
+      ]
+    },
+    {
+      "id": "c-3013767-1220",
+      "corePlaceId": "tour-3013767",
+      "day": "2026-12-20",
+      "start": "11:15",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "구 팔당역 근대역사 보고 콩요리 점심",
+      "intro": "남양주 구 팔당역에서 일자형 역사와 남은 구조를 살펴보고 일심본가콩요리로 이동해요. 식사 뒤에는 카페스토리에서 반려견과 함께 쉬어 가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-976598",
+          "time": "11:15",
+          "stayMin": 60,
+          "next": "버스 11분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2841462",
+          "time": "12:35",
+          "stayMin": 70,
+          "next": "도보 7분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-3013767",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": true
+        }
+      ]
+    },
+    {
+      "id": "c-2863065-1226",
+      "corePlaceId": "tour-2863065",
+      "day": "2026-12-26",
+      "start": "11:05",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "비빔정식 뒤 카펜트리에서 쉬어요",
+      "intro": "오남호수공원 수변산책로를 가볍게 걷고 메밀공작소에서 점심을 먹어요. 이어서 카펜트리에서 브런치와 음료를 즐기며 쉬어요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료 현장 결제",
+      "activities": ["산책", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-2733853",
+          "time": "11:05",
+          "stayMin": 60,
+          "next": "버스 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2858460",
+          "time": "12:30",
+          "stayMin": 70,
+          "next": "버스 12분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2863065",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": true
+        }
+      ]
+    },
+    {
+      "id": "c-798518-1227",
+      "corePlaceId": "tour-798518",
+      "day": "2026-12-27",
+      "start": "11:00",
+      "end": "15:40",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 35,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "황금산문화공원 산책 뒤 가든갤러리",
+      "intro": "황금산문화공원에서 숲속산책로와 잔디마당을 둘러보고 가든갤러리로 이동해요. 식사 뒤에는 미음나루를 지나 어나더쥬얼리에서 커피를 마시며 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["산책", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3012119",
+          "time": "11:00",
+          "stayMin": 60,
+          "next": "버스 13분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-798518",
+          "time": "12:20",
+          "stayMin": 70,
+          "next": "도보 3분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-611647",
+          "time": "13:40",
+          "stayMin": 60,
+          "next": "도보 3분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830252",
+          "time": "14:50",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-3447080-1128",
+      "corePlaceId": "tour-3447080",
+      "day": "2026-11-28",
+      "start": "11:10",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "황금산문화공원 숲속산책로 걷기",
+      "intro": "황금산문화공원에서 숲속산책로와 생태 연못을 따라 가볍게 걸어봐요. 이후 전주곰탕고산로54에서 곰탕을 먹고 그란스 다산에서 커피를 즐겨요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장 결제",
+      "activities": ["자연", "산책", "맛집"],
+      "stops": [
+        {
+          "placeId": "tour-3012119",
+          "time": "11:10",
+          "stayMin": 60,
+          "next": "버스 11분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2862658",
+          "time": "12:30",
+          "stayMin": 70,
+          "next": "버스 12분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-3447080",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": true
+        }
+      ]
+    },
+    {
+      "id": "c-2784077-1129",
+      "corePlaceId": "tour-2784077",
+      "day": "2026-11-29",
+      "start": "10:40",
+      "end": "15:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "미나리전 먹고 북한강변 산책",
+      "intro": "운길산에서 두물머리 쪽 풍경을 바라본 뒤 돌미나리집으로 이동해요. 마음정원에서 산책하고 앳더팔당 루프탑 카페로 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 현장에서 각자 결제",
+      "activities": ["산책", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-125458",
+          "time": "10:40",
+          "stayMin": 60,
+          "next": "버스 12분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2784077",
+          "time": "12:00",
+          "stayMin": 70,
+          "next": "버스 13분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-3018017",
+          "time": "13:30",
+          "stayMin": 60,
+          "next": "버스 22분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2863127",
+          "time": "15:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2830366-1205",
+      "corePlaceId": "tour-2830366",
+      "day": "2026-12-05",
+      "start": "11:20",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 45,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "마음정원 산책 뒤 오리주물럭",
+      "intro": "마음정원에서 북한강변을 따라 조용히 산책해요. 이어서 이가네자연밥상에서 제철 한정식을 먹고 뷰포인트카페로 이동해요.",
+      "include": "코스 안내만 포함돼요.",
+      "exclude": "교통비, 식사·음료는 현장에서 각자 결제해요.",
+      "activities": ["산책", "맛집", "사진"],
+      "stops": [
+        {
+          "placeId": "tour-3018017",
+          "time": "11:20",
+          "stayMin": 60,
+          "next": "도보 6분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2870331",
+          "time": "12:35",
+          "stayMin": 70,
+          "next": "버스 10분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830366",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": true
+        }
+      ]
+    },
+    {
+      "id": "c-2830315-1206",
+      "corePlaceId": "tour-2830315",
+      "day": "2026-12-06",
+      "start": "11:25",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 35,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "산들소리 정원 걷고 한우 점심",
+      "intro": "산들소리에서 15개의 테마 정원을 둘러보며 숲속 정원을 걸어봐요. 싱싱목장에서 한우를 맛본 뒤 닉센에서 베이커리와 커피로 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 입장료는 현장에서 각자 결제해요.",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-1312443",
+          "time": "11:25",
+          "stayMin": 60,
+          "next": "도보 9분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2864414",
+          "time": "12:40",
+          "stayMin": 70,
+          "next": "도보 4분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830315",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": true
+        }
+      ]
+    },
+    {
+      "id": "c-3356066-1212",
+      "corePlaceId": "tour-3356066",
+      "day": "2026-12-12",
+      "start": "10:40",
+      "end": "15:40",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "황금산 산책 뒤 편백찜 점심",
+      "intro": "황금산문화공원에서 가볍게 산책한 뒤 편편집 다산역점에서 편백찜과 샤브샤브를 즐겨요. 이후 테이블에이 다산점을 들렀다가 어나더쥬얼리에서 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3012119",
+          "time": "10:40",
+          "stayMin": 60,
+          "next": "버스 13분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-3356066",
+          "time": "12:00",
+          "stayMin": 70,
+          "next": "도보 6분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-3085257",
+          "time": "13:25",
+          "stayMin": 60,
+          "next": "버스 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830252",
+          "time": "14:50",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2829407-1213",
+      "corePlaceId": "tour-2829407",
+      "day": "2026-12-13",
+      "start": "11:20",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 30,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "산들소리 15개 테마정원 걷기",
+      "intro": "산들소리에서 15개의 테마 정원을 둘러보며 숲속 정원을 먼저 만나요. 이후 스테이564에서 양식 점심을 하고 보나리베로 이동해 카페 시간을 보내요.",
+      "include": "코스 안내만 포함돼요.",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["자연", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-1312443",
+          "time": "11:20",
+          "stayMin": 60,
+          "next": "도보 13분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2765481",
+          "time": "12:40",
+          "stayMin": 70,
+          "next": "도보 4분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2829407",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": true
+        }
+      ]
+    },
+    {
+      "id": "c-2830078-1219",
+      "corePlaceId": "tour-2830078",
+      "day": "2026-12-19",
+      "start": "10:35",
+      "end": "15:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "오리 로스구이 점심과 봉영사 들러요",
+      "intro": "별내어린이천문대에서 별과 행성 관측 체험을 하고 천하장사로 이동해 점심을 먹어요. 이어서 봉영사에 들렀다가 카페실버팟에서 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3013783",
+          "time": "10:35",
+          "stayMin": 60,
+          "next": "버스 19분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830078",
+          "time": "12:00",
+          "stayMin": 70,
+          "next": "버스 13분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-317082",
+          "time": "13:30",
+          "stayMin": 60,
+          "next": "버스 23분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "15:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2830326-1220",
+      "corePlaceId": "tour-2830326",
+      "day": "2026-12-20",
+      "start": "11:10",
+      "end": "14:50",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 30,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "별내어린이천문대 별 관측 체험",
+      "intro": "별내어린이천문대에서 아이들이 직접 망원경을 조작하며 별과 행성을 관측해요. 이후 수락산장어에서 장어 요리를 먹고 카페 라플렌에서 쉬어가요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료, 체험·입장료는 현장에서 각자 결제해요.",
+      "activities": ["문화 공간", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-3013783",
+          "time": "11:10",
+          "stayMin": 60,
+          "next": "버스 18분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2876702",
+          "time": "12:35",
+          "stayMin": 70,
+          "next": "도보 8분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2830326",
+          "time": "14:00",
+          "stayMin": 50,
+          "next": null,
+          "fixed": true
+        }
+      ]
+    },
+    {
+      "id": "c-3457804-1226",
+      "corePlaceId": "tour-3457804",
+      "day": "2026-12-26",
+      "start": "10:45",
+      "end": "15:55",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 35,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "손칼국수와 홍릉·유릉 둘러보기",
+      "intro": "약대울체육공원에서 가볍게 들른 뒤 손칼국수를 먹고 홍릉과 유릉을 둘러봐요. 마지막에는 봉커피에서 브런치와 음료를 마시며 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제",
+      "activities": ["산책", "카페", "문화 공간"],
+      "stops": [
+        {
+          "placeId": "tour-2733851",
+          "time": "10:45",
+          "stayMin": 60,
+          "next": "버스 9분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-3457804",
+          "time": "12:00",
+          "stayMin": 70,
+          "next": "버스 18분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-125548",
+          "time": "13:35",
+          "stayMin": 60,
+          "next": "버스 23분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2858566",
+          "time": "15:05",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    },
+    {
+      "id": "c-2847366-1227",
+      "corePlaceId": "tour-2847366",
+      "day": "2026-12-27",
+      "start": "10:35",
+      "end": "15:45",
+      "min": 3,
+      "max": 6,
+      "origin": "상봉역",
+      "travelMin": 50,
+      "transit": true,
+      "costWon": 23000,
+      "meet": "상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.",
+      "title": "수변산책로 걷고 광릉 들르기",
+      "intro": "오남호수공원 수변산책로를 따라 산책한 뒤 점심으로 콤비식당에 들러요. 오후에는 남양주 광릉을 둘러보고 카페실버팟에서 마무리해요.",
+      "include": "코스 안내",
+      "exclude": "교통비, 식사·음료·입장료는 현장에서 각자 결제해요.",
+      "activities": ["산책", "맛집", "카페"],
+      "stops": [
+        {
+          "placeId": "tour-2733853",
+          "time": "10:35",
+          "stayMin": 60,
+          "next": "버스 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2847366",
+          "time": "12:00",
+          "stayMin": 70,
+          "next": "버스 14분",
+          "fixed": true
+        },
+        {
+          "placeId": "tour-125546",
+          "time": "13:30",
+          "stayMin": 60,
+          "next": "차로 20분",
+          "fixed": false
+        },
+        {
+          "placeId": "tour-2840839",
+          "time": "14:55",
+          "stayMin": 50,
+          "next": null,
+          "fixed": false
+        }
+      ]
+    }
+  ]
+}

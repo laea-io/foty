@@ -22,11 +22,14 @@ const TIMES = ['11:30', '12:30', '17:30']
 export function NewThemeForm({
   id,
   places,
+  maxDay,
   days,
   d,
 }: {
   id: string
-  places: { id: string; label: string }[]
+  places: { id: string; label: string; group?: string }[]
+  /** 달력으로 고를 수 있는 마지막 날 */
+  maxDay?: string
   days: StripDay[]
   d: NewThemeDefaults
 }) {
@@ -44,16 +47,22 @@ export function NewThemeForm({
             defaultValue={d.place}
             className="h-[50px] w-full appearance-none rounded-[14px] border-0 bg-face pr-4 pl-11 text-[15px] text-ink outline-none focus-visible:outline-2 focus-visible:outline-ink"
           >
-            {places.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.label}
-              </option>
+            {[...new Set(places.map((p) => p.group ?? '장소'))].map((g) => (
+              <optgroup key={g} label={g}>
+                {places
+                  .filter((p) => (p.group ?? '장소') === g)
+                  .map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.label}
+                    </option>
+                  ))}
+              </optgroup>
             ))}
           </select>
         </div>
       </Field>
       <Field label="날짜와 시간">
-        <DayStrip days={days} value={d.day} name="day" />
+        <DayStrip days={days} value={d.day} name="day" max={maxDay} />
         <div className="mt-2">
           <input type="hidden" name="start" value={start} />
           <ChipGroup

@@ -8,24 +8,25 @@ import { getViewer } from '../auth'
 import { inviteOk } from '../checkin-token'
 import { loadThemes, type ThemeView } from '../domain/read'
 import { deadlineLabel, today } from '../time'
-import { homeThemes, weekend, weekStrip } from './themes'
+import { homeThemes, upcomingDates, weekend, weekStrip } from './themes'
 
 export type WeekDay = ReturnType<typeof weekStrip>[number]
 
 /** 홈 · 조건 화면: 목록 + 달력 7칸 + 빈 화면 조건 요약 */
 export async function homeData(q: HomeQuery) {
-  const [list, week] = [await homeThemes(q), weekStrip()]
+  const [list, week, dates] = [await homeThemes(q), weekStrip(), await upcomingDates()]
   const w = weekend()
   const days = week.filter((d) => d.iso === w.sat || d.iso === w.sun)
-  const d = week.find((x) => String(x.day) === q.day)
+  const day = q.day ? (dates.find((x) => x.iso === q.day)?.label ?? q.day) : null
   const conditions = [
-    q.view === 'next' ? '다음 주' : q.view === 'all' ? '전체 기간' : (d?.date ?? '이번 주말'),
+    q.view === 'next' ? '다음 주' : q.view === 'all' ? '전체 기간' : (day ?? '이번 주말'),
     `${q.origin} 출발`,
+    q.transit === '0' ? '자차' : null,
     q.budget,
   ]
     .filter(Boolean)
     .join(' · ')
-  return { list, week, days: days.length ? days : week.slice(0, 2), conditions }
+  return { list, week, days: days.length ? days : week.slice(0, 2), dates, conditions }
 }
 
 /** 호스트 블록(진행한 테마 = 여행 완료 수) */

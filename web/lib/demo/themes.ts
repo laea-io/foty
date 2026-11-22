@@ -411,4 +411,4 @@ export const week = [
 
 export const origins = ['상봉역', '청량리역', '잠실역', '구리역']
 export const activityList = ['자연', '산책', '카페', '맛집', '사진', '문화 공간']
-export const budgets = ['1만원 이하', '2만원 이하', '3만원 이하', '상관없음']
+export const budgets = ['1만원 이하', '2만원 이하', '3만원 이하', '5만원 이하', '상관없음']

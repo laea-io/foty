@@ -22,6 +22,13 @@ export async function register() {
     const r = await syncPlaces(db)
     if (r.count) console.log(`[foty] places synced: ${r.count} (${r.fetchedOn})`)
   }
+  // 운영팀 큐레이션 테마(data/curated-themes.json) — 없는 것만 넣는다. 끄려면 CURATED_THEMES=0
+  if (process.env.CURATED_THEMES !== '0') {
+    const { db } = await import('@/lib/db')
+    const { syncCurated } = await import('@/lib/db/curated-sync')
+    const r = await syncCurated(db)
+    if (r.added) console.log(`[foty] curated themes added: ${r.added}`)
+  }
   if (process.env.JOBS !== '0') {
     const { startJobs } = await import('@/lib/server/jobs')
     startJobs()

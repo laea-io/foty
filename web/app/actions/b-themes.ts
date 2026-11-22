@@ -115,8 +115,9 @@ export async function subscribeAction(input: { hostId: string; themeId: string; 
 export async function countThemesAction(q: HomeQuery) {
   const clean: HomeQuery = {
     view: q.view === 'next' || q.view === 'all' ? q.view : 'weekend',
-    day: typeof q.day === 'string' ? q.day.slice(0, 2) : undefined,
+    day: typeof q.day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(q.day) ? q.day : undefined,
     origin: typeof q.origin === 'string' ? q.origin.slice(0, 20) : '상봉역',
+    at: typeof q.at === 'string' && /^-?[\d.]+,-?[\d.]+$/.test(q.at) ? q.at.slice(0, 30) : undefined,
     transit: q.transit === '0' ? '0' : '1',
     budget: typeof q.budget === 'string' ? q.budget.slice(0, 20) : undefined,
     act: typeof q.act === 'string' ? q.act.slice(0, 80) : undefined,

@@ -92,3 +92,25 @@ describe('real places (TourAPI file)', () => {
     expect(tour.every((p) => p.image.startsWith('https://') && p.images.length > 0)).toBe(true)
   })
 })
+
+describe('curated themes (data/curated-themes.json)', () => {
+  it('loads live themes once, hosted by foty 큐레이션, with real stops', async () => {
+    const { syncCurated, CURATED_FILE } = await import('@/lib/db/curated-sync')
+    await syncPlaces(t.db, PLACES_FILE)
+    // 파일의 첫 날짜보다 사흘 전으로 시계를 맞춘다
+    const now = new Date('2026-11-25T00:00:00+09:00')
+    const r = await syncCurated(t.db, CURATED_FILE, now)
+    expect(r.added).toBe(50)
+    expect((await syncCurated(t.db, CURATED_FILE, now)).added).toBe(0)
+    const [h] = await t.db.select().from(s.hosts).where(eq(s.hosts.id, 'foty'))
+    expect(h.name).toBe('foty 큐레이션')
+    expect(h.status).toBe('확인 완료')
+    const stops = await t.db.select().from(s.themeStops)
+    const tourStops = stops.filter((x) => x.placeId.startsWith('tour-'))
+    expect(tourStops.length).toBeGreaterThanOrEqual(150)
+    // 마감이 지난 날짜는 넣지 않는다
+    const late = await testDb()
+    await syncPlaces(late.db, PLACES_FILE)
+    expect((await syncCurated(late.db, CURATED_FILE, new Date('2026-12-30T00:00:00+09:00'))).added).toBe(0)
+  })
+})

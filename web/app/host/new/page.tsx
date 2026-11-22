@@ -30,7 +30,8 @@ export default async function HostNewPage({ searchParams }: { searchParams: Prom
   const own = places.find((p) => p.name === v.host.name)
   const list = (own ? [own, ...places.filter((p) => p !== own)] : places).map((p) => ({
     id: p.id,
-    label: `${p.name} · ${p.area}`,
+    label: `${p.name} · ${p.area} · ${p.kind}`,
+    group: p.group,
   }))
   // 마감(전날 18:00)이 지난 날은 고를 수 없다
   const now = new Date()
@@ -40,6 +41,7 @@ export default async function HostNewPage({ searchParams }: { searchParams: Prom
   }))
   const more = weekStrip(new Date(now.getTime() + 7 * 86400000)).map((d) => ({ ...d, disabled: false }))
   const strip = [...days.filter((d) => !d.disabled), ...more].slice(0, 7)
+  const maxDay = addDays(strip[0]?.iso ?? days[0].iso, 60)
   const defaults = {
     place: sp.place ?? own?.id ?? places[0]?.id ?? '',
     day: sp.day,
@@ -81,7 +83,7 @@ export default async function HostNewPage({ searchParams }: { searchParams: Prom
             네 가지만 알려주세요
           </h1>
           {lead}
-          <NewThemeForm id="new-m" places={list} days={strip} d={defaults} />
+          <NewThemeForm id="new-m" places={list} days={strip} d={defaults} maxDay={maxDay} />
           {note}
           <DemoNote />
         </div>
@@ -100,7 +102,7 @@ export default async function HostNewPage({ searchParams }: { searchParams: Prom
               네 가지만 알려주세요
             </h1>
             {lead}
-            <NewThemeForm id="new-d" places={list} days={strip} d={defaults} />
+            <NewThemeForm id="new-d" places={list} days={strip} d={defaults} maxDay={maxDay} />
             {note}
             <div className="mt-6">
               <Button type="submit" form="new-d" size="lg" icon="sparkle" block>

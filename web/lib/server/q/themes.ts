@@ -2,6 +2,7 @@ import 'server-only'
 import { and, gte, inArray, lte, sql } from 'drizzle-orm'
 import { db, schema as s } from '@/lib/db'
 import type { HomeQuery } from '@/lib/demo/filters'
+import { DEFAULT_ORIGIN, findStation, originPoint, travelEstimate } from '@/lib/stations'
 import { getViewer } from '../auth'
 import { loadTheme, loadThemes, relation, type ThemeView } from '../domain/read'
 import { addDays, bookableSaturday, dayLabel, parts, today } from '../time'
@@ -31,10 +32,35 @@ export function weekStrip(now = new Date()) {
   })
 }
 
-const budgetMax: Record<string, number> = { '1만원 이하': 10000, '2만원 이하': 20000, '3만원 이하': 30000 }
-const offset: Record<string, number> = { 상봉역: 0, 청량리역: 10, 구리역: -10, 잠실역: 20 }
+const budgetMax: Record<string, number> = {
+  '1만원 이하': 10000,
+  '2만원 이하': 20000,
+  '3만원 이하': 30000,
+  '5만원 이하': 50000,
+}
 
-/** 홈 · 조건 결과. 이동 시간은 상봉역 기준 값에 출발지 차이를 더한다(실제 경로 계산 전) */
+/** 조건에 없으면: 내 프로필의 출발지(역 이름과 맞으면) → 상봉역 */
+export async function defaultOrigin() {
+  const o = (await getViewer())?.origin?.trim()
+  if (!o) return DEFAULT_ORIGIN
+  return (findStation(o) ?? findStation(`${o}역`))?.name ?? DEFAULT_ORIGIN
+}
+
+/** 앞으로 60일 동안 모집 중인 테마가 있는 날짜(조건의 날짜 칩) */
+export async function upcomingDates(now = new Date()) {
+  const t = today(now)
+  const rows = await db
+    .select({ day: s.themes.day, n: sql<number>`count(*)::int` })
+    .from(s.themes)
+    .where(
+      and(inArray(s.themes.status, ['모집 중']), gte(s.themes.day, t), lte(s.themes.day, addDays(t, 60))),
+    )
+    .groupBy(s.themes.day)
+    .orderBy(s.themes.day)
+  return rows.map((r) => ({ iso: r.day, label: dayLabel(r.day), count: Number(r.n) }))
+}
+
+/** 홈 · 조건 결과. 이동 시간은 출발지 → 핵심 장소 직선거리로 어림한다("약") */
 export async function homeThemes(q: HomeQuery, now = new Date()) {
   const viewer = await getViewer()
   const t = today(now)
@@ -45,17 +71,21 @@ export async function homeThemes(q: HomeQuery, now = new Date()) {
     from = addDays(w.sat, 7)
     to = addDays(w.sat, 8)
   } else if (q.view === 'all') to = addDays(t, 60)
-  if (q.day) {
-    const d = weekStrip(now).find((x) => String(x.day) === q.day)
-    if (d) from = to = d.iso
-  }
+  if (q.day && q.day >= t) from = to = q.day
   const conds = [inArray(s.themes.status, [...LISTED]), gte(s.themes.day, from), lte(s.themes.day, to)]
   if (q.budget && budgetMax[q.budget]) conds.push(lte(s.themes.costWon, budgetMax[q.budget]))
   if (q.transit === '1') conds.push(sql`${s.themes.transit} = true`)
   if (q.act) conds.push(sql`${s.themes.activities} && ${q.act.split(',')}::text[]`)
   const list = await loadThemes(db, { where: and(...conds), prefs: viewer?.prefs.activities })
-  const off = offset[q.origin ?? '상봉역'] ?? 0
-  return list.map((x) => ({ ...x, from: q.origin ?? x.from, travel: `${x.travelMin + off}분` }))
+  const origin = q.origin ?? DEFAULT_ORIGIN
+  const at = originPoint(origin, q.at)
+  const car = q.transit === '0'
+  return list.map((x) => {
+    const core = x.stops.find((st) => st.fixed) ?? x.stops[0]
+    const min =
+      at && core?.lat && core.lng ? travelEstimate(at, { lat: core.lat, lng: core.lng }, car) : x.travelMin
+    return { ...x, from: origin, travel: `약 ${min}분` }
+  })
 }
 
 /** 상세 + 보는 사람과의 관계 */

@@ -8,7 +8,8 @@ import { NoThemes } from '@/components/theme/empty'
 import { Icon } from '@/components/ui/icon'
 import { Button, Chip, DemoNote, Photo, Reason, TextTabs } from '@/components/ui/primitives'
 import { type HomeQuery, toSearch } from '@/lib/demo/filters'
-import { activityList, budgets, img, origins, type Theme } from '@/lib/demo/themes'
+import { activityList, budgets, img, type Theme } from '@/lib/demo/themes'
+import { DateChoices, OriginChoices, type UpcomingDate } from './conditions'
 
 /** 달력 한 칸(weekStrip) */
 export type Day = { day: number; dow: string; date: string; iso: string }
@@ -25,6 +26,7 @@ export function HomeView({
   list,
   week,
   days,
+  dates,
   conditions,
 }: {
   q: HomeQuery
@@ -32,6 +34,8 @@ export function HomeView({
   week: Day[]
   /** 데스크톱 날짜 칩(이번 주말 토·일) */
   days: Day[]
+  /** 테마가 있는 날짜(조건 패널) */
+  dates: UpcomingDate[]
   conditions: string
 }) {
   const router = useRouter()
@@ -57,15 +61,13 @@ export function HomeView({
         <div className="px-5">
           <div className="mt-[18px] flex gap-1">
             {week.map((w, i) => {
-              const on = q.day ? q.day === String(w.day) : i === 0 && q.view === 'weekend'
+              const on = q.day ? q.day === w.iso : i === 0 && q.view === 'weekend'
               return (
                 <button
-                  key={w.day}
+                  key={w.iso}
                   type="button"
                   aria-pressed={on}
-                  onClick={() =>
-                    set({ day: q.day === String(w.day) ? undefined : String(w.day), view: 'weekend' })
-                  }
+                  onClick={() => set({ day: q.day === w.iso ? undefined : w.iso, view: 'all' })}
                   className={`flex h-[58px] flex-1 flex-col items-center justify-center gap-[3px] rounded-[14px] border-0 ${on ? 'bg-ink' : 'bg-face'}`}
                 >
                   <span className={`text-[11px] ${on ? 'text-white/70' : 'text-muted'}`}>{w.dow}</span>
@@ -172,30 +174,10 @@ export function HomeView({
           <aside className="w-[260px] flex-none">
             <div className="pb-4 text-[18px] font-extrabold tracking-[-0.03em]">조건</div>
             <FilterGroup title="날짜">
-              {days.map((w) => (
-                <Chip
-                  key={w.day}
-                  selected={q.day === String(w.day)}
-                  onClick={() =>
-                    set({ day: q.day === String(w.day) ? undefined : String(w.day), view: 'weekend' })
-                  }
-                >
-                  {w.date}
-                </Chip>
-              ))}
-              <Chip
-                selected={q.view === 'next'}
-                onClick={() => set({ view: q.view === 'next' ? 'weekend' : 'next', day: undefined })}
-              >
-                다음 주말
-              </Chip>
+              <DateChoices q={q} set={set} dates={dates} max={6} />
             </FilterGroup>
             <FilterGroup title="출발지">
-              {origins.map((o) => (
-                <Chip key={o} selected={q.origin === o} onClick={() => set({ origin: o })}>
-                  {o}
-                </Chip>
-              ))}
+              <OriginChoices q={q} set={set} />
             </FilterGroup>
             <FilterGroup title="이동수단">
               <Chip selected={q.transit === '1'} onClick={() => set({ transit: '1' })}>
