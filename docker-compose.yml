@@ -7,6 +7,8 @@ services:
     build: ./web
     image: cortie/foty-web:latest
     env_file: ./web/.env.docker
+    # 후기 사진 — beta 도커 볼륨 foty_uploads(금고 백업: laea-backup-dump)
+    volumes: ["uploads:/data/uploads"]
     ports:
       - "127.0.0.1:4060:4060"
       - "172.26.4.90:4060:4060"
@@ -23,3 +25,5 @@ services:
       timeout: 5s
       start_period: 20s
       retries: 3
+volumes:
+  uploads:
