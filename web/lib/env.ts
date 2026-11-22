@@ -14,6 +14,9 @@ const schema = z.object({
   /** 카카오 로그인(없으면 카카오 버튼은 "준비 중") */
   KAKAO_REST_KEY: z.string().optional(),
   KAKAO_CLIENT_SECRET: z.string().optional(),
+  /** AI 도우미(OpenAI). 없으면 규칙 기반으로만 고른다 */
+  OPENAI_API_KEY: z.string().optional(),
+  OPENAI_MODEL: z.string().default('gpt-5.4-mini'),
   /** 스테이징 시연: 시연 계정으로 바로 들어가기 · 아무 날짜에나 체크인 */
   DEMO_MODE: z.enum(['1', '0']).default('0'),
   /** 후기 사진 저장 폴더 */

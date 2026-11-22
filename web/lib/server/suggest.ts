@@ -1,7 +1,9 @@
 // 코스 제안 — 검토된 장소 목록 안에서만 고른다(실시간 검색 아님 · 기획안 원칙 3·5).
-// 지금은 규칙 기반: 같은 권역 · 덜 알려진 장소 먼저 · 식사/카페 1곳 이상. 나중에 LLM을 붙여도 이 입출력을 지킨다.
+// OPENAI_API_KEY가 있으면 AI(ai.ts)가 후보 안에서 고르고, 없거나 실패하면 규칙 기반:
+// 같은 권역 · 덜 알려진 장소 먼저 · 식사/카페 1곳 이상. 어느 쪽이든 입출력은 같다.
 import { and, eq, inArray, ne, or } from 'drizzle-orm'
 import * as s from '@/lib/db/schema'
+import { type AiCandidate, aiPick } from './ai'
 import type { AnyDb } from './domain/types'
 
 export type Place = typeof s.places.$inferSelect
@@ -24,7 +26,19 @@ async function nearby(db: AnyDb, core: Place) {
   return rows.sort((a, b) => Number(a.stamp) - Number(b.stamp) || a.name.localeCompare(b.name, 'ko'))
 }
 
-/** AI 도우미·코스 바꾸기 요청 → 대안 장소(최대 n) */
+const toCand = (p: Place): AiCandidate => ({
+  id: p.id,
+  name: p.name,
+  kind: p.kind,
+  group: p.group,
+  area: p.area,
+  indoor: p.indoor,
+  cost: p.cost,
+  checked: !!p.checkedOn,
+})
+const MAX_CANDIDATES = 24
+
+/** AI 도우미·코스 바꾸기 요청 → 대안 장소(최대 n). label·reason은 AI가 골랐을 때만 */
 export async function suggestPlaces(
   db: AnyDb,
   input: { corePlaceId: string; ask: Ask; exclude?: string[]; n?: number },
@@ -33,6 +47,17 @@ export async function suggestPlaces(
   if (!core) return { places: [] as Place[], understood: false }
   let list = (await nearby(db, core)).filter((p) => !input.exclude?.includes(p.id))
   const ask = input.ask
+  const ai = await aiPick({
+    ask,
+    core,
+    candidates: list.slice(0, MAX_CANDIDATES).map(toCand),
+    n: input.n ?? 2,
+    purpose: 'swap',
+  })
+  if (ai) {
+    const places = ai.ids.map((id) => list.find((p) => p.id === id)).filter((p): p is Place => !!p)
+    return { places, understood: places.length > 0, label: ai.label, reason: ai.reason }
+  }
   let understood = true
   if (ask.includes('카페') || ask.includes('차')) list = list.filter((p) => CAFE.includes(p.group))
   else if (ask.includes('점심') || ask.includes('밥') || ask.includes('식사'))
@@ -43,7 +68,7 @@ export async function suggestPlaces(
   else if (ask.includes('덜 걷') || ask.includes('걷'))
     list = list.filter((p) => p.indoor || p.group !== '자연')
   else understood = false
-  return { places: list.slice(0, input.n ?? 2), understood }
+  return { places: list.slice(0, input.n ?? 2), understood, label: undefined, reason: undefined }
 }
 
 /** 핵심 장소 하나로 하루 코스 초안: 앞 1곳 + 핵심 + 뒤 1~2곳(식사나 카페 포함) */
@@ -70,7 +95,24 @@ export async function draftCourse(db: AnyDb, input: { corePlaceId: string; start
   if (after2) used.add(after2.id)
   const extraCafe = ask.includes('카페') ? pick((p) => CAFE.includes(p.group), used) : undefined
   const walkLess = ask.includes('덜 걷')
-  const seq = [walkLess ? undefined : before, core, after1, after2, extraCafe].filter((p): p is Place => !!p)
+  let seq = [walkLess ? undefined : before, core, after1, after2, extraCafe].filter((p): p is Place => !!p)
+  // 요청이 있으면 AI가 후보 안에서 다시 고른다 — 자연·문화 공간 1곳은 앞, 식사 → 카페는 뒤
+  const ai = ask
+    ? await aiPick({
+        ask,
+        core,
+        candidates: near.slice(0, MAX_CANDIDATES).map(toCand),
+        n: 3,
+        purpose: 'draft',
+      })
+    : null
+  if (ai?.ids.length) {
+    const picked = ai.ids.map((id) => near.find((p) => p.id === id)).filter((p): p is Place => !!p)
+    const lead = picked.find((p) => p.group === '자연' || p.group === '문화 공간')
+    const rank = (p: Place) => (EAT.includes(p.group) ? 0 : CAFE.includes(p.group) ? 2 : 1)
+    const tail = picked.filter((p) => p !== lead).sort((a, b) => rank(a) - rank(b))
+    seq = [lead, core, ...tail].filter((p): p is Place => !!p)
+  }
   // 시간: 핵심 장소를 start에 맞추고 앞뒤를 붙인다
   const toMin = (hm: string) => Number(hm.slice(0, 2)) * 60 + Number(hm.slice(3))
   const fmt = (m: number) =>

@@ -435,6 +435,8 @@ export async function aiSuggest(sp: SpaceData, ask: string) {
     .pop()
   return {
     understood: r.understood,
+    label: r.label,
+    reason: r.reason,
     places: checked.slice(0, 2),
     unchecked: unchecked[0] ?? null,
     checkedOn: latest ? md(latest) : null,

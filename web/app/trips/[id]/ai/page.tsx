@@ -55,8 +55,8 @@ export default async function AiPage({ params, searchParams }: Props) {
       meta: `${stayOf(p.group)}분 · ${p.cost ? `약 ${p.cost.toLocaleString('ko-KR')}원` : '무료'}`,
       image: { src: p.image, alt: p.imageAlt, bg: p.imageBg },
     }))
-    heading = `코스 근처 ${kindOf(ask)} ${places.length}곳이에요`
-    note = `${r.checkedOn ? `${r.checkedOn} 확인한 정보예요. ` : ''}핵심 장소 ${t.place}${eun(t.place)} 바뀌지 않아요. 제안은 호스트가 확인하면 일정에 반영돼요.`
+    heading = `코스 근처 ${r.label || kindOf(ask)} ${places.length}곳이에요`
+    note = `${r.reason ? `${r.reason} ` : ''}${r.checkedOn ? `${r.checkedOn} 확인한 정보예요. ` : ''}핵심 장소 ${t.place}${eun(t.place)} 바뀌지 않아요. 제안은 호스트가 확인하면 일정에 반영돼요.`
   }
   const back = `/trips/${t.id}`
   const thread = (wide?: boolean) => (
