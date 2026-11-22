@@ -19,6 +19,9 @@ const schema = z.object({
   KAKAO_REST_KEY: z.string().optional(),
   /** 카카오 로그인 Client Secret(콘솔에서 켰을 때만) */
   KAKAO_CLIENT_SECRET: z.string().optional(),
+  /** 비밀번호 찾기 메일(Resend). 없으면 운영팀이 재설정 링크를 만들어 전한다 */
+  RESEND_API_KEY: z.string().optional(),
+  MAIL_FROM: z.string().optional(),
   /** 스테이징 시연: 시연 계정으로 바로 들어가기 · 아무 날짜에나 체크인 */
   DEMO_MODE: z.enum(['1', '0']).default('0'),
   /** 후기 사진 저장 폴더 */

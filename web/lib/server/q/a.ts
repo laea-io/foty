@@ -373,13 +373,13 @@ export async function myPage(db: AnyDb, userId: string, now = new Date()) {
 }
 
 // ── 알림 ─────────────────────────────────────────────
-export async function notificationsOf(db: AnyDb, userId: string, now = new Date()) {
+export async function notificationsOf(db: AnyDb, userId: string, now = new Date(), limit = 30) {
   const rows = await db
     .select()
     .from(s.notifications)
     .where(eq(s.notifications.userId, userId))
     .orderBy(desc(s.notifications.createdAt))
-    .limit(50)
+    .limit(Math.min(Math.max(limit, 1), 300))
   return rows.map((n) => ({
     id: n.id,
     title: n.title,

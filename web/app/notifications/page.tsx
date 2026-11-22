@@ -12,7 +12,7 @@ type Notice = Awaited<ReturnType<typeof notificationsOf>>[number]
 
 export const metadata: Metadata = { title: '알림' }
 
-function List({ items }: { items: Notice[] }) {
+function List({ items, more }: { items: Notice[]; more?: number }) {
   return (
     <>
       <PageTitle>알림</PageTitle>
@@ -38,27 +38,39 @@ function List({ items }: { items: Notice[] }) {
             </span>
           </Link>
         ))}
+        {more && (
+          <Link
+            href={`/notifications?n=${more}`}
+            scroll={false}
+            className="mt-2 flex h-12 items-center justify-center rounded-[14px] text-[14px] font-semibold text-ink no-underline shadow-[inset_0_0_0_1px_var(--color-line-2)]"
+          >
+            지난 알림 더 보기
+          </Link>
+        )}
       </div>
     </>
   )
 }
 
-export default async function NotificationsPage() {
+export default async function NotificationsPage({ searchParams }: { searchParams: Promise<{ n?: string }> }) {
   const v = await requireViewer('/notifications')
-  const notices = await notificationsOf(db, v.id)
+  const n = Math.min(Math.max(Number((await searchParams).n) || 30, 30), 300)
+  const all = await notificationsOf(db, v.id, new Date(), n + 1)
+  const notices = all.slice(0, n)
+  const more = all.length > n ? n + 30 : undefined
   return (
     <>
       <MarkAllRead any={notices.some((n) => n.unread)} />
       <MobileFrame>
         <BackBar title="알림" back="/" />
         <div className="px-5">
-          <List items={notices} />
+          <List items={notices} more={more} />
         </div>
         <DemoNote className="pb-10" />
       </MobileFrame>
       <DesktopFrame>
         <Narrow eyebrow="알림">
-          <List items={notices} />
+          <List items={notices} more={more} />
         </Narrow>
       </DesktopFrame>
     </>

@@ -6,6 +6,8 @@ import { loadThemeCtx } from '@/components/b/theme/load'
 import { type DetailState, StateDetail } from '@/components/b/theme/state-detail'
 import { ThemeDetail } from '@/components/theme/detail'
 import { ButtonLink } from '@/components/ui/primitives'
+import { db } from '@/lib/db'
+import { memberIds } from '@/lib/server/domain/flow'
 import {
   detailExtras,
   hostCard,
@@ -14,6 +16,7 @@ import {
   otherDates,
   subscribedToHost,
 } from '@/lib/server/q/b-themes'
+import { blockedBy } from '@/lib/server/q/c'
 import { themeDetail } from '@/lib/server/q/themes'
 
 type Props = {
@@ -153,6 +156,17 @@ export default async function ThemePage({ params, searchParams }: Props) {
         이번에는 함께하지 못하게 됐어요
       </ButtonLink>
     )
+  }
+  // 내가 차단한 사람이 이미 함께하는 테마면 신청 전에 알려 준다
+  if (rel.role === 'viewer' && viewer) {
+    const blocked = await blockedBy(viewer.id)
+    if (blocked.length && (await memberIds(db, t.id)).some((u) => blocked.includes(u)))
+      notice = (
+        <>
+          {notice ? <>{notice} · </> : null}
+          {strong('차단한 사람이 함께해요')} · 신청하면 같은 그룹이 돼요.
+        </>
+      )
   }
   return <ThemeDetail t={t} host={host} action={action} notice={notice} />
 }

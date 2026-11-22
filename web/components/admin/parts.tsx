@@ -6,6 +6,7 @@ import {
   adminUserSuspendAction,
 } from '@/app/actions/a'
 import { ActionForm, FormError } from '@/components/a/action-form'
+import { AdminResetLink } from '@/components/a/reset-forms'
 import { Badge, Button } from '@/components/ui/primitives'
 import type { AdminPost, AdminUser } from '@/lib/server/q/a'
 
@@ -111,6 +112,7 @@ export function AdminUserRows({ users }: { users: AdminUser[] }) {
           </Button>
         </ActionForm>
       )}
+      {!u.deleted && !u.suspended && <AdminResetLink userId={u.id} />}
     </div>
   ))
 }

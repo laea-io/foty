@@ -171,7 +171,22 @@ export type PostView = {
 
 const photoImg = (src: string): Img => ({ src, alt: '후기 사진', bg: '#e6e1d8' })
 
-export async function posts(kind?: string, q?: string): Promise<PostView[]> {
+/** 내가 차단한 사람 id — 그 사람의 글·답변·대화는 내 화면에서 빠진다 */
+export async function blockedBy(viewerId?: string | null) {
+  if (!viewerId) return []
+  const rows = await db.select({ id: s.blocks.blockedId }).from(s.blocks).where(eq(s.blocks.userId, viewerId))
+  return rows.map((r) => r.id)
+}
+
+export const POSTS_PAGE = 20
+
+/** 커뮤니티 글(최신 순). limit까지 + 더 있는지 */
+export async function posts(
+  kind?: string,
+  q?: string,
+  limit = POSTS_PAGE,
+): Promise<PostView[] & { more?: boolean }> {
+  const blocked = await blockedBy((await getViewer())?.id)
   const k = (q ?? '')
     .replace(/\s+/g, '')
     .toLowerCase()
@@ -180,6 +195,7 @@ export async function posts(kind?: string, q?: string): Promise<PostView[]> {
   const conds = [
     eq(s.posts.public, true),
     isNull(s.posts.hiddenAt),
+    blocked.length ? notInArray(s.posts.authorId, blocked) : undefined,
     kind ? sql`${s.posts.kind} = ${kind}` : undefined,
     k
       ? or(sql`${norm(s.posts.title)} like ${`%${k}%`}`, sql`${norm(s.posts.body)} like ${`%${k}%`}`)
@@ -191,8 +207,13 @@ export async function posts(kind?: string, q?: string): Promise<PostView[]> {
     .innerJoin(s.users, eq(s.users.id, s.posts.authorId))
     .where(and(...conds))
     .orderBy(desc(s.posts.createdAt))
-    .limit(50)
-  return Promise.all(rows.map((r) => toPost(r.p, r.u, false)))
+    .limit(Math.min(Math.max(limit, 1), 200) + 1)
+  const more = rows.length > limit
+  const list: PostView[] & { more?: boolean } = await Promise.all(
+    rows.slice(0, limit).map((r) => toPost(r.p, r.u, false)),
+  )
+  list.more = more
+  return list
 }
 
 export async function post(id: string) {
@@ -204,13 +225,16 @@ export async function post(id: string) {
   if (!r || r.p.hiddenAt) return null
   const viewer = await getViewer()
   if (!r.p.public && viewer?.id !== r.p.authorId) return null
-  return toPost(r.p, r.u, true)
+  const blocked = await blockedBy(viewer?.id)
+  if (blocked.includes(r.p.authorId)) return null
+  return toPost(r.p, r.u, true, blocked)
 }
 
 async function toPost(
   p: typeof s.posts.$inferSelect,
   u: typeof s.users.$inferSelect,
   full: boolean,
+  blocked: string[] = [],
 ): Promise<PostView> {
   const [trips] = await db
     .select({ n: count() })
@@ -240,7 +264,13 @@ async function toPost(
           .select({ c: s.comments, name: s.users.name })
           .from(s.comments)
           .innerJoin(s.users, eq(s.users.id, s.comments.authorId))
-          .where(and(eq(s.comments.postId, p.id), isNull(s.comments.hiddenAt)))
+          .where(
+            and(
+              eq(s.comments.postId, p.id),
+              isNull(s.comments.hiddenAt),
+              blocked.length ? notInArray(s.comments.authorId, blocked) : undefined,
+            ),
+          )
           .orderBy(asc(s.comments.createdAt))
       ).map((a) => ({ author: a.name, body: a.c.body, when: ago(a.c.createdAt) }))
     : []

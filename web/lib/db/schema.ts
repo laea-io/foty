@@ -513,3 +513,16 @@ export const subscriptions = pgTable(
   },
   (t) => [primaryKey({ columns: [t.userId, t.kind, t.key] })],
 )
+
+// ── 비밀번호 재설정 ─────────────────────────────────
+/** 재설정 링크(토큰은 해시만 저장, 30분, 한 번만) */
+export const passwordResets = pgTable('password_resets', {
+  id: uuid().primaryKey().defaultRandom(),
+  userId: uuid()
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  tokenHash: text().notNull().unique(),
+  expiresAt: timestamp({ withTimezone: true }).notNull(),
+  usedAt: timestamp({ withTimezone: true }),
+  createdAt: now(),
+})

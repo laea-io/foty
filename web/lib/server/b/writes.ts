@@ -1,6 +1,6 @@
 // 그룹 B(테마 참여 · 여행)의 쓰기 — 도메인 함수(flow · changes)에 없는 작은 동작들.
 // DB를 인자로 받는다(운영 postgres.js · 시험 PGlite). 서버 액션(app/actions/b-*.ts)이 권한 확인 뒤 부른다.
-import { and, asc, eq, inArray, sql } from 'drizzle-orm'
+import { and, asc, eq, gt, inArray, isNull, or, sql } from 'drizzle-orm'
 import * as s from '@/lib/db/schema'
 import { groupIds, propose } from '../domain/changes'
 import { apply, memberIds } from '../domain/flow'
@@ -30,7 +30,34 @@ export async function sendChat(db: AnyDb, input: { themeId: string; userId: stri
     .values({ themeId: input.themeId, userId: input.userId, body })
     .returning()
   await db.execute(sql`select pg_notify(${CHAT_CHANNEL}, ${input.themeId})`)
+  // 호스트 공지는 따로 알림을 보낸다(announceAction)
+  if (!body.startsWith('[공지]')) await chatNotice(db, input.themeId, input.userId, group, body)
   return row
+}
+
+/** 새 대화 알림 — 사람마다 15분에 한 번, 이 대화 알림을 아직 안 읽었으면 또 보내지 않는다 */
+async function chatNotice(db: AnyDb, themeId: string, from: string, group: string[], body: string) {
+  const href = `/trips/${themeId}/chat`
+  const others = group.filter((u) => u && u !== from)
+  if (!others.length) return
+  const since = new Date(Date.now() - 15 * 60 * 1000)
+  const recent = await db
+    .select({ userId: s.notifications.userId })
+    .from(s.notifications)
+    .where(
+      and(
+        inArray(s.notifications.userId, others),
+        eq(s.notifications.href, href),
+        or(isNull(s.notifications.readAt), gt(s.notifications.createdAt, since)),
+      ),
+    )
+  const skip = new Set(recent.map((r) => r.userId))
+  const [u] = await db.select({ name: s.users.name }).from(s.users).where(eq(s.users.id, from))
+  await notify(
+    db,
+    others.filter((x) => !skip.has(x)),
+    { title: `${u?.name ?? '그룹'} 님이 대화를 남겼어요`, body: body.slice(0, 60), href },
+  )
 }
 
 // ── 테마 요청 ────────────────────────────────────────

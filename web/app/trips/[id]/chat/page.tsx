@@ -1,9 +1,11 @@
+import { and, eq, isNull } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import { ChatThread } from '@/components/b/trips/chat'
 import { loadSpace } from '@/components/b/trips/load'
 import { ChangeCard, SpaceDesktopHead, SpaceMobileHead } from '@/components/b/trips/space'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { StopList } from '@/components/theme/parts'
+import { db, schema } from '@/lib/db'
 import { requireViewer } from '@/lib/server/auth'
 import { chatMessages } from '@/lib/server/q/b-trips'
 
@@ -17,6 +19,17 @@ export default async function ChatPage({ params }: Props) {
   const viewer = await requireViewer(`/trips/${sp.t.id}/chat`)
   const t = sp.t
   const msgs = await chatMessages(t.id, viewer.id)
+  // 대화를 열었으면 이 대화의 알림은 읽은 것으로(다음 새 대화 알림이 다시 올 수 있게)
+  await db
+    .update(schema.notifications)
+    .set({ readAt: new Date() })
+    .where(
+      and(
+        eq(schema.notifications.userId, viewer.id),
+        eq(schema.notifications.href, `/trips/${t.id}/chat`),
+        isNull(schema.notifications.readAt),
+      ),
+    )
   const card = sp.change ? <ChangeCard sp={sp} from="chat" /> : null
   return (
     <>

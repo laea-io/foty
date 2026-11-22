@@ -372,7 +372,16 @@ export async function chatMessages(themeId: string, viewerId: string, since?: Da
     .where(and(eq(s.messages.themeId, themeId), since ? gt(s.messages.createdAt, since) : undefined))
     .orderBy(asc(s.messages.createdAt))
     .limit(300)
-  return rows.map(({ m, name }) => toChat(m, name, viewerId, h))
+  // 내가 차단한 사람의 말은 내용을 가린다(같은 그룹이라 순서는 남긴다)
+  const blocked = new Set(
+    (await db.select({ id: s.blocks.blockedId }).from(s.blocks).where(eq(s.blocks.userId, viewerId))).map(
+      (b) => b.id,
+    ),
+  )
+  return rows.map(({ m, name }) => {
+    const c = toChat(m, name, viewerId, h)
+    return m.userId && blocked.has(m.userId) ? { ...c, text: '차단한 사람의 메시지예요' } : c
+  })
 }
 
 export function toChat(

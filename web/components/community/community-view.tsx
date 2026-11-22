@@ -70,11 +70,14 @@ export function CommunityView({
   kind,
   open,
   q = '',
+  more = false,
 }: {
   list: Post[]
   kind: string
   open: ThemeView[]
   q?: string
+  /** 더 오래된 글이 남았으면 "더 보기" */
+  more?: boolean
 }) {
   return (
     <>
@@ -110,6 +113,7 @@ export function CommunityView({
                         className="h-[100px] w-full rounded-[12px]"
                       />
                     ))}
+                    {more && <MorePosts kind={kind} q={q} n={list.length} />}
                   </div>
                 )}
               </Link>
@@ -167,6 +171,7 @@ export function CommunityView({
                           className="h-[150px] w-full rounded-[14px]"
                         />
                       ))}
+                      {more && <MorePosts kind={kind} q={q} n={list.length} />}
                     </div>
                   )}
                 </Link>
@@ -183,5 +188,22 @@ export function CommunityView({
         </div>
       </DesktopFrame>
     </>
+  )
+}
+
+/** 다음 20개 — 주소의 n을 늘려 다시 그린다(맨 위부터 다시 읽지만 글 수가 적어 충분하다) */
+function MorePosts({ kind, q, n }: { kind: string; q: string; n: number }) {
+  const sp = new URLSearchParams()
+  if (kind !== '전체') sp.set('kind', kind)
+  if (q) sp.set('q', q)
+  sp.set('n', String(n + 20))
+  return (
+    <Link
+      href={`/community?${sp}`}
+      scroll={false}
+      className="mt-4 flex h-12 items-center justify-center rounded-[14px] text-[14px] font-semibold text-ink no-underline shadow-[inset_0_0_0_1px_var(--color-line-2)]"
+    >
+      글 더 보기
+    </Link>
   )
 }

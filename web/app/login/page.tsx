@@ -68,6 +68,10 @@ function EmailLogin({
         로그인
       </Button>
       <div className="mt-5 text-center text-[14px] text-sub">
+        <Link href="/login/forgot" className="text-sub">
+          비밀번호를 잊었어요
+        </Link>
+        <span className="mx-2 text-line">|</span>
         처음이세요?{' '}
         <Link href={signup} className="font-semibold text-ink">
           이메일로 가입하기
@@ -79,6 +83,7 @@ function EmailLogin({
 
 function noticeFor(sp: Awaited<SP>) {
   if (one(sp.kakao) === 'suspended') return '이용이 정지된 계정이에요. 고객센터로 문의해 주세요.'
+  if (one(sp.reset) === '1') return '비밀번호를 바꿨어요. 새 비밀번호로 로그인해 주세요.'
   if (one(sp.deleted) === '1') return '탈퇴가 끝났어요. 그동안 함께해 주셔서 고마워요.'
   if (one(sp.kakao) === 'off') return '카카오 로그인을 준비하고 있어요. 이메일로 계속해 주세요.'
   if (one(sp.kakao) === 'fail')
