@@ -23,6 +23,7 @@ COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/public ./public
 COPY --from=builder --chown=node:node /app/drizzle ./drizzle
+COPY --from=builder --chown=node:node /app/data ./data
 # 후기 사진(UPLOAD_DIR) — 도커 볼륨으로 붙인다
 RUN mkdir -p /data/uploads && chown node:node /data/uploads
 ENV UPLOAD_DIR=/data/uploads

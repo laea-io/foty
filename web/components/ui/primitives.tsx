@@ -217,7 +217,10 @@ export function Photo({
 export function DemoNote({ className }: { className?: string }) {
   return (
     <div className={`pt-6 text-center text-[11px] text-muted ${className ?? ''}`}>
-      화면의 호스트·일정·금액은 시연용 예시예요
+      장소 사진·정보 한국관광공사 ·{' '}
+      <a href="/credits" className="text-muted underline">
+        사진 출처
+      </a>
     </div>
   )
 }

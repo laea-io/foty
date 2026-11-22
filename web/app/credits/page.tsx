@@ -23,9 +23,18 @@ const credits: [Img, string, string][] = [
 function Body({ columns }: { columns?: boolean }) {
   return (
     <>
-      <PageTitle sub="시안에 쓴 사진은 위키미디어 공용의 자유 라이선스 이미지예요. 크기를 줄이고 잘라서 썼어요.">
-        사진 출처
-      </PageTitle>
+      <PageTitle sub="foty에 나오는 사진과 장소 정보를 어디서 가져왔는지 적어 둬요.">사진 출처</PageTitle>
+      <h2 className="mt-6 mb-0 text-[17px] font-extrabold tracking-[-0.03em]">장소 사진·정보</h2>
+      <div className="mt-2 text-[13px] leading-[20px] text-sub">
+        장소의 사진·주소·영업시간·메뉴·소개는 한국관광공사 TourAPI(국문 관광정보 서비스)에서 받았어요. 사진은
+        공공누리 제1유형(출처 표시) 또는 제3유형(출처 표시 + 변경 금지) 조건이라 원본 그대로 보여 줘요.
+        영업시간은 바뀔 수 있으니 가기 전에 한 번 더 확인해 주세요.
+      </div>
+      <div className="mt-2 text-[12px] text-muted">출처: 한국관광공사 · 공공데이터포털(data.go.kr)</div>
+      <h2 className="mt-8 mb-0 text-[17px] font-extrabold tracking-[-0.03em]">시안 사진</h2>
+      <div className="mt-2 text-[12px] leading-[18px] text-muted">
+        아래는 시안에 쓴 위키미디어 공용 사진이에요. 카페와 한정식 사진은 남양주가 아닌 곳의 사진이에요.
+      </div>
       <div className={`mt-[18px] ${columns ? 'columns-2 gap-14' : ''}`}>
         {credits.map(([p, title, by]) => (
           <div key={title} className="flex break-inside-avoid items-center gap-3.5 border-t border-line py-3">
@@ -36,10 +45,6 @@ function Body({ columns }: { columns?: boolean }) {
             </div>
           </div>
         ))}
-      </div>
-      <div className="mt-4 text-[12px] leading-[18px] text-muted">
-        카페와 한정식 사진은 남양주가 아닌 곳의 사진이에요. 실제 서비스에서는 직접 촬영하거나 이용 허락을 받은
-        사진으로 바꿔야 해요.
       </div>
     </>
   )

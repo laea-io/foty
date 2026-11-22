@@ -16,6 +16,7 @@ import { reviewDeadline, reviewTargets } from '../b/writes'
 import { loadThemes, type ThemeView } from '../domain/read'
 import { suggestPlaces } from '../suggest'
 import { dday, hhmm, parts, today } from '../time'
+import { REGIONS } from './a'
 import { themeDetail } from './themes'
 
 const md = (day: string) => {
@@ -379,9 +380,7 @@ export function toChat(
 
 // ── 체크인 ───────────────────────────────────────────
 const regionName = (id: string | null) =>
-  id
-    ? (regions.find((r) => r.id === id)?.name ?? ({ byeollae: '별내' } as Record<string, string>)[id] ?? id)
-    : ''
+  id ? (regions.find((r) => r.id === id)?.name ?? REGIONS.find((r) => r.id === id)?.name ?? id) : ''
 
 /** 내 체크인(스탬프): 시각 · 장소 · 같은 장소 몇 번째 · 권역 첫 스탬프인지 */
 export async function myCheckin(themeId: string, userId: string) {

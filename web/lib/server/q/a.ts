@@ -19,6 +19,8 @@ export const REGIONS = [
   { id: 'dasan', name: '다산·정약용 문화권' },
   { id: 'gwangneung', name: '광릉·진접 숲' },
   { id: 'byeollae', name: '별내' },
+  { id: 'hwado', name: '화도·수동 계곡' },
+  { id: 'city', name: '남양주 시내' },
 ] as const
 export const regionName = (id: string | null | undefined) => REGIONS.find((r) => r.id === id)?.name ?? ''
 

@@ -4,6 +4,7 @@ import { sql } from 'drizzle-orm'
 import {
   boolean,
   date,
+  doublePrecision,
   index,
   integer,
   jsonb,
@@ -152,6 +153,22 @@ export const places = pgTable('places', {
   cost: integer().notNull().default(0),
   /** 스탬프 칸으로 쓰는 핵심 장소 */
   stamp: boolean().notNull().default(false),
+  /** 원본: 'tourapi'(관광공사, data/places-namyangju.json) · null(직접 넣음) */
+  source: text(),
+  sourceId: text(),
+  address: text(),
+  lat: doublePrecision(),
+  lng: doublePrecision(),
+  phone: text(),
+  hours: text(),
+  closed: text(),
+  parking: text(),
+  menu: text(),
+  overview: text(),
+  /** 사진 여러 장(첫 장 = image) */
+  images: jsonb().$type<string[]>().notNull().default([]),
+  /** 사진 이용 조건 — 관광공사 Type1(출처 표시) · Type3(출처 표시 + 변경 금지) */
+  imageCredit: text(),
 })
 
 // ── 테마 ─────────────────────────────────────────────

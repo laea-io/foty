@@ -69,7 +69,7 @@ export function DesktopFooter() {
   if (bare(path) || path.endsWith('/apply')) return null
   return (
     <footer className="hidden border-t border-line p-7 text-center text-[12px] text-muted lg:block">
-      foty · 화면의 호스트·일정·금액은 시연용 예시예요 ·{' '}
+      foty · 장소 사진·정보 한국관광공사 ·{' '}
       <Link href="/credits" className="text-muted">
         사진 출처
       </Link>
