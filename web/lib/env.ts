@@ -11,9 +11,6 @@ const schema = z.object({
   APP_URL: z.string().url().default('http://localhost:4060'),
   /** 체크인 QR 서명·초대 토큰용 비밀값(32자 이상). 개발 기본값은 운영에서 쓰지 않는다 */
   AUTH_SECRET: z.string().min(32).default('dev-only-secret-change-me-0123456789abcdef'),
-  /** 카카오 로그인(없으면 카카오 버튼은 "준비 중") */
-  KAKAO_REST_KEY: z.string().optional(),
-  KAKAO_CLIENT_SECRET: z.string().optional(),
   /** AI 도우미(OpenAI). 없으면 규칙 기반으로만 고른다 */
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_MODEL: z.string().default('gpt-5.4-mini'),

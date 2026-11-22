@@ -51,7 +51,7 @@ export default async function EmailSignupPage({
 }) {
   const raw = (await searchParams).next
   const next = safeNext(Array.isArray(raw) ? raw[0] : raw)
-  const back = next !== '/' ? `/login/email?next=${encodeURIComponent(next)}` : '/login/email'
+  const back = next !== '/' ? `/login?next=${encodeURIComponent(next)}` : '/login'
   return (
     <>
       <MobileFrame bottom>
