@@ -1,13 +1,13 @@
 // 그룹 A(가입·마이·공통) 읽기. 모두 db를 첫 인자로 받는다 — 페이지는 '@/lib/db'의 db를, 시험은 PGlite를 넘긴다.
 import 'server-only'
-import { and, asc, desc, eq, gte, inArray, lte, or, sql } from 'drizzle-orm'
+import { and, asc, desc, eq, gte, inArray, lte, ne, or, sql } from 'drizzle-orm'
 import type { BadgeTone } from '@/components/ui/primitives'
 import * as s from '@/lib/db/schema'
 import type { Cell } from '@/lib/demo/stamps'
 import { loadThemes, type ThemeView } from '../domain/read'
 import type { AnyDb } from '../domain/types'
 import { rules } from '../rules'
-import { ago, dayLabel, parts, today } from '../time'
+import { ago, dayLabel, hhmm, parts, today } from '../time'
 
 /** 목록에 보이는 상태(q/themes.ts의 LISTED와 같다 — 그 모듈은 운영 db를 불러와서 여기서는 따로 둔다) */
 export const LISTED = ['모집 중', '모집 마감', '일정 조율 중', '일정 확정'] as const
@@ -24,30 +24,72 @@ export const REGIONS = [
 ] as const
 export const regionName = (id: string | null | undefined) => REGIONS.find((r) => r.id === id)?.name ?? ''
 
-/** 계절 시리즈 — 그 기간에 체크인한 장소가 채워진다 */
-export const SEASONS: { name: string; from: string; to: string; cells: [place: string, name: string][] }[] = [
-  {
-    name: '2026 가을',
-    from: '2026-09-01',
-    to: '2026-11-30',
-    cells: [
-      ['dumulmeori', '가을 두물머리'],
-      ['gwangneung', '가을 광릉숲'],
-      ['sujongsa', '가을 수종사'],
-      ['water-garden', '가을 물의정원'],
-    ],
-  },
-  {
-    name: '2026 겨울',
-    from: '2026-12-01',
-    to: '2027-02-28',
-    cells: [
-      ['sujongsa', '겨울 찻집'],
-      ['water-garden', '겨울 수변 산책'],
-      ['dasan-hanjeongsik', '겨울 한 상'],
-    ],
-  },
-]
+/** 계절 시리즈 — 그 기간에 체크인한 장소가 채워진다. 칸은 실제 장소(관광공사 id) + 시안 장소(스테이징)이고,
+ *  DB에 있는 장소만 보인다. 지금 계절과 다음 계절 두 개를 날짜로 계산한다 */
+const SEASON_CELLS: Record<'봄' | '여름' | '가을' | '겨울', [place: string, name: string][]> = {
+  봄: [
+    ['tour-2602619', '봄 물의 정원'],
+    ['tour-2500687', '봄 다산생태공원'],
+    ['tour-126539', '봄 봉선사'],
+    ['tour-2633910', '봄 물맑음수목원'],
+    ['tour-125453', '봄 천마산'],
+    ['water-garden', '봄 물의정원'],
+  ],
+  여름: [
+    ['tour-2765241', '여름 묘적사계곡'],
+    ['tour-127818', '여름 축령산 숲'],
+    ['tour-3007678', '여름 밤섬유원지'],
+    ['tour-3013790', '여름 팔당유원지'],
+    ['tour-125458', '여름 운길산'],
+    ['gwangneung', '여름 광릉숲'],
+  ],
+  가을: [
+    ['tour-129516', '가을 수종사'],
+    ['tour-2602619', '가을 물의 정원'],
+    ['tour-125546', '가을 광릉'],
+    ['tour-127818', '가을 축령산'],
+    ['tour-2765241', '가을 묘적사계곡'],
+    ['dumulmeori', '가을 두물머리'],
+    ['water-garden', '가을 물의정원'],
+    ['gwangneung', '가을 광릉숲'],
+    ['sujongsa', '가을 수종사'],
+  ],
+  겨울: [
+    ['tour-129516', '겨울 수종사'],
+    ['tour-3012162', '겨울 실학박물관'],
+    ['tour-1936797', '겨울 남양주시립박물관'],
+    ['tour-2773766', '겨울 한강뮤지엄'],
+    ['tour-126806', '겨울 정약용유적지'],
+    ['sujongsa', '겨울 찻집'],
+    ['dasan-hanjeongsik', '겨울 한 상'],
+  ],
+}
+
+const pad = (n: number) => String(n).padStart(2, '0')
+const lastDay = (y: number, m: number) => new Date(Date.UTC(y, m, 0)).getUTCDate()
+
+/** 날짜가 속한 계절과 그다음 계절(가을 9~11월, 겨울 12~2월, 봄 3~5월, 여름 6~8월) */
+export function seasonsFor(todayIso: string) {
+  const [y, m] = todayIso.split('-').map(Number)
+  const order = ['겨울', '봄', '여름', '가을'] as const
+  // 계절 시작 달: 겨울 12, 봄 3, 여름 6, 가을 9. 1·2월은 전년도 겨울
+  const startMonth = m === 12 || m <= 2 ? 12 : m <= 5 ? 3 : m <= 8 ? 6 : 9
+  const startYear = m <= 2 ? y - 1 : y
+  const make = (sy: number, sm: number) => {
+    const name = order[sm === 12 ? 0 : sm / 3] as keyof typeof SEASON_CELLS
+    const ey = sm === 12 ? sy + 1 : sy
+    const em = sm === 12 ? 2 : sm + 2
+    const label = sm === 12 ? `${sy}–${String(ey).slice(2)} 겨울` : `${sy} ${name}`
+    return {
+      name: label,
+      from: `${sy}-${pad(sm)}-01`,
+      to: `${ey}-${pad(em)}-${pad(lastDay(ey, em))}`,
+      cells: SEASON_CELLS[name],
+    }
+  }
+  const next = startMonth === 12 ? [startYear + 1, 3] : [startYear, startMonth + 3]
+  return [make(startYear, startMonth), make(next[0], next[1])]
+}
 
 /** 'YYYY-MM-DD' 둘 중 늦은 날 */
 function laterDay(a: string, b: string) {
@@ -185,13 +227,13 @@ export async function stampbook(db: AnyDb, userId: string, now = new Date()) {
 /** 계절 시리즈 */
 export async function seasonSeries(db: AnyDb, userId: string, now = new Date()) {
   const t = today(now)
-  const ids = [...new Set(SEASONS.flatMap((x) => x.cells.map(([p]) => p)))]
+  const ids = [...new Set(seasonsFor(t).flatMap((x) => x.cells.map(([p]) => p)))]
   const [places, visits] = await Promise.all([
     db.select().from(s.places).where(inArray(s.places.id, ids)),
     visitsOf(db, userId),
   ])
   const out = []
-  for (const season of SEASONS) {
+  for (const season of seasonsFor(t)) {
     const stats = visitStats(visits, season.from, season.to)
     const rec = await recruitingByPlace(db, laterDay(t, season.from), season.to)
     const cells = season.cells.flatMap(([id, name]) => {
@@ -493,7 +535,15 @@ export type AdminHost = {
   line: string
   badge: [BadgeTone, string]
   pending: boolean
+  /** 확인 완료면 정지할 수 있고, 정지면 해제할 수 있다 */
+  status: (typeof s.hostStatus.enumValues)[number]
   themes: number
+  kind: string
+  area: string
+  intro: string
+  contact: string
+  /** 11.21 14:05 제출 */
+  submitted: string
 }
 export type AdminReport = {
   id: string
@@ -504,7 +554,11 @@ export type AdminReport = {
   /** 처리 버튼 글자(불참 신고는 "불참 확인") */
   doneLabel: string
   href: string
+  /** 신고한 사람·대상 바로 가기 */
+  links: { href: string; label: string }[]
 }
+
+const stamp = (at: Date) => `${mdKo(at)} ${hhmm(at)}`
 
 export async function adminQueue(db: AnyDb) {
   const hosts = await db.select().from(s.hosts).orderBy(asc(s.hosts.submittedAt))
@@ -525,24 +579,47 @@ export async function adminQueue(db: AnyDb) {
           ? ['warn', '확인 대기']
           : ['muted', h.status],
     pending: h.status === '확인 대기' || h.status === '보류',
+    status: h.status,
     themes: Number(counts.find((c) => c.hostId === h.id)?.n ?? 0),
+    kind: h.kind === 'business' ? '가게·관광지(사업장)' : '남양주 주민',
+    area: h.area,
+    intro: h.intro,
+    contact: h.contact,
+    submitted: stamp(h.submittedAt),
   })
   const open = hosts.filter((h) => h.status === '확인 대기' || h.status === '보류').map(toRow)
   const done = hosts
     .filter((h) => h.status === '확인 완료')
     .sort((a, b) => (b.verifiedAt?.getTime() ?? 0) - (a.verifiedAt?.getTime() ?? 0))
-    .slice(0, 3)
     .map(toRow)
+  const stopped = hosts.filter((h) => h.status === '정지').map(toRow)
 
-  const reps = await db
-    .select({ r: s.reports, user: s.users, theme: s.themes })
-    .from(s.reports)
-    .leftJoin(s.users, eq(s.users.id, s.reports.targetUserId))
-    .leftJoin(s.themes, eq(s.themes.id, s.reports.targetThemeId))
-    .orderBy(desc(s.reports.createdAt))
-    .limit(30)
-  const reports: AdminReport[] = reps
-    .map(({ r, user, theme }) => ({
+  // 검토 중인 신고는 오래돼도 전부, 끝난 신고는 최근 20개만
+  const reportRows = (open: boolean) =>
+    db
+      .select({ r: s.reports, user: s.users, theme: s.themes })
+      .from(s.reports)
+      .leftJoin(s.users, eq(s.users.id, s.reports.targetUserId))
+      .leftJoin(s.themes, eq(s.themes.id, s.reports.targetThemeId))
+      .where(open ? eq(s.reports.status, '검토 중') : ne(s.reports.status, '검토 중'))
+      .orderBy(desc(s.reports.createdAt))
+      .limit(open ? 500 : 20)
+  const [openReps, closedReps] = await Promise.all([reportRows(true), reportRows(false)])
+  const reporterIds = [...new Set([...openReps, ...closedReps].map((x) => x.r.reporterId))]
+  const reporters = reporterIds.length
+    ? await db
+        .select({ id: s.users.id, name: s.users.name, handle: s.users.handle })
+        .from(s.users)
+        .where(inArray(s.users.id, reporterIds))
+    : []
+  const reports: AdminReport[] = [...openReps, ...closedReps].map(({ r, user, theme }) => {
+    const by = reporters.find((x) => x.id === r.reporterId)
+    const links = [
+      user ? { href: `/users/${user.handle}`, label: `대상 ${user.name}` } : null,
+      theme ? { href: `/themes/${theme.id}`, label: `테마 ${theme.title}` } : null,
+      by ? { href: `/users/${by.handle}`, label: `신고한 사람 ${by.name}` } : null,
+    ].filter((x): x is { href: string; label: string } => !!x)
+    return {
       id: r.id,
       name: user?.name ?? theme?.title ?? '운영팀 문의',
       line: [r.reason, `${md(today(r.createdAt))} 접수`, r.detail || null, user && theme ? theme.title : null]
@@ -556,14 +633,144 @@ export async function adminQueue(db: AnyDb) {
       open: r.status === '검토 중',
       doneLabel: r.reason === '약속 시간 불참' ? '불참 확인' : '처리 완료',
       href: user ? `/users/${user.handle}` : theme ? `/themes/${theme.id}` : '/admin',
-    }))
-    .sort((a, b) => Number(b.open) - Number(a.open))
+      links,
+    }
+  })
   return {
-    hosts: [...open, ...done],
+    hosts: [...open, ...done, ...stopped],
     openHosts: open.filter((h) => h.badge[1] === '확인 대기').length,
     reports,
     openReports: reports.filter((r) => r.open).length,
   }
+}
+
+export type AdminUser = {
+  id: string
+  handle: string
+  name: string
+  email: string | null
+  role: string
+  kakao: boolean
+  created: string
+  suspended: boolean
+  deleted: boolean
+}
+
+/** 사용자 찾기(handle·이름·이메일). 검색어가 없으면 최근 가입 30명 */
+export async function adminUsers(db: AnyDb, q = ''): Promise<AdminUser[]> {
+  const k = q.trim().toLowerCase()
+  const rows = await db
+    .select()
+    .from(s.users)
+    .where(
+      k
+        ? or(
+            sql`lower(${s.users.handle}) like ${like(k)}`,
+            sql`lower(${s.users.name}) like ${like(k)}`,
+            sql`lower(coalesce(${s.users.email}, '')) like ${like(k)}`,
+          )
+        : undefined,
+    )
+    .orderBy(desc(s.users.createdAt))
+    .limit(k ? 50 : 30)
+  return rows.map((u) => ({
+    id: u.id,
+    handle: u.handle,
+    name: u.name,
+    email: u.email,
+    role: u.role,
+    kakao: !!u.kakaoId,
+    created: mdKo(u.createdAt),
+    suspended: !!u.suspendedAt,
+    deleted: u.handle.startsWith('deleted-'),
+  }))
+}
+
+export type AdminPost = {
+  id: string
+  title: string
+  kind: string
+  author: string
+  when: string
+  hidden: boolean
+  comments: { id: string; author: string; body: string; when: string; hidden: boolean }[]
+}
+
+/** 커뮤니티 관리: 최근 글 20개 + 각 글의 댓글(숨긴 것 포함) */
+export async function adminPosts(db: AnyDb, now = new Date()): Promise<AdminPost[]> {
+  const rows = await db
+    .select({ p: s.posts, author: s.users.name })
+    .from(s.posts)
+    .innerJoin(s.users, eq(s.users.id, s.posts.authorId))
+    .orderBy(desc(s.posts.createdAt))
+    .limit(20)
+  const ids = rows.map((r) => r.p.id)
+  const cs = ids.length
+    ? await db
+        .select({ c: s.comments, author: s.users.name })
+        .from(s.comments)
+        .innerJoin(s.users, eq(s.users.id, s.comments.authorId))
+        .where(inArray(s.comments.postId, ids))
+        .orderBy(asc(s.comments.createdAt))
+    : []
+  return rows.map(({ p, author }) => ({
+    id: p.id,
+    title: p.title,
+    kind: p.kind,
+    author,
+    when: ago(p.createdAt, now),
+    hidden: !!p.hiddenAt,
+    comments: cs
+      .filter((x) => x.c.postId === p.id)
+      .map((x) => ({
+        id: x.c.id,
+        author: x.author,
+        body: x.c.body,
+        when: ago(x.c.createdAt, now),
+        hidden: !!x.c.hiddenAt,
+      })),
+  }))
+}
+
+/** 운영팀이 취소할 수 있는 테마: 아직 끝나지 않은 앞으로의 테마 */
+export async function adminThemes(db: AnyDb, now = new Date()) {
+  const rows = await db
+    .select({ t: s.themes, host: s.hosts.name })
+    .from(s.themes)
+    .innerJoin(s.hosts, eq(s.hosts.id, s.themes.hostId))
+    .where(and(inArray(s.themes.status, [...LISTED]), gte(s.themes.day, today(now))))
+    .orderBy(asc(s.themes.day))
+    .limit(40)
+  return rows.map(({ t, host }) => ({
+    id: t.id,
+    title: t.title,
+    line: `${dayLabel(t.day)} · ${host} · ${t.status}`,
+  }))
+}
+
+/** 참여 기록 검토 중(호스트 확인과 체크인이 어긋난 것) */
+export async function adminAttendance(db: AnyDb) {
+  const rows = await db
+    .select({
+      a: s.attendance,
+      title: s.themes.title,
+      day: s.themes.day,
+      name: s.users.name,
+      handle: s.users.handle,
+    })
+    .from(s.attendance)
+    .innerJoin(s.themes, eq(s.themes.id, s.attendance.themeId))
+    .innerJoin(s.users, eq(s.users.id, s.attendance.userId))
+    .where(eq(s.attendance.status, '검토 중'))
+    .orderBy(asc(s.attendance.updatedAt))
+  return rows.map((r) => ({
+    themeId: r.a.themeId,
+    userId: r.a.userId,
+    title: r.title,
+    name: r.name,
+    handle: r.handle,
+    line: [dayLabel(r.day), r.a.note].filter(Boolean).join(' · '),
+  }))
 }
 
 // ── 프로필 ───────────────────────────────────────────

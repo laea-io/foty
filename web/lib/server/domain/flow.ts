@@ -58,14 +58,26 @@ async function announceIfMatched(db: Tx, t: typeof s.themes.$inferSelect, before
 // ── 신청 ─────────────────────────────────────────────
 export async function apply(
   db: AnyDb,
-  input: { themeId: string; userId: string; party?: number; message?: string; now?: Date },
+  input: {
+    themeId: string
+    userId: string
+    party?: number
+    message?: string
+    now?: Date
+    /** 초대 링크로 들어온 친구: 초대한 사람이 잡아 둔 자리를 넘겨받는다(마감·모집 마감이어도 된다) */
+    seatFrom?: '수락' | '신청 대기'
+  },
 ): Promise<{ status: '수락' | '신청 대기'; applicationId: string }> {
   const party = Math.min(Math.max(input.party ?? 1, 1), rules.partyMax)
   const now = input.now ?? new Date()
   return db.transaction(async (tx) => {
     const t = await lockTheme(tx, input.themeId)
-    if (t.status !== '모집 중') throw new FlowError('closed', '모집이 끝난 테마예요')
-    if (t.deadline <= now) throw new FlowError('closed', '모집 마감 시간이 지났어요')
+    if (input.seatFrom) {
+      if (t.status === '취소' || t.status === '여행 완료') throw new FlowError('closed', '이미 끝난 테마예요')
+    } else {
+      if (t.status !== '모집 중') throw new FlowError('closed', '모집이 끝난 테마예요')
+      if (t.deadline <= now) throw new FlowError('closed', '모집 마감 시간이 지났어요')
+    }
     const hostUser = await hostUserId(tx, t.hostId)
     if (hostUser === input.userId) throw new FlowError('self', '내가 연 테마에는 신청할 수 없어요')
     const [prev] = await tx
@@ -77,7 +89,7 @@ export async function apply(
     if (prev?.status === '거절') throw new FlowError('rejected', '이 테마에는 다시 신청할 수 없어요')
     const before = await acceptedCount(tx, t.id)
     if (before + party > t.max) throw new FlowError('full', '남은 자리가 없어요')
-    const status = t.confirmMode === 'auto' ? '수락' : '신청 대기'
+    const status = input.seatFrom === '수락' || t.confirmMode === 'auto' ? '수락' : '신청 대기'
     const values = {
       party,
       message: input.message ?? '',
@@ -94,8 +106,15 @@ export async function apply(
           .insert(s.applications)
           .values({ themeId: t.id, userId: input.userId, ...values })
           .returning()
-    if (status === '수락') await announceIfMatched(tx, t, before, before + party)
-    else
+    if (status === '수락') {
+      await announceIfMatched(tx, t, before, before + party)
+      if (!input.seatFrom)
+        await notify(tx, [hostUser], {
+          title: '새 참여자가 함께해요',
+          body: `${t.title} · ${before + party}/${t.max}명`,
+          href: `/host/themes/${t.id}/applicants`,
+        })
+    } else
       await notify(tx, [hostUser], {
         title: '새 신청이 왔어요',
         body: t.title,
@@ -124,6 +143,26 @@ export async function cancelApplication(db: AnyDb, input: { themeId: string; use
       .where(eq(s.applications.id, a.id))
     if (t.status === '모집 마감' && t.deadline > new Date())
       await tx.update(s.themes).set({ status: '모집 중' }).where(eq(s.themes.id, t.id))
+    if (a.status === '수락')
+      await notify(tx, [await hostUserId(tx, t.hostId)], {
+        title: '참여자 한 명이 신청을 취소했어요',
+        body: `${t.title} · ${accepted - a.party}/${t.max}명`,
+        href: `/host/themes/${t.id}/applicants`,
+      })
+    // 이 신청의 초대 링크로 들어온 친구에게도 알린다(친구 신청은 그대로 둔다)
+    const friends = await tx
+      .select({ userId: s.applications.userId })
+      .from(s.applications)
+      .where(and(eq(s.applications.inviteToken, a.id), inArray(s.applications.status, [...OPEN_APPS])))
+    await notify(
+      tx,
+      friends.map((f) => f.userId),
+      {
+        title: '함께 신청한 친구가 취소했어요',
+        body: `${t.title} · 내 신청은 그대로예요`,
+        href: `/themes/${t.id}`,
+      },
+    )
   })
 }
 
@@ -199,6 +238,8 @@ export async function confirmSchedule(db: AnyDb, input: { themeId: string; hostU
       .select({ id: s.changes.id })
       .from(s.changes)
       .where(and(eq(s.changes.themeId, t.id), eq(s.changes.status, '변경 확인 중')))
+    if (t.status !== '일정 조율 중' && t.status !== '모집 마감')
+      throw new FlowError('status', '모집이 끝나고 일정을 조율하는 중에만 확정할 수 있어요')
     if (pending.length) throw new FlowError('pending', '참여자 확인을 기다리는 변경이 있어요')
     if ((await acceptedCount(tx, t.id)) < t.min) throw new FlowError('not-matched', '아직 성사되지 않았어요')
     await tx.update(s.themes).set({ status: '일정 확정' }).where(eq(s.themes.id, t.id))
@@ -219,13 +260,40 @@ export async function tick(db: AnyDb, now = new Date()) {
     .where(and(inArray(s.themes.status, ['모집 중', '모집 마감']), lt(s.themes.deadline, now)))
   for (const t of due) {
     await db.transaction(async (tx) => {
+      // 마감까지 친구가 들어오지 않은 2인 신청은 혼자 신청으로 바꾼다(초대 기한)
+      const solo = await tx
+        .update(s.applications)
+        .set({ party: 1 })
+        .where(
+          and(
+            eq(s.applications.themeId, t.id),
+            inArray(s.applications.status, [...OPEN_APPS]),
+            sql`${s.applications.party} > 1`,
+          ),
+        )
+        .returning({ userId: s.applications.userId })
+      await notify(
+        tx,
+        solo.map((x) => x.userId),
+        { title: '친구가 신청하지 않아 혼자 신청으로 바뀌었어요', body: t.title, href: `/themes/${t.id}` },
+      )
       const n = await acceptedCount(tx, t.id)
       if (n >= t.min) {
         await tx.update(s.themes).set({ status: '일정 조율 중' }).where(eq(s.themes.id, t.id))
-        await tx
+        const dropped = await tx
           .update(s.applications)
           .set({ status: '신청 취소', decidedAt: now })
           .where(and(eq(s.applications.themeId, t.id), eq(s.applications.status, '신청 대기')))
+          .returning({ userId: s.applications.userId })
+        await notify(
+          tx,
+          dropped.map((x) => x.userId),
+          {
+            title: '모집이 마감돼 신청이 닫혔어요',
+            body: `${t.title} · 호스트가 마감 전에 확인하지 못했어요`,
+            href: `/themes/${t.id}`,
+          },
+        )
       } else {
         await tx
           .update(s.themes)
@@ -265,13 +333,23 @@ export async function tick(db: AnyDb, now = new Date()) {
           .values({ themeId: t.id, userId, status: done.has(userId) ? '참여 확인' : '검토 중' })
           .onConflictDoNothing()
       }
-      await notify(tx, ids, {
-        title: '여행은 어땠나요?',
-        body: '함께한 사람들에게 평가를 남겨 주세요.',
-        href: `/trips/${t.id}/review`,
+      await notify(
+        tx,
+        ids.filter((u) => done.has(u)),
+        {
+          title: '여행은 어땠나요?',
+          body: '함께한 사람들에게 평가를 남겨 주세요.',
+          href: `/trips/${t.id}/review`,
+        },
+      )
+      await notify(tx, [await hostUserId(tx, t.hostId)], {
+        title: '여행이 끝났어요',
+        body: `${t.title} · 체크인 ${done.size}/${ids.length}명 — 참여자 평가를 남겨 주세요`,
+        href: `/host/themes/${t.id}/review`,
       })
     })
   }
+  await reminders(db, now)
   return { closed: due.length }
 }
 
@@ -322,4 +400,67 @@ export async function checkin(
       .where(and(eq(s.checkins.userId, input.userId), eq(s.checkins.placeId, t.corePlaceId)))
     return { created: !!row, placeId: t.corePlaceId, visits: Number(visits[0]?.n ?? 1) }
   })
+}
+
+/** 같은 사람에게 같은 알림(제목+주소)을 이미 보냈으면 건너뛴다 */
+async function notifyOnce(db: Tx, userIds: string[], n: { title: string; body?: string; href: string }) {
+  if (!userIds.length) return
+  const sent = await db
+    .select({ userId: s.notifications.userId })
+    .from(s.notifications)
+    .where(
+      and(
+        inArray(s.notifications.userId, userIds),
+        eq(s.notifications.title, n.title),
+        eq(s.notifications.href, n.href),
+      ),
+    )
+  const had = new Set(sent.map((x) => x.userId))
+  await notify(
+    db,
+    userIds.filter((u) => !had.has(u)),
+    n,
+  )
+}
+
+/** 여행 날 아침(08시 이후) 체크인 안내 · 완료 3일 뒤 평가 안 한 사람에게 한 번 더 */
+export async function reminders(db: AnyDb, now = new Date()) {
+  const kstDay = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(now)
+  const hour = Number(
+    new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', hour12: false }).format(now),
+  )
+  if (hour >= 8) {
+    const todays = await db
+      .select()
+      .from(s.themes)
+      .where(and(eq(s.themes.day, kstDay), inArray(s.themes.status, ['일정 조율 중', '일정 확정'])))
+    for (const t of todays)
+      await notifyOnce(db, await memberIds(db, t.id), {
+        title: `오늘 ${t.start} ${t.title}`,
+        body: '현장에서 호스트의 QR을 찍어 체크인해 주세요.',
+        href: `/trips/${t.id}/checkin`,
+      })
+  }
+  const d3 = new Date(now.getTime() - 3 * 86400000)
+  const threeAgo = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(d3)
+  const done = await db
+    .select()
+    .from(s.themes)
+    .where(and(eq(s.themes.day, threeAgo), eq(s.themes.status, '여행 완료')))
+  for (const t of done) {
+    const reviewed = await db
+      .select({ userId: s.peerReviews.fromUser })
+      .from(s.peerReviews)
+      .where(eq(s.peerReviews.themeId, t.id))
+    const did = new Set(reviewed.map((r) => r.userId))
+    const checked = await db
+      .select({ userId: s.checkins.userId })
+      .from(s.checkins)
+      .where(eq(s.checkins.themeId, t.id))
+    await notifyOnce(
+      db,
+      checked.map((c) => c.userId).filter((u) => !did.has(u)),
+      { title: '평가 기간이 곧 끝나요', body: t.title, href: `/trips/${t.id}/review` },
+    )
+  }
 }

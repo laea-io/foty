@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { addDateAction } from '@/app/actions/c'
-import { ChipGroup, Field, Stepper } from '@/components/c/form'
+import { Field, Stepper, TextInput } from '@/components/c/form'
 import { ActionForm } from '@/components/host/action-form'
 import { DayStrip } from '@/components/host/day-strip'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
@@ -27,14 +27,10 @@ function Body({ t, id }: { t: ThemeView; id: string }) {
       <ThemeMini t={t} className="mt-4" />
       <div className="mt-[22px] flex flex-col gap-[22px]">
         <Field label="날짜">
-          <DayStrip days={days} name="day" />
+          <DayStrip days={days} name="day" max={days.length ? addDays(days[0].iso, 60) : undefined} />
         </Field>
         <Field label="시간">
-          <ChipGroup
-            name="start"
-            options={[...new Set([t.start, '11:30', '12:30', '17:30'])]}
-            defaultValue={t.start}
-          />
+          <TextInput type="time" name="start" defaultValue={t.start} aria-label="시작 시간" required />
         </Field>
         <Field label="인원">
           <div className="flex gap-2">

@@ -80,7 +80,14 @@ export async function joinInvite(
       throw new FlowError('invite-closed', '초대한 신청이 취소돼서 함께 신청할 수 없어요')
     if (inv.a.party > 1)
       await tx.update(s.applications).set({ party: 1 }).where(eq(s.applications.id, inv.a.id))
-    const r = await apply(tx, { themeId: input.themeId, userId: input.userId, party: 1, now: input.now })
+    const r = await apply(tx, {
+      themeId: input.themeId,
+      userId: input.userId,
+      party: 1,
+      now: input.now,
+      // 초대한 사람이 잡아 둔 두 번째 자리를 넘겨받는다
+      seatFrom: inv.a.party > 1 ? (inv.a.status as '수락' | '신청 대기') : undefined,
+    })
     await tx
       .update(s.applications)
       .set({ inviteToken: inv.a.id })

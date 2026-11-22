@@ -1,6 +1,8 @@
 // 그룹 C 쓰기(코스 · 커뮤니티 · 호스트) — DB를 인자로 받아 시험할 수 있게.
-import { and, eq, inArray } from 'drizzle-orm'
+
+import { and, eq, inArray, or } from 'drizzle-orm'
 import * as s from '@/lib/db/schema'
+import { findStation, travelEstimate } from '@/lib/stations'
 import { rules } from '../rules'
 import { memberIds } from './flow'
 import { notify } from './notify'
@@ -41,16 +43,21 @@ export async function joinHost(
   if (!values.name || !values.area) throw new FlowError('input', '이름과 동네를 적어 주세요')
   if (prev) {
     if (prev.status === '확인 완료') throw new FlowError('done', '이미 확인된 호스트예요')
-    await db.update(s.hosts).set(values).where(eq(s.hosts.id, prev.id))
-    return prev.id
+    if (prev.status === '정지')
+      throw new FlowError('suspended', '이용이 멈춘 호스트예요. 고객센터로 문의해 주세요')
   }
-  const id = `h-${crypto.randomUUID().slice(0, 8)}`
-  await db.insert(s.hosts).values({ id, userId: input.userId, ...values })
+  const id = prev?.id ?? `h-${crypto.randomUUID().slice(0, 8)}`
+  if (prev) await db.update(s.hosts).set(values).where(eq(s.hosts.id, prev.id))
+  else await db.insert(s.hosts).values({ id, userId: input.userId, ...values })
   const admins = await db.select({ id: s.users.id }).from(s.users).where(eq(s.users.role, 'admin'))
   await notify(
     db,
     admins.map((a) => a.id),
-    { title: '호스트 확인 요청이 왔어요', body: values.name, href: '/admin' },
+    {
+      title: prev ? '호스트 확인 요청을 다시 보냈어요' : '호스트 확인 요청이 왔어요',
+      body: values.name,
+      href: '/admin',
+    },
   )
   return id
 }
@@ -61,7 +68,10 @@ export async function editHost(
   input: { userId: string; name: string; area: string; intro: string; contact: string },
 ) {
   const h = await hostOf(db, input.userId)
-  const changed = h.kind === 'business' && (input.name.trim() !== h.name || input.area.trim() !== h.area)
+  // 사업장 상호·동네가 바뀌거나, 보류된 호스트가 고쳐 다시 내면 운영팀이 다시 확인한다
+  const changed =
+    h.status === '보류' ||
+    (h.kind === 'business' && (input.name.trim() !== h.name || input.area.trim() !== h.area))
   await db
     .update(s.hosts)
     .set({
@@ -72,6 +82,14 @@ export async function editHost(
       ...(changed ? { status: '확인 대기' as const, verifiedAt: null } : {}),
     })
     .where(eq(s.hosts.id, h.id))
+  if (changed) {
+    const admins = await db.select({ id: s.users.id }).from(s.users).where(eq(s.users.role, 'admin'))
+    await notify(
+      db,
+      admins.map((a) => a.id),
+      { title: '호스트 정보가 바뀌어 다시 확인이 필요해요', body: input.name, href: '/admin' },
+    )
+  }
   return { reverify: changed }
 }
 
@@ -88,6 +106,10 @@ export type NewTheme = {
   stops: { placeId: string; time: string; stayMin: number; next?: string | null; fixed?: boolean }[]
   /** 참여자 테마 요청에서 열었으면 그 요청 id(요청한 사람에게 알림) */
   requestId?: string
+  /** 'station' 역에서 모여 이동 · 'place' 첫 장소에서 만나기 */
+  meetMode?: 'station' | 'place'
+  origin?: string
+  transit?: boolean
 }
 
 /** 테마 게시 — 확인된 호스트만. 핵심 장소는 고정, 마감은 전날 18:00 */
@@ -113,6 +135,13 @@ export async function publishTheme(db: AnyDb, t: NewTheme, now = new Date()) {
   const endMin = toMin(last.time) + last.stayMin
   const end = `${String(Math.floor(endMin / 60) % 24).padStart(2, '0')}:${String(endMin % 60).padStart(2, '0')}`
   const id = `${t.corePlaceId}-${t.day.slice(5).replace('-', '')}-${crypto.randomUUID().slice(0, 4)}`
+  // 모이는 역(없으면 상봉역) → 핵심 장소까지 이동 시간은 직선거리로 어림한다
+  const station = t.meetMode === 'place' ? null : (findStation(t.origin) ?? findStation('상봉역'))
+  const firstName = places.find((p) => p.id === t.stops[0].placeId)?.name ?? core.name
+  const travelMin =
+    station && core.lat && core.lng
+      ? travelEstimate(station, { lat: core.lat, lng: core.lng }, t.transit === false)
+      : 45
   await db.transaction(async (tx) => {
     await tx.insert(s.themes).values({
       id,
@@ -121,7 +150,6 @@ export async function publishTheme(db: AnyDb, t: NewTheme, now = new Date()) {
       title: t.title.trim().slice(0, 40) || `${core.name}에서 보내는 하루`,
       intro: t.intro.trim().slice(0, 200),
       day: t.day,
-      start: t.start,
       end,
       min: t.min,
       max: t.max,
@@ -129,7 +157,14 @@ export async function publishTheme(db: AnyDb, t: NewTheme, now = new Date()) {
       costWon: Math.max(0, t.costWon),
       activities: [...groups].filter((g) => g !== '기타').map((g) => (g === '자연' ? '자연' : g)),
       confirmMode: h.confirmMode,
-      meet: '상봉역 1번 출구에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.',
+      start: t.stops[0].time,
+      origin: station?.name ?? core.area,
+      travelMin,
+      transit: t.transit ?? true,
+      meet:
+        t.meetMode === 'place'
+          ? `각자 ${firstName}에서 만나요. 상세 위치는 성사 후 공개돼요.`
+          : `${station?.name ?? '상봉역'}에서 모여 함께 이동해요. 상세 위치는 성사 후 공개돼요.`,
       exclude: '교통비 · 현장에서 각자 결제',
     })
     await tx.insert(s.themeStops).values(
@@ -156,13 +191,20 @@ export async function publishTheme(db: AnyDb, t: NewTheme, now = new Date()) {
       )
     }
     // 새 테마 알림을 구독한 사람들
+    // 이 호스트를 구독한 사람 + "새 테마 알림 받기"를 켠 사람(호스트 본인 제외, 한 번씩)
     const subs = await tx
       .select({ userId: s.subscriptions.userId })
       .from(s.subscriptions)
-      .where(eq(s.subscriptions.key, h.id))
+      .where(
+        or(
+          and(eq(s.subscriptions.kind, 'host'), eq(s.subscriptions.key, h.id)),
+          and(eq(s.subscriptions.kind, 'place'), eq(s.subscriptions.key, t.corePlaceId)),
+          eq(s.subscriptions.kind, 'all'),
+        ),
+      )
     await notify(
       tx,
-      subs.map((x) => x.userId),
+      [...new Set(subs.map((x) => x.userId))].filter((u) => u !== t.userId),
       { title: `${h.name} 님이 새 테마를 열었어요`, body: t.title, href: `/themes/${id}` },
     )
   })
@@ -190,6 +232,12 @@ export async function addDate(
   const shift = toMin(input.start) - toMin(t.start)
   const fmt = (m: number) =>
     `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`
+  const last = stops[stops.length - 1]
+  if (
+    stops.length &&
+    (toMin(stops[0].time) + shift < 5 * 60 || toMin(last.time) + last.stayMin + shift > 23 * 60 + 59)
+  )
+    throw new FlowError('input', '코스가 하루 안에 끝나도록 시작 시간을 골라 주세요')
   return publishTheme(
     db,
     {
@@ -207,7 +255,12 @@ export async function addDate(
         time: fmt(toMin(x.time) + shift),
         stayMin: x.stayMin,
         next: x.next,
+        fixed: x.fixed,
       })),
+      // 모이는 곳·이동 방법은 원래 테마를 따른다
+      meetMode: t.meet.startsWith('각자') ? 'place' : 'station',
+      origin: t.origin,
+      transit: t.transit,
     },
     now,
   )

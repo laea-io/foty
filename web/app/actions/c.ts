@@ -147,6 +147,9 @@ export async function publishThemeAction(_: FormState, f: FormData): Promise<For
       costWon: num(f, 'cost', 0),
       stops,
       requestId: str(f, 'request') || undefined,
+      meetMode: str(f, 'meetMode') === 'place' ? 'place' : 'station',
+      origin: str(f, 'origin') || undefined,
+      transit: str(f, 'transit') !== '0',
     }),
   )
   if (!r.ok) return fail(r)
@@ -174,30 +177,35 @@ export async function addDateAction(_: FormState, f: FormData): Promise<FormStat
 export async function cancelThemeAction(_: FormState, f: FormData): Promise<FormState> {
   const v = await requireHost()
   const themeId = str(f, 'theme')
-  const r = await act(async () => {
-    await hostCancel(db, {
+  const r = await act(() =>
+    hostCancel(db, {
       themeId,
       hostUserId: v.id,
       reason: str(f, 'reason') || '기타',
       message: str(f, 'message'),
-    })
-    if (f.get('reopen') === 'on') {
+    }),
+  )
+  if (!r.ok) return fail(r)
+  revalidatePath('/host')
+  revalidatePath(`/themes/${themeId}`)
+  // 취소는 끝났다. "일주일 뒤 다시 열기"는 따로 해 보고, 안 되면 날짜 추가 화면으로 보낸다
+  if (f.get('reopen') === 'on') {
+    const re = await act(async () => {
       const { addDays } = await import('@/lib/server/time')
       const { loadTheme } = await import('@/lib/server/domain/read')
       const t = await loadTheme(db, themeId)
-      if (t)
-        await C.addDate(db, {
-          userId: v.id,
-          themeId,
-          day: addDays(t.day, 7),
-          start: t.start,
-          min: t.min,
-          max: t.max,
-        })
-    }
-  })
-  if (!r.ok) return fail(r)
-  revalidatePath('/host')
+      if (!t) throw new FlowError('not-found', '테마를 찾을 수 없어요')
+      return C.addDate(db, {
+        userId: v.id,
+        themeId,
+        day: addDays(t.day, 7),
+        start: t.start,
+        min: t.min,
+        max: t.max,
+      })
+    })
+    if (!re.ok) redirect(`/host/themes/${themeId}/add-date`)
+  }
   redirect('/host')
 }
 
@@ -264,14 +272,22 @@ export async function announceAction(_: FormState, f: FormData): Promise<FormSta
   const body = str(f, 'body').trim()
   if (!body) return { error: '공지할 내용을 적어 주세요' }
   const { groupIds } = await import('@/lib/server/domain/changes')
-  const { schema } = await import('@/lib/db')
   const themeId = str(f, 'theme')
   const r = await act(async () => {
     const ids = await groupIds(db, themeId)
     if (ids[0] !== v.id) throw new FlowError('forbidden', '이 테마의 호스트가 아니에요')
-    await db.insert(schema.messages).values({ themeId, userId: v.id, body: `[공지] ${body}` })
+    // 대화창에 바로 뜨게(sendChat이 pg_notify까지) + 참여자에게 알림
+    const { sendChat } = await import('@/lib/server/b/writes')
+    const { notify } = await import('@/lib/server/domain/notify')
+    await sendChat(db, { themeId, userId: v.id, body: `[공지] ${body.slice(0, 990)}` })
+    await notify(db, ids.slice(1), {
+      title: '호스트 공지',
+      body: body.slice(0, 80),
+      href: `/trips/${themeId}/chat`,
+    })
   })
   if (!r.ok) return fail(r)
+  revalidatePath(`/host/themes/${themeId}/space`)
   return { done: true }
 }
 

@@ -110,14 +110,6 @@ export function ChatThread({
     <>
       {error && <div className="mb-2 text-[13px] text-warn">{error}</div>}
       <form onSubmit={send} className="flex items-center gap-2">
-        <button
-          type="button"
-          aria-label="첨부(준비 중)"
-          disabled
-          className="flex h-11 w-11 flex-none items-center justify-center border-0 bg-transparent p-0 opacity-40"
-        >
-          <Icon name="plus" />
-        </button>
         <label htmlFor={inputId} className="sr-only">
           메시지
         </label>

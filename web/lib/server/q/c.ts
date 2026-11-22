@@ -1,6 +1,6 @@
 import 'server-only'
 // 그룹 C(코스 · 커뮤니티 · 호스트) 읽기
-import { and, asc, count, desc, eq, gte, inArray, lt, notInArray, sql } from 'drizzle-orm'
+import { and, asc, count, desc, eq, gte, inArray, isNull, lt, notInArray, or, sql } from 'drizzle-orm'
 import { db, schema as s } from '@/lib/db'
 import type { Img } from '@/lib/demo/themes'
 import { getViewer } from '../auth'
@@ -49,6 +49,16 @@ export async function corePlaces(): Promise<PlaceItem[]> {
   }))
 }
 
+/** 코스 찾기(?q=): 이름·지역·종류에 검색어가 들어간 핵심 장소 */
+export async function searchPlaces(q: string): Promise<PlaceItem[]> {
+  const k = q.replace(/\s+/g, '').toLowerCase()
+  if (!k) return []
+  const norm = (v: string) => v.replace(/\s+/g, '').toLowerCase()
+  return (await corePlaces()).filter(
+    (p) => norm(p.name).includes(k) || norm(p.area).includes(k) || norm(p.kind).includes(k),
+  )
+}
+
 export type CourseData = {
   place: PlaceItem
   date: string
@@ -81,6 +91,7 @@ export async function courseFor(placeId?: string, ask?: string): Promise<CourseD
     image: img(d.place),
     lat: d.place.lat,
     lng: d.place.lng,
+    sourceUrl: d.place.sourceUrl,
   }))
   const ids = draft.map((d) => d.placeId)
   const themeIds = await db
@@ -160,8 +171,20 @@ export type PostView = {
 
 const photoImg = (src: string): Img => ({ src, alt: '후기 사진', bg: '#e6e1d8' })
 
-export async function posts(kind?: string): Promise<PostView[]> {
-  const conds = [eq(s.posts.public, true), kind ? sql`${s.posts.kind} = ${kind}` : undefined].filter(Boolean)
+export async function posts(kind?: string, q?: string): Promise<PostView[]> {
+  const k = (q ?? '')
+    .replace(/\s+/g, '')
+    .toLowerCase()
+    .replace(/[\\%_]/g, (c) => `\\${c}`)
+  const norm = (col: unknown) => sql`replace(lower(${col}), ' ', '')`
+  const conds = [
+    eq(s.posts.public, true),
+    isNull(s.posts.hiddenAt),
+    kind ? sql`${s.posts.kind} = ${kind}` : undefined,
+    k
+      ? or(sql`${norm(s.posts.title)} like ${`%${k}%`}`, sql`${norm(s.posts.body)} like ${`%${k}%`}`)
+      : undefined,
+  ].filter(Boolean)
   const rows = await db
     .select({ p: s.posts, u: s.users })
     .from(s.posts)
@@ -178,7 +201,7 @@ export async function post(id: string) {
     .from(s.posts)
     .innerJoin(s.users, eq(s.users.id, s.posts.authorId))
     .where(eq(s.posts.id, id))
-  if (!r) return null
+  if (!r || r.p.hiddenAt) return null
   const viewer = await getViewer()
   if (!r.p.public && viewer?.id !== r.p.authorId) return null
   return toPost(r.p, r.u, true)
@@ -217,7 +240,7 @@ async function toPost(
           .select({ c: s.comments, name: s.users.name })
           .from(s.comments)
           .innerJoin(s.users, eq(s.users.id, s.comments.authorId))
-          .where(eq(s.comments.postId, p.id))
+          .where(and(eq(s.comments.postId, p.id), isNull(s.comments.hiddenAt)))
           .orderBy(asc(s.comments.createdAt))
       ).map((a) => ({ author: a.name, body: a.c.body, when: ago(a.c.createdAt) }))
     : []
@@ -302,8 +325,9 @@ export async function hostThemes(hostId: string) {
   const all = await loadThemes(db, { where: eq(s.themes.hostId, hostId) })
   const active = all.filter((x) => (LISTED as readonly string[]).includes(x.status) && x.day >= t)
   return {
-    recruiting: active.filter((x) => !x.matched && x.status === '모집 중'),
-    matched: active.filter((x) => x.matched || x.status !== '모집 중'),
+    // 아직 성사 전(모집 중·모집 마감)은 모집 탭, 성사된 것만 성사 탭
+    recruiting: active.filter((x) => !x.matched && (x.status === '모집 중' || x.status === '모집 마감')),
+    matched: active.filter((x) => x.matched),
     past: all.filter((x) => !active.includes(x)).sort((a, b) => b.day.localeCompare(a.day)),
   }
 }

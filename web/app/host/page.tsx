@@ -65,6 +65,14 @@ async function Recruiting({ t }: { t: ThemeView }) {
           날짜 추가
         </Link>
       </div>
+      <div className="mt-2 flex gap-4 text-[12px]">
+        <Link href={`/host/themes/${t.id}/edit`} className="text-sub">
+          정보 고치기
+        </Link>
+        <Link href={`/host/themes/${t.id}/cancel`} className="text-warn">
+          테마 취소
+        </Link>
+      </div>
     </div>
   )
 }
@@ -91,6 +99,14 @@ function Matched({ t }: { t: ThemeView }) {
           체크인 QR
         </Link>
       </div>
+      <div className="mt-2 flex gap-4 text-[12px]">
+        <Link href={`/host/themes/${t.id}/edit`} className="text-sub">
+          정보 고치기
+        </Link>
+        <Link href={`/host/themes/${t.id}/cancel`} className="text-warn">
+          테마 취소
+        </Link>
+      </div>
     </div>
   )
 }
@@ -102,9 +118,7 @@ function SummaryCard({ wide, line }: { wide?: boolean; line: string }) {
       className="flex items-center rounded-[16px] bg-face px-[18px] py-4 text-ink no-underline"
     >
       <span className="grow">
-        <span className={`block text-sub ${wide ? 'text-[13px]' : 'text-[12px]'}`}>
-          이번 달 방문 요약{wide && ' · 시연용 예시'}
-        </span>
+        <span className={`block text-sub ${wide ? 'text-[13px]' : 'text-[12px]'}`}>이번 달 방문 요약</span>
         <span className="mt-0.5 block text-[16px] font-extrabold tracking-[-0.02em]">{line}</span>
       </span>
       <Icon name="chevron" size={18} className="text-sub" />

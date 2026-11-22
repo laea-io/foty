@@ -10,7 +10,9 @@ export const metadata: Metadata = { title: '질문하기' }
 
 export default async function AskPage() {
   if (!(await getViewer())) redirect('/login?next=/community/ask')
-  const places = (await corePlaces()).slice(0, 6).map((p) => ({ id: p.id, name: p.name }))
+  const places = (await corePlaces())
+    .map((p) => ({ id: p.id, name: p.name, area: p.area, group: p.group }))
+    .sort((a, b) => a.name.localeCompare(b.name, 'ko'))
   return (
     <>
       <MobileFrame bottom>

@@ -31,6 +31,7 @@ export async function applyAction(_: FormState, form: FormData): Promise<FormSta
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? '입력을 확인해 주세요' }
   const d = parsed.data
   const viewer = await requireViewer(`/themes/${d.themeId}/apply`)
+  if (!viewer.adult) redirect(`/onboarding/2?next=${encodeURIComponent(`/themes/${d.themeId}/apply`)}`)
   const before = (await loadTheme(db, d.themeId))?.current ?? 0
   const r = await act(() =>
     apply(db, { themeId: d.themeId, userId: viewer.id, party: d.party, message: d.message.trim() }),
@@ -75,6 +76,7 @@ export async function joinAction(_: FormState, form: FormData): Promise<FormStat
   const d = parsed.data
   const here = `/themes/${d.themeId}/join?a=${d.a}&s=${encodeURIComponent(d.s)}`
   const viewer = await requireViewer(here)
+  if (!viewer.adult) redirect(`/onboarding/2?next=${encodeURIComponent(here)}`)
   if (!inviteOk(d.a, d.s)) return { error: '초대 링크가 맞지 않아요' }
   const before = (await loadTheme(db, d.themeId))?.current ?? 0
   const r = await act(() =>

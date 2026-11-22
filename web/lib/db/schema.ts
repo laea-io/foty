@@ -84,6 +84,8 @@ export const users = pgTable(
     onboarded: boolean().notNull().default(false),
     /** 시연 계정(스테이징 seed) */
     demo: boolean().notNull().default(false),
+    /** 운영팀 정지 · 탈퇴 시각 — 있으면 로그인할 수 없다(탈퇴는 handle이 deleted-로 시작) */
+    suspendedAt: timestamp({ withTimezone: true }),
     createdAt: now(),
   },
   (t) => [
@@ -388,6 +390,8 @@ export const posts = pgTable(
     public: boolean().notNull().default(true),
     allowCopy: boolean().notNull().default(true),
     visitedOn: date(),
+    /** 운영팀이 숨긴 시각 — 있으면 목록·글에서 빠진다 */
+    hiddenAt: timestamp({ withTimezone: true }),
     createdAt: now(),
   },
   (t) => [index('posts_created').on(t.createdAt)],
@@ -402,6 +406,8 @@ export const comments = pgTable('comments', {
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
   body: text().notNull(),
+  /** 운영팀이 숨긴 시각 */
+  hiddenAt: timestamp({ withTimezone: true }),
   createdAt: now(),
 })
 

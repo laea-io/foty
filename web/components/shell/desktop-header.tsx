@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Logo } from '@/components/ui/mascot'
 import { Avatar, Badge, IconButton } from '@/components/ui/primitives'
-import { me } from '@/lib/demo/people'
+import { useViewerBrief } from './viewer-context'
 
 const guestNav = [
   { href: '/', label: '홈', match: (p: string) => p === '/' || p.startsWith('/themes') },
@@ -25,7 +25,9 @@ const bare = (p: string) => p === '/login'
 
 export function DesktopHeader() {
   const path = usePathname()
-  if (bare(path)) return null
+  const viewer = useViewerBrief()
+  // 로그인 전(로그인·가입·약관)에는 메뉴를 보이지 않는다 — 누를 곳이 모두 로그인 화면이라서
+  if (bare(path) || !viewer) return null
   const host = (path === '/host' || path.startsWith('/host/')) && !path.startsWith('/host/join')
   const nav = host ? hostNav : guestNav
   return (
@@ -55,9 +57,9 @@ export function DesktopHeader() {
           {host ? '참여자 화면으로' : '호스트 메뉴'}
         </Link>
         <IconButton icon="search" label="검색" href="/search" />
-        <IconButton icon="bell" label="알림" href="/notifications" dot />
+        <IconButton icon="bell" label="알림" href="/notifications" dot={!!viewer?.unread} />
         <Link href="/my" className="inline-flex">
-          <Avatar name={me.name} size={34} />
+          <Avatar name={viewer?.name ?? '나'} size={34} />
         </Link>
       </div>
     </header>

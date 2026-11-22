@@ -67,8 +67,7 @@ const bone = 'block rounded-[8px] bg-face motion-safe:animate-pulse'
 function Finding({ size }: { size: number }) {
   return (
     <div className="flex items-center gap-2 text-sub" style={{ fontSize: size }}>
-      <Mascot size={22} />
-      상봉역에서 갈 수 있는 테마를 찾고 있어요
+      <Mascot size={22} />갈 수 있는 테마를 찾고 있어요
     </div>
   )
 }

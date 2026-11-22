@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { OtherDateRows, SectionHead, StatusHead, ThemeList } from '@/components/b/theme/flow'
 import { loadTheme } from '@/components/b/theme/load'
 import { SimpleScreen } from '@/components/b/trips/simple'
@@ -10,6 +11,7 @@ export const metadata: Metadata = { title: '호스트 사정으로 취소됐어�
 /** 호스트 취소 — 호스트가 남긴 사유(cancelReason)를 그대로 */
 export default async function HostCancelledPage({ params }: { params: Promise<{ id: string }> }) {
   const t = await loadTheme(params)
+  if (t.status !== '취소') redirect(`/themes/${t.id}`)
   const [dates, similar] = await Promise.all([otherDates(t), similarThemes(t, 1)])
   return (
     <SimpleScreen

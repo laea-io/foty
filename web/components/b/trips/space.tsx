@@ -171,6 +171,9 @@ function SpaceActions({ t, wide }: { t: Theme; wide?: boolean }) {
       <ButtonLink href={`/trips/${t.id}/ai`} variant="outline" icon="sparkle" className={cls}>
         AI 도우미
       </ButtonLink>
+      <ButtonLink href={`/trips/${t.id}/propose`} variant="outline" className={cls}>
+        변경 제안
+      </ButtonLink>
       <ShareAction
         label="가족에게 일정 공유"
         title={`${t.title} 일정`}

@@ -59,16 +59,45 @@ export function BusinessFields({
           />
         </div>
       </Field>
-      <Field label="담당자 연락 수단" htmlFor="biz-contact">
-        <TextInput
-          id="biz-contact"
-          name="contact"
-          defaultValue={d?.contact}
-          placeholder="카카오톡 채널 · 전화"
-          readOnly={readOnly}
-        />
-      </Field>
+      <ContactField
+        id="biz-contact"
+        label="담당자 연락 수단"
+        placeholder="카카오톡 채널 · 전화"
+        defaultValue={d?.contact}
+        readOnly={readOnly}
+      />
     </div>
+  )
+}
+
+/** 운영팀이 확인 연락을 드릴 연락 수단(사업장 · 주민 공통, hosts.contact에 저장) */
+export function ContactField({
+  id,
+  label = '연락 수단',
+  placeholder = '카카오톡 아이디 · 전화',
+  defaultValue,
+  readOnly,
+  required,
+}: {
+  id: string
+  label?: string
+  placeholder?: string
+  defaultValue?: string
+  readOnly?: boolean
+  required?: boolean
+}) {
+  return (
+    <Field label={label} htmlFor={id}>
+      <TextInput
+        id={id}
+        name="contact"
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        maxLength={60}
+        readOnly={readOnly}
+        required={required}
+      />
+    </Field>
   )
 }
 

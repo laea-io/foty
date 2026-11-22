@@ -8,10 +8,17 @@ import { NoThemes } from '@/components/theme/empty'
 import { Icon } from '@/components/ui/icon'
 import { Button, Chip, DemoNote, Photo, Reason, TextTabs } from '@/components/ui/primitives'
 import { type HomeQuery, toSearch } from '@/lib/demo/filters'
-import { activityList, budgets, img, type Theme } from '@/lib/demo/themes'
+import { activityList, budgets, type Theme } from '@/lib/demo/themes'
 import { DateChoices, OriginChoices, type UpcomingDate } from './conditions'
 
 /** 달력 한 칸(weekStrip) */
+// 배너 사진: 물의 정원(한국관광공사, 공공누리 제1유형 — 출처 표시, 잘라 써도 된다)
+const BANNER = {
+  src: 'https://tong.visitkorea.or.kr/cms/resource_photo/26/4063126_image2_1.jpg',
+  alt: '남양주 물의 정원',
+  bg: '#cfd8d4',
+}
+
 export type Day = { day: number; dow: string; date: string; iso: string }
 
 const tabsFor = (q: HomeQuery) => [
@@ -25,15 +32,14 @@ export function HomeView({
   q,
   list,
   week,
-  days,
   dates,
   conditions,
 }: {
   q: HomeQuery
   list: Theme[]
   week: Day[]
-  /** 데스크톱 날짜 칩(이번 주말 토·일) */
-  days: Day[]
+  /** (예전) 이번 주말 토·일 — 지금은 dates를 쓴다 */
+  days?: Day[]
   /** 테마가 있는 날짜(조건 패널) */
   dates: UpcomingDate[]
   conditions: string
@@ -109,12 +115,7 @@ export function HomeView({
                 href="/course"
                 className="relative mt-4 block h-[132px] overflow-hidden rounded-[20px] text-white no-underline"
               >
-                <Photo
-                  src={img.dumulmeori.src}
-                  alt={img.dumulmeori.alt}
-                  bg={img.dumulmeori.bg}
-                  className="h-[132px] w-full"
-                />
+                <Photo src={BANNER.src} alt={BANNER.alt} bg={BANNER.bg} className="h-[132px] w-full" />
                 <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(11,13,18,0.86)_0%,rgba(11,13,18,0.5)_55%,rgba(11,13,18,0)_100%)]" />
                 <div className="absolute top-[30px] left-[22px]">
                   <div className="text-[19px] leading-[25px] font-extrabold tracking-[-0.04em]">
@@ -152,12 +153,7 @@ export function HomeView({
       {/* ── 데스크톱 ── */}
       <DesktopFrame>
         <div className="relative h-[260px] overflow-hidden rounded-[20px] text-white">
-          <Photo
-            src={img.dumulmeori.src}
-            alt={img.dumulmeori.alt}
-            bg={img.dumulmeori.bg}
-            className="h-[260px] w-full"
-          />
+          <Photo src={BANNER.src} alt={BANNER.alt} bg={BANNER.bg} className="h-[260px] w-full" />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(11,13,18,0.86)_0%,rgba(11,13,18,0.45)_50%,rgba(11,13,18,0)_100%)]" />
           <div className="absolute top-16 left-12">
             <div className="text-[38px] leading-[46px] font-extrabold tracking-[-0.05em]">

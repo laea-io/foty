@@ -105,6 +105,7 @@ export async function loadThemes(
         image: { src: x.p.image, alt: x.p.imageAlt, bg: x.p.imageBg },
         lat: x.p.lat,
         lng: x.p.lng,
+        sourceUrl: x.p.sourceUrl,
       })),
       meet: t.meet,
       include: t.include,

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { ResultHead, SectionHead, ThemeList } from '@/components/b/theme/flow'
 import { loadThemeCtx } from '@/components/b/theme/load'
 import { SimpleScreen } from '@/components/b/trips/simple'
@@ -12,7 +13,9 @@ export const metadata: Metadata = { title: '신청을 취소했어요' }
 /** 신청 취소 완료(취소는 cancelAction이 하고 여기로 온다) */
 export default async function CancelDonePage({ params }: { params: Promise<{ id: string }> }) {
   await requireViewer(`/themes/${(await params).id}/cancel-done`)
-  const { theme: t } = await loadThemeCtx(params)
+  const { theme: t, rel } = await loadThemeCtx(params)
+  // 실제로 그 상태인 신청이 있을 때만(주소만 바꿔 들어오면 상세로)
+  if (rel.application?.status !== '신청 취소') redirect(`/themes/${t.id}`)
   return (
     <SimpleScreen
       title="내 여행"

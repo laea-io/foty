@@ -61,10 +61,7 @@ function Rows({ rows }: { rows: Sum['rows'] }) {
       >
         남양주 전체 방문 요약 보기 <span className="font-normal text-sub">›</span>
       </Link>
-      <Note className="mt-4">
-        방문은 현장 체크인으로만 세요. 신청이나 저장은 방문으로 집계하지 않아요. 지금 숫자는 시연 데이터에서
-        나왔어요.
-      </Note>
+      <Note className="mt-4">방문은 현장 체크인으로만 세요. 신청이나 저장은 방문으로 집계하지 않아요.</Note>
     </>
   )
 }

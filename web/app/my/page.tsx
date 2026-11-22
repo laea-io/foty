@@ -43,6 +43,7 @@ function menus(v: Viewer) {
       ? [{ href: '/admin', label: '운영팀', icon: 'settings', aside: '호스트 확인 · 신고' }]
       : []
   const logout: MenuItem = { href: '#logout', label: '로그아웃', icon: 'logout' }
+  const account: MenuItem = { href: '/my/account', label: '계정', icon: 'user', aside: '비밀번호 · 탈퇴' }
   return {
     mobile: [
       { href: '/notifications', label: '알림', icon: 'bell' },
@@ -50,6 +51,7 @@ function menus(v: Viewer) {
       ...admin,
       { href: '/my/privacy', label: '개인정보 공개 범위', icon: 'shield' },
       { href: '/my/blocks', label: '신고·차단 내역', icon: 'flag' },
+      account,
       logout,
     ] as MenuItem[],
     desktop: [
@@ -63,6 +65,7 @@ function menus(v: Viewer) {
       { href: '/my/blocks', label: '신고·차단 내역', icon: 'flag' },
       host,
       ...admin,
+      account,
       logout,
     ] as MenuItem[],
   }

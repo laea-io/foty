@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 import { OtherDateRows, SectionHead, ThemeList } from '@/components/b/theme/flow'
 import { loadTheme } from '@/components/b/theme/load'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
@@ -11,6 +12,9 @@ export const metadata: Metadata = { title: '이번 테마는 취소됐어요' }
 /** 미성사 취소: 최소 인원이 모이지 않아 자동 취소된 테마 */
 export default async function CancelledPage({ params }: { params: Promise<{ id: string }> }) {
   const t = await loadTheme(params)
+  // 실제로 인원 미달로 취소된 테마에서만(주소만 바꿔 들어오면 상세로)
+  if (t.status !== '취소') redirect(`/themes/${t.id}`)
+  if (t.cancelReason !== '최소 인원 미달') redirect(`/themes/${t.id}/host-cancelled`)
   const [dates, similar] = await Promise.all([otherDates(t), similarThemes(t)])
   const why = `${t.min}명부터 성사인데 ${t.current}명이 신청했어요.`
   return (

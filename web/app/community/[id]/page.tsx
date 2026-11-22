@@ -26,7 +26,7 @@ function Body({ p, t, loggedIn }: { p: Post; t?: ThemeView; loggedIn: boolean })
             {p.trips > 0 ? ` · 동행 ${p.trips}회` : ' · 첫 동행이에요'}
           </div>
           <div className="text-[12px] text-muted">
-            {p.kind} · {p.when} · 시연용 예시
+            {p.kind} · {p.when}
           </div>
         </div>
       </div>

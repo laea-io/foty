@@ -125,6 +125,12 @@ export async function decideChange(
         .update(s.changes)
         .set({ status: '반려됨', decidedAt: new Date() })
         .where(eq(s.changes.id, c.id))
+      if (c.proposerId && c.proposerId !== hostUser)
+        await notify(tx, [c.proposerId], {
+          title: '제안한 변경은 이번에 반영되지 않았어요',
+          body: `${c.label}: ${c.toText}`,
+          href: `/trips/${c.themeId}/history`,
+        })
       return
     }
     if (c.major) throw new FlowError('needs-confirm', '주요 변경은 참여자 모두가 확인해야 반영돼요')
@@ -167,4 +173,10 @@ async function applyChange(tx: AnyDb, c: typeof s.changes.$inferSelect) {
     .set({ scheduleVersion: sql`${s.themes.scheduleVersion} + 1` })
     .where(eq(s.themes.id, c.themeId))
   await systemMessage(tx, c.themeId, `${c.label}이(가) ${c.fromText} → ${c.toText}(으)로 바뀌었어요`)
+  // 모든 참여자에게: 일정이 바뀌었어요(채팅을 안 보고 있어도 알 수 있게)
+  await notify(tx, await memberIds(tx, c.themeId), {
+    title: `일정이 바뀌었어요 · ${c.label}`,
+    body: `${c.fromText} → ${c.toText}`,
+    href: `/trips/${c.themeId}`,
+  })
 }

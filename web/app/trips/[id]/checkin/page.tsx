@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { ToggleButton } from '@/components/b/trips/actions'
 import { AskHost, DemoCheckin } from '@/components/b/trips/forms'
 import { loadSpace } from '@/components/b/trips/load'
+import { SendToPhone } from '@/components/b/trips/send-to-phone'
 import { displayName } from '@/components/b/trips/types'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
@@ -104,12 +104,7 @@ export default async function CheckinPage({ params }: Props) {
                 </ButtonLink>
               ) : me ? (
                 <>
-                  <ToggleButton
-                    label="내 휴대폰으로 링크 보내기"
-                    done="휴대폰에서 이 화면을 열어 주세요"
-                    variant="primary"
-                    size="md"
-                  />
+                  <SendToPhone themeId={t.id} />
                   <AskHost themeId={t.id} wide />
                 </>
               ) : null}

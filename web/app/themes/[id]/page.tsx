@@ -84,7 +84,35 @@ export default async function ThemePage({ params, searchParams }: Props) {
   const a = rel.application
   let action: ReactNode
   let notice: ReactNode
-  if (rel.role === 'host') {
+  // 취소·완료된 테마는 누구에게나 그 상태부터 보여 준다(참여자에게 '참여 확정'이 뜨지 않게)
+  if (t.status === '취소') {
+    const auto = t.cancelReason === '최소 인원 미달'
+    action = (
+      <ButtonLink
+        href={rel.role === 'host' ? '/host' : `/themes/${t.id}/${auto ? 'cancelled' : 'host-cancelled'}`}
+        variant="outline"
+        size="lg"
+        block
+      >
+        {rel.role === 'host' ? '취소한 테마예요 · 내 테마로' : '취소된 테마예요 · 다른 날짜 보기'}
+      </ButtonLink>
+    )
+    notice = (
+      <>
+        {strong('취소된 테마')} · {t.cancelReason || '호스트 사정으로 취소됐어요'}
+      </>
+    )
+  } else if (t.status === '여행 완료' && (rel.role === 'member' || rel.role === 'host')) {
+    action = (
+      <ButtonLink
+        href={rel.role === 'host' ? `/host/themes/${t.id}/review` : `/trips/${t.id}/review`}
+        size="lg"
+        block
+      >
+        끝난 여행이에요 · 평가하기
+      </ButtonLink>
+    )
+  } else if (rel.role === 'host') {
     action = t.matched ? (
       <ButtonLink href={`/host/themes/${t.id}/space`} size="lg" block>
         그룹 공간 열기
@@ -119,18 +147,6 @@ export default async function ThemePage({ params, searchParams }: Props) {
           </Link>
         </>
       )
-  } else if (t.status === '취소' && a && a.status !== '신청 취소') {
-    const auto = t.cancelReason === '최소 인원 미달'
-    action = (
-      <ButtonLink
-        href={`/themes/${t.id}/${auto ? 'cancelled' : 'host-cancelled'}`}
-        variant="outline"
-        size="lg"
-        block
-      >
-        취소된 테마예요 · 다른 날짜 보기
-      </ButtonLink>
-    )
   } else if (a?.status === '거절') {
     action = (
       <ButtonLink href={`/themes/${t.id}/rejected`} variant="soft" size="lg" block>

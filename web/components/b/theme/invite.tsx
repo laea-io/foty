@@ -28,7 +28,7 @@ export function CopyLink({ url }: { url: string }) {
   )
 }
 
-/** 카카오톡으로 보내기 — 시스템 공유 시트(없으면 주소 복사) */
+/** 링크 공유하기 — 시스템 공유 시트(카카오톡 등, 없으면 주소 복사). 이름은 호출하는 곳 때문에 그대로 */
 export function KakaoShare({ title, url }: { title: string; url: string }) {
   const [done, setDone] = useState(false)
   const share = async () => {
@@ -44,12 +44,8 @@ export function KakaoShare({ title, url }: { title: string; url: string }) {
     }
   }
   return (
-    <button
-      type="button"
-      onClick={share}
-      className={buttonClass('soft', 'lg', 'flex-1 bg-kakao text-[#191600]')}
-    >
-      {done ? '링크를 복사했어요' : '카카오톡으로 보내기'}
+    <button type="button" onClick={share} className={buttonClass('soft', 'lg', 'flex-1')}>
+      {done ? '링크를 복사했어요' : '링크 공유하기'}
     </button>
   )
 }

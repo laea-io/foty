@@ -5,6 +5,7 @@ import { demoLoginAction, loginAction } from '@/app/actions/auth'
 import { ActionForm, FormError } from '@/components/a/action-form'
 import { Field } from '@/components/a/form'
 import { DemoLogin, KakaoButton, OrLine } from '@/components/a/login-buttons'
+import { LegalLinks } from '@/components/legal/doc'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Mascot } from '@/components/ui/mascot'
 import { Button, Photo } from '@/components/ui/primitives'
@@ -30,16 +31,27 @@ type SP = Promise<Record<string, string | string[] | undefined>>
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)
 
 /** 이메일 로그인 — foty는 로그인한 뒤에 쓸 수 있어서 첫 화면에 바로 둔다 */
-function EmailLogin({ next, signup, notice }: { next: string; signup: string; notice?: string }) {
+function EmailLogin({
+  next,
+  signup,
+  notice,
+  kakao,
+}: {
+  next: string
+  signup: string
+  notice?: string
+  /** 카카오 REST 키가 있을 때만 카카오 버튼 + 구분선 */
+  kakao: boolean
+}) {
   return (
     <ActionForm action={loginAction} className="w-full text-left">
-      <KakaoButton next={next} />
+      {kakao && <KakaoButton next={next} />}
       {notice && (
         <p role="status" className="m-0 mt-3 text-center text-[13px] text-warn">
           {notice}
         </p>
       )}
-      <OrLine />
+      {kakao ? <OrLine /> : <div className="h-2" />}
       {next !== '/' && <input type="hidden" name="next" value={next} />}
       <div className="flex flex-col gap-4">
         <Field label="이메일" name="email" type="email" placeholder="example@foty.kr" autoComplete="email" />
@@ -66,6 +78,8 @@ function EmailLogin({ next, signup, notice }: { next: string; signup: string; no
 }
 
 function noticeFor(sp: Awaited<SP>) {
+  if (one(sp.kakao) === 'suspended') return '이용이 정지된 계정이에요. 고객센터로 문의해 주세요.'
+  if (one(sp.deleted) === '1') return '탈퇴가 끝났어요. 그동안 함께해 주셔서 고마워요.'
   if (one(sp.kakao) === 'off') return '카카오 로그인을 준비하고 있어요. 이메일로 계속해 주세요.'
   if (one(sp.kakao) === 'fail')
     return '카카오 로그인이 끝나지 않았어요. 다시 시도하거나 이메일로 계속해 주세요.'
@@ -77,6 +91,7 @@ export default async function LoginPage({ searchParams }: { searchParams: SP }) 
   const next = safeNext(one(sp.next))
   if (await getViewer()) redirect(next)
   const demo = env.DEMO_MODE === '1'
+  const kakao = !!env.KAKAO_REST_KEY
   const notice = noticeFor(sp)
   const signup = `/signup/email${next !== '/' ? `?next=${encodeURIComponent(next)}` : ''}`
   return (
@@ -87,17 +102,11 @@ export default async function LoginPage({ searchParams }: { searchParams: SP }) 
           <Brand />
         </div>
         <div className="px-6 pt-11">
-          <EmailLogin next={next} signup={signup} notice={notice} />
+          <EmailLogin next={next} signup={signup} notice={notice} kakao={kakao} />
           {demo && <DemoLogin action={demoLoginAction} next={next} />}
         </div>
         <div className="grow" />
-        <div className="flex justify-center gap-3.5 pt-10 pb-9 text-[12px] text-muted">
-          <span>이용약관</span>
-          <span className="text-line">|</span>
-          <span>개인정보 처리 방침</span>
-          <span className="text-line">|</span>
-          <span>고객센터</span>
-        </div>
+        <LegalLinks className="pt-10 pb-9" />
       </MobileFrame>
 
       {/* ── 데스크톱: 머리·바닥 없이 사진 반 + 로그인 반 ── */}
@@ -124,10 +133,10 @@ export default async function LoginPage({ searchParams }: { searchParams: SP }) 
             <div className="mx-auto flex w-[400px] flex-col items-center pt-[120px] pb-20 text-center">
               <Brand lg />
               <div className="mt-11 w-full">
-                <EmailLogin next={next} signup={signup} notice={notice} />
+                <EmailLogin next={next} signup={signup} notice={notice} kakao={kakao} />
               </div>
               {demo && <DemoLogin action={demoLoginAction} next={next} />}
-              <div className="mt-[72px] text-[12px] text-muted">이용약관 | 개인정보 처리 방침 | 고객센터</div>
+              <LegalLinks className="mt-[72px]" />
             </div>
           </div>
         </div>

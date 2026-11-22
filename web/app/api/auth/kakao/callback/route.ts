@@ -48,6 +48,7 @@ export async function GET(req: Request) {
       })
       .returning()
   }
+  if (u.suspendedAt) return back('/login?kakao=suspended')
   await startSession(u.id)
   return back(u.onboarded ? next || '/' : `/onboarding?next=${encodeURIComponent(next || '/')}`)
 }

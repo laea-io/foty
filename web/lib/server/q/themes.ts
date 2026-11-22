@@ -72,7 +72,12 @@ export async function homeThemes(q: HomeQuery, now = new Date()) {
     to = addDays(w.sat, 8)
   } else if (q.view === 'all') to = addDays(t, 60)
   if (q.day && q.day >= t) from = to = q.day
-  const conds = [inArray(s.themes.status, [...LISTED]), gte(s.themes.day, from), lte(s.themes.day, to)]
+  // 홈은 신청할 수 있거나 곧 열리는 테마만(조율·확정된 테마는 참여자만 내 여행에서 본다)
+  const conds = [
+    inArray(s.themes.status, ['모집 중', '모집 마감']),
+    gte(s.themes.day, from),
+    lte(s.themes.day, to),
+  ]
   if (q.budget && budgetMax[q.budget]) conds.push(lte(s.themes.costWon, budgetMax[q.budget]))
   if (q.transit === '1') conds.push(sql`${s.themes.transit} = true`)
   if (q.act) conds.push(sql`${s.themes.activities} && ${q.act.split(',')}::text[]`)

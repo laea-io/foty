@@ -22,9 +22,15 @@ export function StopList({ stops, className }: { stops: Stop[]; className?: stri
               {s.time} · {s.stay} · {s.kind} ·{' '}
               {s.checked ? `${s.checked} 확인` : <span className="font-semibold text-warn">재확인 필요</span>}{' '}
               ·{' '}
-              <a href="#source" className="text-inherit">
-                출처
-              </a>
+              {s.sourceUrl && /^https?:\/\//.test(s.sourceUrl) ? (
+                <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-inherit">
+                  출처
+                </a>
+              ) : (
+                <Link href="/credits" className="text-inherit">
+                  출처
+                </Link>
+              )}
             </div>
             {s.next && <div className="mt-0.5 text-[11px] text-muted">다음 장소까지 {s.next}</div>}
           </div>

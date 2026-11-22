@@ -8,7 +8,11 @@ import { z } from 'zod'
 import { type AuthState, signupAction } from '@/app/actions/auth'
 import { db, schema } from '@/lib/db'
 import {
+  adminCancelTheme,
+  changePassword,
+  decideAttendance,
   decideHost,
+  deleteAccount,
   fileReport,
   markRead,
   PRIVACY_KEYS,
@@ -17,10 +21,16 @@ import {
   saveOnboarding,
   savePrivacy,
   setBlock,
+  setCommentHidden,
+  setHostSuspended,
+  setPostHidden,
   setSubscription,
+  setUserSuspended,
 } from '@/lib/server/a-ops'
 import { type ActResult, act } from '@/lib/server/act'
-import { requireAdmin, requireViewer, safeNext } from '@/lib/server/auth'
+import { endSession, requireAdmin, requireViewer, safeNext } from '@/lib/server/auth'
+import { FlowError } from '@/lib/server/domain/types'
+import { findStation } from '@/lib/stations'
 
 export type FormState = { error?: string } | undefined
 
@@ -56,11 +66,15 @@ export async function onboardingAction(_: FormState, form: FormData): Promise<Fo
         },
       })
     } else if (step === '2') {
-      const origin = one('origin')
+      // 출발역: 역 목록에 있는 이름만(홈 조건의 기본 출발지와 맞춘다). 비우면 그대로 둔다
+      const raw = str(form, 'origin').trim()
+      const station = raw ? (findStation(raw) ?? findStation(`${raw}역`)) : undefined
+      if (raw && !station) throw new FlowError('origin', '출발역을 목록에서 골라 주세요')
       await saveOnboarding(db, v.id, {
         name: str(form, 'nickname'),
         adult: form.get('adult') === 'on',
-        origin: origin === '직접 입력' ? undefined : origin,
+        origin: station?.name,
+        prefs: keys.has('transport') ? { transport: one('transport') } : undefined,
       })
     } else if (step === '3') {
       await saveOnboarding(db, v.id, {
@@ -77,7 +91,8 @@ export async function onboardingAction(_: FormState, form: FormData): Promise<Fo
   if (!r.ok) return { error: r.error }
   revalidatePath('/my')
   if (step === '1') redirect(withNext('/onboarding/2', next))
-  if (step === '2' || step === 'mbti') redirect(withNext('/onboarding/3', next))
+  // 가입 중일 때만 다음 단계로. 이미 가입한 사람이 마이에서 고친 거면 바로 돌아간다
+  if ((step === '2' || step === 'mbti') && !v.onboarded) redirect(withNext('/onboarding/3', next))
   redirect(done)
 }
 
@@ -169,16 +184,96 @@ export async function reportAction(_: FormState, form: FormData): Promise<FormSt
 }
 
 // ── 운영팀 ───────────────────────────────────────────
-export async function adminHostAction(form: FormData) {
+export async function adminHostAction(_: FormState, form: FormData): Promise<FormState> {
   await requireAdmin()
-  const r = await act(() => decideHost(db, str(form, 'hostId'), form.get('ok') === '1'))
-  if (!r.ok) console.warn('[foty] admin host', r.error)
+  const ok = form.get('ok') === '1'
+  const reason = str(form, 'reason')
+  if (!ok && !reason) return { error: '보류 사유를 적어 주세요. 호스트에게 그대로 전해져요' }
+  const r = await act(() => decideHost(db, str(form, 'hostId'), ok, new Date(), reason))
+  if (!r.ok) return { error: r.error }
   revalidatePath('/admin')
 }
 
-export async function adminReportAction(form: FormData) {
+export async function adminReportAction(_: FormState, form: FormData): Promise<FormState> {
   await requireAdmin()
   const r = await act(() => resolveReport(db, str(form, 'reportId'), form.get('done') === '1'))
-  if (!r.ok) console.warn('[foty] admin report', r.error)
+  if (!r.ok) return { error: r.error }
   revalidatePath('/admin')
+}
+
+/** 호스트 권한 정지(on=1) / 해제(on=0) */
+export async function adminHostSuspendAction(_: FormState, form: FormData): Promise<FormState> {
+  await requireAdmin()
+  const on = form.get('on') === '1'
+  const r = await act(() => setHostSuspended(db, str(form, 'hostId'), on, str(form, 'reason')))
+  if (!r.ok) return { error: r.error }
+  revalidatePath('/admin')
+}
+
+/** 사용자 정지(on=1: 세션 끝내고 로그인 막기) / 해제(on=0) */
+export async function adminUserSuspendAction(_: FormState, form: FormData): Promise<FormState> {
+  const me = await requireAdmin()
+  const userId = str(form, 'userId')
+  if (!z.string().uuid().safeParse(userId).success) return { error: '사용자를 찾을 수 없어요' }
+  if (userId === me.id) return { error: '나를 정지할 수는 없어요' }
+  const r = await act(() => setUserSuspended(db, userId, form.get('on') === '1'))
+  if (!r.ok) return { error: r.error }
+  revalidatePath('/admin')
+}
+
+/** 글(kind=post) · 댓글(kind=comment) 숨기기(on=1) / 다시 보이기(on=0) */
+export async function adminHideAction(_: FormState, form: FormData): Promise<FormState> {
+  await requireAdmin()
+  const id = str(form, 'id')
+  const on = form.get('on') === '1'
+  const kind = str(form, 'kind')
+  if (kind === 'comment' && !z.string().uuid().safeParse(id).success)
+    return { error: '댓글을 찾을 수 없어요' }
+  const r = await act(() => (kind === 'comment' ? setCommentHidden(db, id, on) : setPostHidden(db, id, on)))
+  if (!r.ok) return { error: r.error }
+  revalidatePath('/admin')
+  revalidatePath('/community')
+}
+
+/** 운영팀 테마 취소(사유 필수, 참여자·신청자·호스트에게 알림) */
+export async function adminCancelThemeAction(_: FormState, form: FormData): Promise<FormState> {
+  await requireAdmin()
+  const themeId = str(form, 'themeId')
+  const r = await act(() => adminCancelTheme(db, themeId, str(form, 'reason')))
+  if (!r.ok) return { error: r.error }
+  revalidatePath('/admin')
+  revalidatePath(`/themes/${themeId}`)
+}
+
+/** 참여 기록 검토 중 → 참여 확인(ok=1) / 불참 확인(ok=0) */
+export async function adminAttendanceAction(_: FormState, form: FormData): Promise<FormState> {
+  await requireAdmin()
+  const userId = str(form, 'userId')
+  if (!z.string().uuid().safeParse(userId).success) return { error: '사용자를 찾을 수 없어요' }
+  const r = await act(() =>
+    decideAttendance(db, { themeId: str(form, 'themeId'), userId, attended: form.get('ok') === '1' }),
+  )
+  if (!r.ok) return { error: r.error }
+  revalidatePath('/admin')
+}
+
+// ── 계정 ─────────────────────────────────────────────
+/** 비밀번호 바꾸기(비밀번호가 없던 카카오 계정은 새로 정하기) */
+export async function changePasswordAction(_: FormState, form: FormData): Promise<FormState> {
+  const v = await requireViewer('/my/account')
+  const next = str(form, 'next')
+  if (next !== str(form, 'next2')) return { error: '새 비밀번호가 서로 달라요' }
+  const r = await act(() => changePassword(db, v.id, str(form, 'current'), next))
+  if (!r.ok) return { error: r.error }
+  redirect('/my/account?pw=1')
+}
+
+/** 탈퇴 — "탈퇴"를 그대로 적어야 한다. 정보를 지우고 세션을 끝낸 뒤 로그인 화면으로 */
+export async function deleteAccountAction(_: FormState, form: FormData): Promise<FormState> {
+  const v = await requireViewer('/my/account')
+  if (str(form, 'confirm') !== '탈퇴') return { error: '확인 칸에 "탈퇴"를 그대로 적어 주세요' }
+  const r = await act(() => deleteAccount(db, v.id))
+  if (!r.ok) return { error: r.error }
+  await endSession()
+  redirect('/login?deleted=1')
 }

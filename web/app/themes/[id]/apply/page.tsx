@@ -16,9 +16,12 @@ type Props = {
 /** 참여 신청: 상세 위에 시트(모바일) · 가운데 창(데스크톱). ?party=2 = 친구와 함께 */
 export default async function ApplyPage({ params, searchParams }: Props) {
   const id = (await params).id
-  await requireViewer(`/themes/${id}/apply`)
+  const me = await requireViewer(`/themes/${id}/apply`)
   const { theme: t, rel } = await loadThemeCtx(params)
-  if (rel.role !== 'viewer' || t.status !== '모집 중') redirect(`/themes/${id}`)
+  if (rel.role !== 'viewer' || t.status !== '모집 중' || rel.application?.status === '거절')
+    redirect(`/themes/${id}`)
+  // 만 19세 이상 확인을 안 했으면 먼저(foty는 성인만)
+  if (!me.adult) redirect(`/onboarding/2?next=${encodeURIComponent(`/themes/${id}/apply`)}`)
   const party = (await searchParams).party === '2' ? 2 : 1
   const host = await hostCard(t.hostId, t.intro)
   return (

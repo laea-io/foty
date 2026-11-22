@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { joinHostAction } from '@/app/actions/c'
 import { Field, TextInput } from '@/components/c/form'
 import { ActionForm } from '@/components/host/action-form'
-import { KindPicker } from '@/components/host/join'
+import { ContactField, KindPicker } from '@/components/host/join'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
 import { Button, DemoNote, Note } from '@/components/ui/primitives'
@@ -45,6 +45,7 @@ function Body({ id }: { id: string }) {
             maxLength={80}
           />
         </Field>
+        <ContactField id={`${id}-contact`} label="연락받을 곳" required />
         <Field label="인증 방법">
           <div className="flex h-[50px] items-center gap-2 rounded-[14px] bg-face px-4 text-[15px]">
             <Icon name="shield" size={18} />
@@ -53,7 +54,8 @@ function Body({ id }: { id: string }) {
         </Field>
       </div>
       <div className="mt-3 text-[13px] leading-5 text-sub">
-        지금은 운영팀이 연락드려 주민인지 확인해요. 확인되면 프로필에 남양주 주민 인증이 표시돼요.
+        지금은 운영팀이 적어 주신 연락처로 연락드려 주민인지 확인해요. 확인되면 프로필에 남양주 주민 인증이
+        표시돼요.
       </div>
       <Note className="mt-4">인증 표시는 주민이라는 사실만 알려줘요. 안전을 보장하는 표시는 아니에요.</Note>
     </ActionForm>

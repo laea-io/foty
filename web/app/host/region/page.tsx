@@ -43,7 +43,7 @@ function Body({ current, wide, r }: { current: string; wide?: boolean; r: R }) {
         남양주 방문 요약
       </h1>
       <div className="mt-1.5 text-[13px] leading-5 text-sub">
-        지자체·상인회 협의용 자료예요. 이 화면의 숫자는 시연용 예시예요.
+        지자체·상인회 협의용 자료예요. 숫자는 현장 체크인 기록으로 세요.
       </div>
       <div className={`mt-5 ${wide ? 'max-w-[420px]' : ''}`}>
         <Segmented items={periodsFor(r)} current={current} />

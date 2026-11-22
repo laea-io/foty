@@ -1,8 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import { ChipGroup, Field, Stepper, TextInput } from '@/components/c/form'
+import { ChipGroup, Field, Stepper, SwitchRow, TextInput } from '@/components/c/form'
 import { Icon } from '@/components/ui/icon'
+import { STATIONS } from '@/lib/stations'
 import { DayStrip, type StripDay } from './day-strip'
 
 export type NewThemeDefaults = {
@@ -14,6 +15,11 @@ export type NewThemeDefaults = {
   intro: string
   cost: string
   request?: string
+  title?: string
+  /** 'station' 역에서 모여 같이 이동 · 'place' 첫 장소에서 만나기 */
+  meetMode?: 'station' | 'place'
+  origin?: string
+  transit?: boolean
 }
 
 const TIMES = ['11:30', '12:30', '17:30']
@@ -35,6 +41,7 @@ export function NewThemeForm({
 }) {
   const [custom, setCustom] = useState(!TIMES.includes(d.start))
   const [start, setStart] = useState(d.start)
+  const [meetMode, setMeetMode] = useState(d.meetMode ?? 'station')
   return (
     <form id={id} method="get" action="/host/new/draft" className="mt-[22px] flex flex-col gap-[22px]">
       {d.request && <input type="hidden" name="request" value={d.request} />}
@@ -85,11 +92,57 @@ export function NewThemeForm({
           )}
         </div>
       </Field>
+      <Field label="모이는 곳">
+        <input type="hidden" name="meetMode" value={meetMode} />
+        <ChipGroup
+          options={['역에서 모여 같이 가요', '첫 장소에서 만나요']}
+          defaultValue={meetMode === 'place' ? '첫 장소에서 만나요' : '역에서 모여 같이 가요'}
+          onChange={(v) => setMeetMode(v[0] === '첫 장소에서 만나요' ? 'place' : 'station')}
+        />
+        {meetMode === 'station' && (
+          <select
+            name="origin"
+            aria-label="모이는 역"
+            defaultValue={d.origin ?? '상봉역'}
+            className="mt-2 h-[50px] w-full appearance-none rounded-[14px] border-0 bg-face px-4 text-[15px] text-ink outline-none"
+          >
+            {STATIONS.map((s) => (
+              <option key={s.name} value={s.name}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+        )}
+        <div className="mt-2">
+          <SwitchRow
+            name="transit"
+            title="대중교통으로 갈 수 있어요"
+            desc="끄면 '자차' 테마로 보여요"
+            defaultOn={d.transit ?? true}
+          />
+        </div>
+      </Field>
       <Field label="인원">
         <div className="flex gap-2">
           <Stepper name="min" label="최소 (이만큼 모이면 성사)" value={d.min} min={2} max={6} />
           <Stepper name="max" label="최대" value={d.max} min={3} max={12} />
         </div>
+      </Field>
+      <Field
+        htmlFor={`${id}-title`}
+        label={
+          <>
+            제목 <span className="font-normal text-muted">선택 · 비우면 장소 이름으로 지어요</span>
+          </>
+        }
+      >
+        <TextInput
+          id={`${id}-title`}
+          name="title"
+          defaultValue={d.title}
+          placeholder="한정식 점심과 여유당 산책"
+          maxLength={40}
+        />
       </Field>
       <Field label="한 줄 소개" htmlFor={`${id}-intro`}>
         <TextInput

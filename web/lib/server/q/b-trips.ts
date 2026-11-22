@@ -10,7 +10,6 @@ import type {
   TripBadge,
 } from '@/components/b/trips/types'
 import { db, schema as s } from '@/lib/db'
-import { regions } from '@/lib/demo/stamps'
 import { requireViewer } from '../auth'
 import { reviewDeadline, reviewTargets } from '../b/writes'
 import { loadThemes, type ThemeView } from '../domain/read'
@@ -84,6 +83,24 @@ export async function myTrips(userId: string) {
     const t = byId.get(a.themeId)
     if (!t) continue
     const open = a.status === '신청 대기' || a.status === '수락'
+    // 호스트가 마감 전에 확인하지 못해 닫힌 신청(마감 때 자동으로 신청 취소)
+    if (
+      a.status === '신청 취소' &&
+      t.status !== '취소' &&
+      t.status !== '모집 중' &&
+      a.decidedAt &&
+      a.decidedAt >= t.deadlineAt
+    ) {
+      if (t.day >= t0)
+        cancelled.push({
+          t,
+          reason: '모집이 마감됐어요. 호스트가 마감 전에 신청을 확인하지 못했어요.',
+          href: `/themes/${t.id}`,
+          label: '다른 날짜와 비슷한 테마 보기',
+          badge: { tone: 'muted', label: '마감' },
+        })
+      continue
+    }
     if (t.status === '취소') {
       if (!open) continue
       const auto = t.cancelReason === '최소 인원 미달'
@@ -379,8 +396,7 @@ export function toChat(
 }
 
 // ── 체크인 ───────────────────────────────────────────
-const regionName = (id: string | null) =>
-  id ? (regions.find((r) => r.id === id)?.name ?? REGIONS.find((r) => r.id === id)?.name ?? id) : ''
+const regionName = (id: string | null) => (id ? (REGIONS.find((r) => r.id === id)?.name ?? id) : '')
 
 /** 내 체크인(스탬프): 시각 · 장소 · 같은 장소 몇 번째 · 권역 첫 스탬프인지 */
 export async function myCheckin(themeId: string, userId: string) {

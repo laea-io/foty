@@ -20,6 +20,10 @@ type SP = {
   intro?: string
   cost?: string
   request?: string
+  title?: string
+  meetMode?: string
+  origin?: string
+  transit?: string
 }
 
 export default async function HostNewPage({ searchParams }: { searchParams: Promise<SP> }) {
@@ -51,6 +55,10 @@ export default async function HostNewPage({ searchParams }: { searchParams: Prom
     intro: sp.intro ?? '',
     cost: sp.cost ?? '',
     request: sp.request,
+    title: sp.title,
+    meetMode: sp.meetMode === 'place' ? ('place' as const) : ('station' as const),
+    origin: sp.origin,
+    transit: sp.transit ? sp.transit === 'on' : true,
   }
   const { recruiting } = await hostThemes(v.host.id)
   const preview = recruiting[0]

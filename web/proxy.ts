@@ -9,6 +9,7 @@ const OPEN = [
   /^\/login(\/|$)/,
   /^\/signup(\/|$)/,
   /^\/credits$/,
+  /^\/(terms|privacy|support)$/,
   /^\/api\/health$/,
   /^\/api\/auth\/kakao(\/|$)/,
   /^\/robots\.txt$/,

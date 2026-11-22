@@ -45,7 +45,7 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
     .leftJoin(schema.hosts, eq(schema.hosts.userId, schema.users.id))
     .where(and(eq(schema.sessions.id, sha256(token)), gt(schema.sessions.expiresAt, new Date())))
     .limit(1)
-  if (!row[0]) return null
+  if (!row[0] || row[0].user.suspendedAt) return null
   return { ...row[0].user, host: row[0].host }
 })
 

@@ -5,17 +5,26 @@ import { Narrow, PageTitle } from '@/components/a/form'
 import { LaterNextSubmit } from '@/components/a/later-bar'
 import { PickGroup, StepDots } from '@/components/a/onboarding'
 import { nextOf, withNext } from '@/components/a/onboarding-form'
+import { StationPick } from '@/components/a/station-pick'
 import { ToggleRow } from '@/components/a/toggle'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote } from '@/components/ui/primitives'
 import { requireViewer, type Viewer } from '@/lib/server/auth'
+import { DEFAULT_ORIGIN, findStation, STATIONS } from '@/lib/stations'
 
 export const metadata: Metadata = { title: '기본 정보' }
 
-const ORIGINS = ['상봉·중랑', '청량리·동대문', '잠실·송파', '구리', '하남', '의정부', '직접 입력']
+/** 칩으로 보여 줄 자주 쓰는 출발역 — 나머지는 검색으로 */
+const COMMON = ['상봉역', '청량리역', '왕십리역', '잠실역', '건대입구역', '강남역', '노원역', '구리역']
+const STATION_NAMES = STATIONS.map((s) => s.name)
+const TRANSPORT = ['대중교통', '자차']
 
-function Body({ v, next }: { v: Viewer; next: string }) {
-  const origin = v.origin ? (ORIGINS.includes(v.origin) ? v.origin : '직접 입력') : '상봉·중랑'
+function Body({ v, next, id }: { v: Viewer; next: string; id: string }) {
+  // 옛 권역 값(상봉·중랑 등)은 역으로 맞지 않으면 기본 출발역으로
+  const o = v.origin?.trim()
+  const origin = (o && (findStation(o) ?? findStation(`${o}역`))?.name) || DEFAULT_ORIGIN
+  const transport =
+    v.prefs.transport && TRANSPORT.includes(v.prefs.transport) ? v.prefs.transport : '대중교통'
   return (
     <>
       <input type="hidden" name="step" value="2" />
@@ -47,9 +56,15 @@ function Body({ v, next }: { v: Viewer; next: string }) {
           </div>
         </div>
       </div>
-      <PickGroup name="origin" title="출발 권역" options={ORIGINS} initial={[origin]} />
-      {/* 주로 타는 것: 저장할 칸이 아직 없다(보고함) — 화면만 */}
-      <PickGroup title="주로 타는 것" options={['대중교통', '자차']} initial={['대중교통']} />
+      <div className="mt-[26px] mb-2.5 text-[14px] font-semibold">출발역</div>
+      <StationPick
+        id={`${id}-origin`}
+        name="origin"
+        stations={STATION_NAMES}
+        common={COMMON}
+        initial={origin}
+      />
+      <PickGroup name="transport" title="주로 타는 것" options={TRANSPORT} initial={[transport]} />
       <FormError className="mt-5" />
     </>
   )
@@ -68,7 +83,7 @@ export default async function Onboarding2Page({
         <BackBar title="가입" back={withNext('/onboarding', next)} />
         <ActionForm action={onboardingAction}>
           <div className="px-5">
-            <Body v={v} next={next} />
+            <Body v={v} next={next} id="m" />
           </div>
           <DemoNote />
           <LaterNextSubmit nextLabel="다음" />
@@ -77,7 +92,7 @@ export default async function Onboarding2Page({
       <DesktopFrame>
         <Narrow eyebrow="가입">
           <ActionForm action={onboardingAction}>
-            <Body v={v} next={next} />
+            <Body v={v} next={next} id="d" />
             <LaterNextSubmit nextLabel="다음" desktop />
           </ActionForm>
         </Narrow>

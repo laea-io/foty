@@ -12,7 +12,8 @@ import { PostActions } from './post-actions'
 
 const kinds: ('전체' | PostKind)[] = ['전체', '여행 후기', '코스 공유', '질문']
 
-function KindChips({ current }: { current: string }) {
+function KindChips({ current, q }: { current: string; q: string }) {
+  const qs = q ? `q=${encodeURIComponent(q)}` : ''
   return (
     <div className="no-scrollbar flex gap-1.5 overflow-x-auto">
       {kinds.map((k) => {
@@ -20,7 +21,11 @@ function KindChips({ current }: { current: string }) {
         return (
           <Link
             key={k}
-            href={k === '전체' ? '/community' : `/community?kind=${encodeURIComponent(k)}`}
+            href={
+              k === '전체'
+                ? `/community${qs ? `?${qs}` : ''}`
+                : `/community?kind=${encodeURIComponent(k)}${qs ? `&${qs}` : ''}`
+            }
             aria-current={on ? 'page' : undefined}
             className={`inline-flex h-11 flex-none items-center whitespace-nowrap rounded-full px-4 text-[15px] no-underline ${
               on ? 'bg-ink font-semibold text-white' : 'bg-face font-medium text-label'
@@ -34,14 +39,52 @@ function KindChips({ current }: { current: string }) {
   )
 }
 
-export function CommunityView({ list, kind, open }: { list: Post[]; kind: string; open: ThemeView[] }) {
+/** 검색어로 거른 목록일 때: 검색어 + 지우기 */
+function QueryBar({ q, kind, n }: { q: string; kind: string; n: number }) {
+  if (!q) return null
+  const clear = kind === '전체' ? '/community' : `/community?kind=${encodeURIComponent(kind)}`
+  return (
+    <div className="mt-3 flex items-center gap-2 text-[13px] text-sub">
+      <Icon name="search" size={15} className="text-muted" />
+      <span className="min-w-0 grow truncate">
+        <b className="font-semibold text-ink">‘{q}’</b> 검색 결과 {n}개
+      </span>
+      <Link href={clear} className="inline-flex items-center gap-1 font-semibold text-ink no-underline">
+        <Icon name="close" size={13} />
+        검색어 지우기
+      </Link>
+    </div>
+  )
+}
+
+function NoPosts({ q }: { q: string }) {
+  return (
+    <div className="py-14 text-center text-[13px] text-sub">
+      {q ? '검색어에 맞는 글이 없어요. 다른 말로 찾아보세요.' : '아직 글이 없어요. 첫 글을 남겨 주세요.'}
+    </div>
+  )
+}
+
+export function CommunityView({
+  list,
+  kind,
+  open,
+  q = '',
+}: {
+  list: Post[]
+  kind: string
+  open: ThemeView[]
+  q?: string
+}) {
   return (
     <>
       <MobileFrame tabbar>
         <MobileTopBar />
         <div className="px-5">
-          <KindChips current={kind} />
+          <KindChips current={kind} q={q} />
+          <QueryBar q={q} kind={kind} n={list.length} />
           <div className="h-2" />
+          {!list.length && <NoPosts q={q} />}
           {list.map((p) => (
             <article key={p.id} className="mt-2 rounded-[20px] bg-face p-4">
               <Link href={`/community/${p.id}`} className="block text-ink no-underline">
@@ -93,10 +136,12 @@ export function CommunityView({ list, kind, open }: { list: Post[]; kind: string
           </ButtonLink>
         </div>
         <div className="mt-5">
-          <KindChips current={kind} />
+          <KindChips current={kind} q={q} />
+          <QueryBar q={q} kind={kind} n={list.length} />
         </div>
         <div className="mt-5 flex items-start gap-14">
           <div className="min-w-0 flex-1">
+            {!list.length && <NoPosts q={q} />}
             {list.map((p) => (
               <article key={p.id} className="border-t border-line py-6">
                 <Link href={`/community/${p.id}`} className="block text-ink no-underline">
@@ -106,7 +151,6 @@ export function CommunityView({ list, kind, open }: { list: Post[]; kind: string
                       <div className="text-[14px] font-semibold">{p.author}</div>
                       <div className="text-[12px] text-muted">
                         {p.kind} · {p.when}
-                        {p.kind !== '질문' && ' · 시연용 예시'}
                       </div>
                     </div>
                   </div>

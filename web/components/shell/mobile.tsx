@@ -6,6 +6,7 @@ import type { ReactNode } from 'react'
 import { Icon, type IconName } from '@/components/ui/icon'
 import { Logo } from '@/components/ui/mascot'
 import { Badge, IconButton } from '@/components/ui/primitives'
+import { useViewerBrief } from './viewer-context'
 
 const tabs: { href: string; label: string; icon: IconName; match: (p: string) => boolean }[] = [
   { href: '/', label: '홈', icon: 'home', match: (p) => p === '/' },
@@ -46,6 +47,7 @@ export function MobileTabBar() {
 
 /** 홈·탭 화면 상단: 로고 + 검색 + 알림 */
 export function MobileTopBar({ host }: { host?: boolean }) {
+  const viewer = useViewerBrief()
   return (
     <header className="flex h-14 items-center pr-2 pl-5">
       <Link href={host ? '/host' : '/'} className="inline-flex items-center gap-2 no-underline">
@@ -60,7 +62,7 @@ export function MobileTopBar({ host }: { host?: boolean }) {
       ) : (
         <IconButton icon="search" label="검색" href="/search" />
       )}
-      <IconButton icon="bell" label="알림" href="/notifications" dot />
+      <IconButton icon="bell" label="알림" href="/notifications" dot={!!viewer?.unread} />
     </header>
   )
 }

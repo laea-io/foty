@@ -207,8 +207,14 @@ export function Photo({
 }) {
   return (
     <div className={`flex-none overflow-hidden ${className ?? ''}`} style={{ background: bg }}>
+      {/* 사진을 못 불러오면 대체 글자를 감추고 배경색만 남긴다(글자가 사진 칸 위로 겹쳐 보이지 않게) */}
       {/* biome-ignore lint/performance/noImgElement: standalone에 sharp를 넣지 않는다 — 사진은 미리 줄여 둔다 */}
-      <img src={src} alt={alt} className="block h-full w-full object-cover" loading="lazy" />
+      <img
+        src={src}
+        alt={alt}
+        className="block h-full w-full object-cover text-[0px] text-transparent"
+        loading="lazy"
+      />
     </div>
   )
 }

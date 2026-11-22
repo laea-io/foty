@@ -24,7 +24,7 @@ function Body({ seasons }: { seasons: Awaited<ReturnType<typeof seasonSeries>> }
         <StampGroup key={s.name} title={s.name} aside={s.aside} cells={s.cells} dim={s.closed} />
       ))}
       <div className="mt-4 text-[12px] leading-[18px] text-muted">
-        계절 시리즈는 그 계절에 열린 테마에서 체크인하면 채워져요. 시리즈 구성은 예시예요.
+        계절 시리즈는 그 계절에 열린 테마에서 체크인하면 채워져요.
       </div>
     </>
   )

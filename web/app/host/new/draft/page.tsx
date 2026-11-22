@@ -22,6 +22,10 @@ type SP = {
   cost?: string
   request?: string
   ask?: string
+  title?: string
+  meetMode?: string
+  origin?: string
+  transit?: string
 }
 const ASKS = ['덜 걷는 코스로', '카페 한 곳 더', '실내 장소로']
 
@@ -60,7 +64,10 @@ export default async function HostDraftPage({ searchParams }: { searchParams: Pr
     intro: sp.intro ?? '',
     cost: sp.cost ?? '',
     request: sp.request ?? '',
-    title: core ? `${core.short ?? core.name}에서 보내는 하루` : '',
+    title: sp.title?.trim() || (core ? `${core.short ?? core.name}에서 보내는 하루` : ''),
+    meetMode: sp.meetMode === 'place' ? 'place' : 'station',
+    origin: sp.origin ?? '상봉역',
+    transit: sp.transit === 'on' ? '1' : '0',
     stops: JSON.stringify(
       draft.map((d) => ({ placeId: d.placeId, time: d.time, stayMin: d.stayMin, next: d.next })),
     ),
@@ -71,7 +78,7 @@ export default async function HostDraftPage({ searchParams }: { searchParams: Pr
         ['날짜', dayLabel(sp.day as string)],
         ['총 시간', `${hours}시간`],
         ['인원', `${fields.min}~${fields.max}명`],
-        ['이동', '대중교통'],
+        ['이동', sp.transit === 'on' ? '대중교통' : '자차'],
       ].map(([k, v]) => (
         <div key={k} className="flex-1">
           <div className={`text-muted ${wide ? 'text-[12px]' : 'text-[11px]'}`}>{k}</div>

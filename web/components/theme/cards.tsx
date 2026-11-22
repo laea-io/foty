@@ -1,12 +1,11 @@
 import Link from 'next/link'
 import { Badge, Photo, Progress, Verified } from '@/components/ui/primitives'
-import { hostById } from '@/lib/demo/people'
 import { type Theme, themeBadge } from '@/lib/demo/themes'
 
 /** 모바일 목록형 테마 카드(88px 사진 + 네 줄) */
 export function ThemeRow({ t, href }: { t: Theme; href?: string }) {
   const b = themeBadge(t)
-  const host = hostById(t.hostId)
+  const host = t.hostName ? { name: t.hostName, kind: t.hostKind ?? 'business' } : null
   return (
     <Link href={href ?? `/themes/${t.id}`} className="flex gap-3.5 py-3.5 text-ink no-underline">
       <Photo
@@ -30,7 +29,7 @@ export function ThemeRow({ t, href }: { t: Theme; href?: string }) {
         {host && (
           <div className="mt-[5px] flex items-center gap-1.5 text-[11px] text-muted">
             <span>{host.name}</span>
-            <Verified kind={host.kind} />
+            {t.hostId === 'foty' ? <span>· 운영팀이 짠 코스</span> : <Verified kind={host.kind} />}
           </div>
         )}
       </div>
@@ -41,7 +40,7 @@ export function ThemeRow({ t, href }: { t: Theme; href?: string }) {
 /** 데스크톱 격자형 테마 카드(210px 사진 + 성사 진행) */
 export function ThemeTile({ t, href }: { t: Theme; href?: string }) {
   const b = themeBadge(t)
-  const host = hostById(t.hostId)
+  const host = t.hostName ? { name: t.hostName, kind: t.hostKind ?? 'business' } : null
   return (
     <Link href={href ?? `/themes/${t.id}`} className="block min-w-0 text-ink no-underline">
       <Photo
@@ -64,7 +63,7 @@ export function ThemeTile({ t, href }: { t: Theme; href?: string }) {
       {host && (
         <div className="mt-1.5 flex items-center gap-1.5 text-[12px] text-muted">
           <span>{host.name}</span>
-          <Verified kind={host.kind} />
+          {t.hostId === 'foty' ? <span>· 운영팀이 짠 코스</span> : <Verified kind={host.kind} />}
         </div>
       )}
       <div className="mt-3">

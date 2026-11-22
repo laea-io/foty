@@ -33,9 +33,14 @@ export type Stop = {
   /** 지도 좌표(관광공사 장소만 있다) */
   lat?: number | null
   lng?: number | null
+  /** 장소 정보 출처(관광공사 등). 없으면 사진 출처 화면으로 */
+  sourceUrl?: string | null
 }
 
 export type Theme = {
+  /** 호스트 이름·종류(DB). 시안 데이터에는 없다 */
+  hostName?: string
+  hostKind?: 'business' | 'resident'
   id: string
   title: string
   /** 핵심 장소 */

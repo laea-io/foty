@@ -83,15 +83,34 @@ export function KakaoMap({
         const map = new maps.Map(box.current, { center: path[0], level: 6 })
         map.setZoomable(false) // 페이지 스크롤을 지도가 가로채지 않게 — 확대는 버튼으로
         map.addControl(new maps.ZoomControl(), maps.ControlPosition.RIGHT)
+        // 먼저 직선 점선을 그리고, 실제 도로 경로를 받으면 그 선으로 바꾼다
+        const straight =
+          path.length > 1
+            ? new maps.Polyline({
+                map,
+                path,
+                strokeWeight: 3,
+                strokeColor: '#0b0d12',
+                strokeOpacity: 0.6,
+                strokeStyle: 'shortdot',
+              })
+            : null
         if (path.length > 1)
-          new maps.Polyline({
-            map,
-            path,
-            strokeWeight: 3,
-            strokeColor: '#0b0d12',
-            strokeOpacity: 0.8,
-            strokeStyle: 'shortdot',
-          })
+          fetch(`/api/route?p=${pts.map((p) => `${p.lat.toFixed(5)},${p.lng.toFixed(5)}`).join(';')}`)
+            .then((r) => (r.ok ? r.json() : null))
+            .then((r: { path: [number, number][] | null } | null) => {
+              if (gone || !r?.path?.length) return
+              straight?.setMap(null)
+              new maps.Polyline({
+                map,
+                path: r.path.map(([lat, lng]) => new maps.LatLng(lat, lng)),
+                strokeWeight: 5,
+                strokeColor: '#0b0d12',
+                strokeOpacity: 0.85,
+                strokeStyle: 'solid',
+              })
+            })
+            .catch(() => {})
         const bounds = new maps.LatLngBounds()
         pts.forEach((p, i) => {
           new maps.CustomOverlay({

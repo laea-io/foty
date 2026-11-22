@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { signupFormAction } from '@/app/actions/a'
 import { ActionForm, FormError } from '@/components/a/action-form'
 import { Field, Narrow, PageTitle } from '@/components/a/form'
@@ -39,6 +40,16 @@ function Form({ next }: { next: string }) {
         <ToggleRow name="terms" title="이용약관 동의" sub="필수" defaultOn />
         <ToggleRow name="privacy" title="개인정보 처리 방침 동의" sub="필수" defaultOn />
         <ToggleRow name="alerts" title="새 테마 알림 받기" sub="선택 · 언제든 끌 수 있어요" />
+        <div className="border-t border-line pt-3 text-[12px] text-sub">
+          동의하기 전에 읽어 보세요 ·{' '}
+          <Link href="/terms" className="font-semibold text-ink">
+            이용약관 보기
+          </Link>{' '}
+          ·{' '}
+          <Link href="/privacy" className="font-semibold text-ink">
+            개인정보 처리 방침 보기
+          </Link>
+        </div>
       </div>
     </>
   )

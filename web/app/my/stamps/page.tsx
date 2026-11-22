@@ -42,7 +42,7 @@ function Body({ cols, name, book }: { cols: number; name: string; book: Book }) 
       ))}
       <div className="mt-4 text-[12px] leading-[18px] text-muted">
         스탬프는 핵심 장소에서 현장 체크인을 하면 받아요. 빈 칸을 누르면 그 권역에서 모집 중인 테마를 볼 수
-        있어요. 내 기록을 모아 두는 곳이라 다른 사람과 비교하지 않아요. 권역 구분은 예시예요.
+        있어요. 내 기록을 모아 두는 곳이라 다른 사람과 비교하지 않아요.
       </div>
     </>
   )
