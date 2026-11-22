@@ -79,6 +79,8 @@ export async function courseFor(placeId?: string, ask?: string): Promise<CourseD
     next: d.next ?? undefined,
     fixed: d.fixed,
     image: img(d.place),
+    lat: d.place.lat,
+    lng: d.place.lng,
   }))
   const ids = draft.map((d) => d.placeId)
   const themeIds = await db

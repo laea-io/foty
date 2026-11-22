@@ -44,7 +44,7 @@ export function CourseView({ c, view }: { c: Course; view: 'list' | 'map' }) {
             <StopList stops={c.stops} className="mt-1" />
           ) : (
             <>
-              <MapSketch count={c.stops.length} height={430} className="mt-3" />
+              <MapSketch count={c.stops.length} stops={c.stops} height={430} className="mt-3" />
               {fixed && (
                 <Link
                   href={`/course${q}`}
@@ -95,7 +95,7 @@ export function CourseView({ c, view }: { c: Course; view: 'list' | 'map' }) {
             <OpenThemes c={c} wide />
           </div>
           <div className="sticky top-6 min-w-0 flex-1">
-            <MapSketch count={c.stops.length} height={640} />
+            <MapSketch count={c.stops.length} stops={c.stops} height={640} />
           </div>
         </div>
       </DesktopFrame>

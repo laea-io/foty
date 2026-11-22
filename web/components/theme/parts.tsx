@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { KakaoMap } from '@/components/map/kakao-map'
 import { Icon } from '@/components/ui/icon'
 import { Avatar, Badge, Photo, StepNo, Verified } from '@/components/ui/primitives'
 import type { Host } from '@/lib/demo/people'
@@ -40,15 +41,17 @@ export function StopList({ stops, className }: { stops: Stop[]; className?: stri
 }
 
 /**
- * 코스 약도. 실제 지도가 아니라 장소 순서를 보여 주는 그림이다
- * (지도 연동 전 — 실시간 지도라고 표현하지 않는다). 높이가 커지면 그림도 세로로 늘린다.
+ * 코스 지도. stops에 좌표가 있으면 카카오맵, 없으면(키 없음·시안 장소·SDK 실패) 장소 순서를 보여 주는 약도 그림.
+ * 높이가 커지면 그림도 세로로 늘린다.
  */
 export function MapSketch({
   count,
+  stops,
   height = 260,
   className,
 }: {
   count: number
+  stops?: Stop[]
   height?: number
   className?: string
 }) {
@@ -66,36 +69,38 @@ export function MapSketch({
       className={`relative overflow-hidden rounded-[20px] bg-[#e6eaec] ${className ?? ''}`}
       style={{ height }}
     >
-      <svg
-        viewBox={`0 0 520 ${vh}`}
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden="true"
-        className="block h-full w-full"
-      >
-        <path
-          d={`M-10 ${y(195)}C120 ${y(182)} 200 ${y(117)} 280 ${y(99)}S420 ${y(52)} 540 ${y(68)}`}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="14"
-        />
-        <path d={`M300 ${vh + 10}C330 ${y(195)} 400 ${y(161)} 540 ${y(156)}V${vh + 10}z`} fill="#d5dde3" />
-        <path
-          d={`M${pts.map((p) => p.join(' ')).join('L')}`}
-          fill="none"
-          stroke="#0b0d12"
-          strokeWidth="2.5"
-          strokeDasharray="1 8"
-          strokeLinecap="round"
-        />
-        {pts.map(([x, py], i) => (
-          <g key={`${x}-${py}`}>
-            <circle cx={x} cy={py} r="14" fill="#0b0d12" />
-            <text x={x} y={py + 5} fill="#ffffff" fontSize="13" fontWeight="600" textAnchor="middle">
-              {i + 1}
-            </text>
-          </g>
-        ))}
-      </svg>
+      <KakaoMap points={stops ?? []} fixedIndex={stops?.findIndex((x) => x.fixed)} className="h-full w-full">
+        <svg
+          viewBox={`0 0 520 ${vh}`}
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+          className="block h-full w-full"
+        >
+          <path
+            d={`M-10 ${y(195)}C120 ${y(182)} 200 ${y(117)} 280 ${y(99)}S420 ${y(52)} 540 ${y(68)}`}
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="14"
+          />
+          <path d={`M300 ${vh + 10}C330 ${y(195)} 400 ${y(161)} 540 ${y(156)}V${vh + 10}z`} fill="#d5dde3" />
+          <path
+            d={`M${pts.map((p) => p.join(' ')).join('L')}`}
+            fill="none"
+            stroke="#0b0d12"
+            strokeWidth="2.5"
+            strokeDasharray="1 8"
+            strokeLinecap="round"
+          />
+          {pts.map(([x, py], i) => (
+            <g key={`${x}-${py}`}>
+              <circle cx={x} cy={py} r="14" fill="#0b0d12" />
+              <text x={x} y={py + 5} fill="#ffffff" fontSize="13" fontWeight="600" textAnchor="middle">
+                {i + 1}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </KakaoMap>
     </div>
   )
 }

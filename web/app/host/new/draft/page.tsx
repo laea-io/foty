@@ -44,6 +44,8 @@ export default async function HostDraftPage({ searchParams }: { searchParams: Pr
     next: d.next ?? undefined,
     fixed: d.fixed,
     image: { src: d.place.image, alt: d.place.imageAlt, bg: d.place.imageBg },
+    lat: d.place.lat,
+    lng: d.place.lng,
   }))
   const toMin = (hm: string) => Number(hm.slice(0, 2)) * 60 + Number(hm.slice(3))
   const last = draft[draft.length - 1]
@@ -153,7 +155,7 @@ export default async function HostDraftPage({ searchParams }: { searchParams: Pr
             </div>
           </div>
           <div className="sticky top-6 min-w-0 flex-1">
-            <MapSketch count={stops.length} height={600} />
+            <MapSketch count={stops.length} stops={stops} height={600} />
           </div>
         </div>
       </DesktopFrame>

@@ -131,7 +131,7 @@ export default async function HostSpacePage({ params }: { params: Promise<{ id: 
             <div className="mt-6">{confirm('confirm-d')}</div>
           </div>
           <div className="sticky top-6 w-[520px] flex-none">
-            <MapSketch count={t.stops.length} height={560} />
+            <MapSketch count={t.stops.length} stops={t.stops} height={560} />
           </div>
         </div>
       </DesktopFrame>

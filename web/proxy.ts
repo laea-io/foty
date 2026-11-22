@@ -5,7 +5,14 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { db, schema } from '@/lib/db'
 import { sha256 } from '@/lib/server/crypto'
 
-const OPEN = [/^\/login(\/|$)/, /^\/signup(\/|$)/, /^\/credits$/, /^\/api\/health$/, /^\/robots\.txt$/]
+const OPEN = [
+  /^\/login(\/|$)/,
+  /^\/signup(\/|$)/,
+  /^\/credits$/,
+  /^\/api\/health$/,
+  /^\/api\/auth\/kakao(\/|$)/,
+  /^\/robots\.txt$/,
+]
 
 export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname

@@ -103,6 +103,8 @@ export async function loadThemes(
         next: x.st.next ?? undefined,
         fixed: x.st.fixed,
         image: { src: x.p.image, alt: x.p.imageAlt, bg: x.p.imageBg },
+        lat: x.p.lat,
+        lng: x.p.lng,
       })),
       meet: t.meet,
       include: t.include,

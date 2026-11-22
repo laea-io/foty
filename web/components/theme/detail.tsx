@@ -178,7 +178,7 @@ export function ThemeDetail({
               <DetailHead title="코스" aside={courseLength(t.stops, t.start, t.end)} first />
             </div>
             <StopList stops={t.stops} className="-mt-2" />
-            <MapSketch count={t.stops.length} className="mt-4" />
+            <MapSketch count={t.stops.length} stops={t.stops} className="mt-4" />
             <div className="mt-8">
               <InfoRows rows={rows} wide />
             </div>

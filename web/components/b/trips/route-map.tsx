@@ -1,5 +1,8 @@
+import { KakaoMap } from '@/components/map/kakao-map'
+import type { Stop } from '@/lib/demo/themes'
+
 /**
- * 그룹 공간의 코스 약도. 실제 지도가 아니라 장소 순서를 보여 주는 그림이다(지도 연동 전).
+ * 그룹 공간의 코스 지도. stops에 좌표가 있으면 카카오맵, 없으면 장소 순서를 보여 주는 약도 그림.
  * mini: 모바일 일정 아래 140px · tall: 데스크톱 오른쪽 560px / 모바일 지도 보기
  */
 const shapes = {
@@ -39,10 +42,12 @@ const shapes = {
 
 export function RouteMap({
   count,
+  stops,
   kind = 'mini',
   className,
 }: {
   count: number
+  stops?: Stop[]
   kind?: keyof typeof shapes
   className?: string
 }) {
@@ -50,38 +55,40 @@ export function RouteMap({
   const pts = s.pts.slice(0, Math.max(1, Math.min(4, count)))
   return (
     <div className={`relative overflow-hidden bg-[#e6eaec] ${className ?? ''}`}>
-      <svg
-        viewBox={s.box}
-        preserveAspectRatio="xMidYMid slice"
-        aria-hidden="true"
-        className="block h-full w-full"
-      >
-        <path d={s.road} fill="none" stroke="#ffffff" strokeWidth={s.roadW} />
-        <path d={s.water} fill="#d5dde3" />
-        <path
-          d={`M${pts.map((p) => p.join(' ')).join('L')}`}
-          fill="none"
-          stroke="#0b0d12"
-          strokeWidth={s.line}
-          strokeDasharray={s.dash}
-          strokeLinecap="round"
-        />
-        {pts.map(([x, y], i) => (
-          <g key={`${x}-${y}`}>
-            <circle cx={x} cy={y} r={s.r} fill="#0b0d12" />
-            <text
-              x={x}
-              y={y + s.fs * 0.38}
-              fill="#ffffff"
-              fontSize={s.fs}
-              fontWeight="600"
-              textAnchor="middle"
-            >
-              {i + 1}
-            </text>
-          </g>
-        ))}
-      </svg>
+      <KakaoMap points={stops ?? []} fixedIndex={stops?.findIndex((x) => x.fixed)} className="h-full w-full">
+        <svg
+          viewBox={s.box}
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+          className="block h-full w-full"
+        >
+          <path d={s.road} fill="none" stroke="#ffffff" strokeWidth={s.roadW} />
+          <path d={s.water} fill="#d5dde3" />
+          <path
+            d={`M${pts.map((p) => p.join(' ')).join('L')}`}
+            fill="none"
+            stroke="#0b0d12"
+            strokeWidth={s.line}
+            strokeDasharray={s.dash}
+            strokeLinecap="round"
+          />
+          {pts.map(([x, y], i) => (
+            <g key={`${x}-${y}`}>
+              <circle cx={x} cy={y} r={s.r} fill="#0b0d12" />
+              <text
+                x={x}
+                y={y + s.fs * 0.38}
+                fill="#ffffff"
+                fontSize={s.fs}
+                fontWeight="600"
+                textAnchor="middle"
+              >
+                {i + 1}
+              </text>
+            </g>
+          ))}
+        </svg>
+      </KakaoMap>
     </div>
   )
 }

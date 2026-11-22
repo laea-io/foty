@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import { demoLoginAction, loginAction } from '@/app/actions/auth'
 import { ActionForm, FormError } from '@/components/a/action-form'
 import { Field } from '@/components/a/form'
-import { DemoLogin } from '@/components/a/login-buttons'
+import { DemoLogin, KakaoButton, OrLine } from '@/components/a/login-buttons'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Mascot } from '@/components/ui/mascot'
 import { Button, Photo } from '@/components/ui/primitives'
@@ -30,9 +30,16 @@ type SP = Promise<Record<string, string | string[] | undefined>>
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)
 
 /** 이메일 로그인 — foty는 로그인한 뒤에 쓸 수 있어서 첫 화면에 바로 둔다 */
-function EmailLogin({ next, signup }: { next: string; signup: string }) {
+function EmailLogin({ next, signup, notice }: { next: string; signup: string; notice?: string }) {
   return (
     <ActionForm action={loginAction} className="w-full text-left">
+      <KakaoButton next={next} />
+      {notice && (
+        <p role="status" className="m-0 mt-3 text-center text-[13px] text-warn">
+          {notice}
+        </p>
+      )}
+      <OrLine />
       {next !== '/' && <input type="hidden" name="next" value={next} />}
       <div className="flex flex-col gap-4">
         <Field label="이메일" name="email" type="email" placeholder="example@foty.kr" autoComplete="email" />
@@ -58,11 +65,19 @@ function EmailLogin({ next, signup }: { next: string; signup: string }) {
   )
 }
 
+function noticeFor(sp: Awaited<SP>) {
+  if (one(sp.kakao) === 'off') return '카카오 로그인을 준비하고 있어요. 이메일로 계속해 주세요.'
+  if (one(sp.kakao) === 'fail')
+    return '카카오 로그인이 끝나지 않았어요. 다시 시도하거나 이메일로 계속해 주세요.'
+  return undefined
+}
+
 export default async function LoginPage({ searchParams }: { searchParams: SP }) {
   const sp = await searchParams
   const next = safeNext(one(sp.next))
   if (await getViewer()) redirect(next)
   const demo = env.DEMO_MODE === '1'
+  const notice = noticeFor(sp)
   const signup = `/signup/email${next !== '/' ? `?next=${encodeURIComponent(next)}` : ''}`
   return (
     <>
@@ -72,7 +87,7 @@ export default async function LoginPage({ searchParams }: { searchParams: SP }) 
           <Brand />
         </div>
         <div className="px-6 pt-11">
-          <EmailLogin next={next} signup={signup} />
+          <EmailLogin next={next} signup={signup} notice={notice} />
           {demo && <DemoLogin action={demoLoginAction} next={next} />}
         </div>
         <div className="grow" />
@@ -109,7 +124,7 @@ export default async function LoginPage({ searchParams }: { searchParams: SP }) 
             <div className="mx-auto flex w-[400px] flex-col items-center pt-[120px] pb-20 text-center">
               <Brand lg />
               <div className="mt-11 w-full">
-                <EmailLogin next={next} signup={signup} />
+                <EmailLogin next={next} signup={signup} notice={notice} />
               </div>
               {demo && <DemoLogin action={demoLoginAction} next={next} />}
               <div className="mt-[72px] text-[12px] text-muted">이용약관 | 개인정보 처리 방침 | 고객센터</div>

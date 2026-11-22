@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next'
+import { KakaoKeyProvider } from '@/components/map/kakao-map'
 import { DesktopFooter, DesktopHeader } from '@/components/shell/desktop-header'
+import { env } from '@/lib/env'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -22,9 +24,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <DesktopHeader />
-        {children}
-        <DesktopFooter />
+        <KakaoKeyProvider value={env.KAKAO_JS_KEY}>
+          <DesktopHeader />
+          {children}
+          <DesktopFooter />
+        </KakaoKeyProvider>
       </body>
     </html>
   )

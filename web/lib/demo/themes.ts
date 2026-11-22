@@ -30,6 +30,9 @@ export type Stop = {
   /** 핵심 장소(고정) */
   fixed?: boolean
   image: Img
+  /** 지도 좌표(관광공사 장소만 있다) */
+  lat?: number | null
+  lng?: number | null
 }
 
 export type Theme = {

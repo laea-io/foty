@@ -14,6 +14,11 @@ const schema = z.object({
   /** AI 도우미(OpenAI). 없으면 규칙 기반으로만 고른다 */
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_MODEL: z.string().default('gpt-5.4-mini'),
+  /** 카카오맵 JavaScript 키(브라우저에 보이는 값 — 카카오 개발자 콘솔에서 도메인으로 제한) · REST 키(서버) */
+  KAKAO_JS_KEY: z.string().optional(),
+  KAKAO_REST_KEY: z.string().optional(),
+  /** 카카오 로그인 Client Secret(콘솔에서 켰을 때만) */
+  KAKAO_CLIENT_SECRET: z.string().optional(),
   /** 스테이징 시연: 시연 계정으로 바로 들어가기 · 아무 날짜에나 체크인 */
   DEMO_MODE: z.enum(['1', '0']).default('0'),
   /** 후기 사진 저장 폴더 */

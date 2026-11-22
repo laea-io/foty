@@ -173,7 +173,7 @@ const vis = (page, sel) => page.locator(sel).locator('visible=true').first()
       await page.waitForURL(/\/login\?next=/, { timeout: 10000 }).catch(() => {})
       ok('host requires login', page.url().includes('/login?next='), page.url())
       await page.goto(`${base}/community/dumulmeori-quiet`)
-      ok('post readable without login', (await page.content()).includes('두물머리, 생각보다 훨씬 조용했어요'))
+      ok('posts need login too (2026-11-22)', page.url().includes('/login?next=%2Fcommunity%2Fdumulmeori-quiet'), page.url())
       await ctx.close()
     }
   } catch (e) {

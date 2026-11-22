@@ -150,7 +150,7 @@ function CourseHead({ sp, wide }: { sp: SpaceData; wide?: boolean }) {
 function MapView({ t }: { t: Theme }) {
   return (
     <div className="mt-2">
-      <RouteMap count={t.stops.length} kind="tall" className="h-[320px] rounded-[16px]" />
+      <RouteMap count={t.stops.length} stops={t.stops} kind="tall" className="h-[320px] rounded-[16px]" />
       <ol className="m-0 mt-3 list-none p-0">
         {t.stops.map((st, i) => (
           <li key={st.name} className="flex items-center gap-3 py-2 text-[14px]">
@@ -197,7 +197,7 @@ export function SpacePlanMobile({ sp }: { sp: SpaceData }) {
         list={
           <>
             <StopList stops={t.stops} />
-            <RouteMap count={t.stops.length} className="mt-2 h-[140px] rounded-[16px]" />
+            <RouteMap count={t.stops.length} stops={t.stops} className="mt-2 h-[140px] rounded-[16px]" />
           </>
         }
         map={<MapView t={t} />}
@@ -233,7 +233,9 @@ export function SpacePlanDesktop({ sp, right }: { sp: SpaceData; right?: ReactNo
         <SpaceActions t={t} wide />
       </div>
       <div className="min-w-0 flex-1">
-        {right ?? <RouteMap count={t.stops.length} kind="tall" className="h-[560px] rounded-[20px]" />}
+        {right ?? (
+          <RouteMap count={t.stops.length} stops={t.stops} kind="tall" className="h-[560px] rounded-[20px]" />
+        )}
       </div>
     </div>
   )
