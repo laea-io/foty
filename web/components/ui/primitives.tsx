@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type { ComponentProps, ReactNode } from 'react'
-import { Icon, type IconName } from './icon'
+import { Icon, type IconName } from '@/components/ui/icon'
 
 // ── 버튼 ─────────────────────────────────────────────
 // 디자인의 버튼 네 가지: 검정(주요) · 주황(강조, 한 화면에 한 곳) · 테두리 · 면(회색)
@@ -312,16 +312,6 @@ export function IconButton({
     <button type="button" aria-label={label} className={cls} onClick={onClick}>
       {inner}
     </button>
-  )
-}
-
-/** 섹션 제목(17px 굵게) + 오른쪽 보조 */
-export function SectionTitle({ children, aside }: { children: ReactNode; aside?: ReactNode }) {
-  return (
-    <div className="flex items-center justify-between">
-      <h2 className="m-0 text-[17px] font-extrabold tracking-[-0.03em]">{children}</h2>
-      {aside}
-    </div>
   )
 }
 

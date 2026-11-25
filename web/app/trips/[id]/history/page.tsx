@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { loadSpace } from '@/components/b/trips/load'
-import { PageTitle, SimpleScreen } from '@/components/b/trips/simple'
+import { loadSpace } from '@/components/trips/load'
+import { PageTitle, SimpleScreen } from '@/components/trips/simple'
 import { Badge } from '@/components/ui/primitives'
-import { changeHistory } from '@/lib/server/q/b-trips'
+import { changeHistory } from '@/lib/server/queries/trips'
 
 type Props = { params: Promise<{ id: string }> }
 

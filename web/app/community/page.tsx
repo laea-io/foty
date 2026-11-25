@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { CommunityView } from '@/components/community/community-view'
-import { openThemes, posts } from '@/lib/server/q/c'
+import { openThemes, posts } from '@/lib/server/queries/community'
 
 export const metadata: Metadata = { title: '커뮤니티' }
 

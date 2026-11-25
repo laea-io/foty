@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Narrow } from '@/components/a/form'
-import { BlockButton } from '@/components/a/live-toggles'
+import { BlockButton } from '@/components/my/live-toggles'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { Narrow } from '@/components/ui/parts'
 import { Avatar, ButtonLink, DemoNote } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { requireViewer } from '@/lib/server/auth'
-import { userProfile } from '@/lib/server/q/a'
+import { requireViewer } from '@/lib/server/auth/session'
+import { userProfile } from '@/lib/server/queries/profiles'
 
 export const metadata: Metadata = { title: '참여자' }
 

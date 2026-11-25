@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import { AdminHostRow, AdminReportRow } from '@/components/a/admin-row'
-import { PageTitle } from '@/components/a/form'
 import {
   AdminAttendanceRows,
   AdminNav,
@@ -10,10 +8,12 @@ import {
   AdminUserRows,
   UserSearch,
 } from '@/components/admin/parts'
+import { AdminHostRow, AdminReportRow } from '@/components/admin/rows'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { PageTitle } from '@/components/ui/parts'
 import { db } from '@/lib/db'
-import { requireAdmin } from '@/lib/server/auth'
-import { adminAttendance, adminPosts, adminQueue, adminThemes, adminUsers } from '@/lib/server/q/a'
+import { requireAdmin } from '@/lib/server/auth/session'
+import { adminAttendance, adminPosts, adminQueue, adminThemes, adminUsers } from '@/lib/server/queries/admin'
 
 export const metadata: Metadata = { title: '운영팀' }
 

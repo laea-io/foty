@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { migrate } from 'drizzle-orm/postgres-js/migrator'
-import { db } from './index'
+import { db } from '@/lib/db'
 
 export async function runMigrations() {
   await migrate(db, { migrationsFolder: path.join(process.cwd(), 'drizzle') })

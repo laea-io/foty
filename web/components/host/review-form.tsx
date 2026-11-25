@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState, useState } from 'react'
-import { hostReviewAction } from '@/app/actions/c'
+import { hostReviewAction } from '@/app/actions/host'
 import { Avatar } from '@/components/ui/primitives'
 import { keep } from '@/lib/client/keep-form'
 

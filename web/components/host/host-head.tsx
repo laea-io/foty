@@ -3,7 +3,7 @@ import { ButtonLink, Segmented } from '@/components/ui/primitives'
 
 export type HostCounts = { recruiting: number; matched: number; past: number }
 
-export const hostTabs = (n: HostCounts) => [
+const hostTabs = (n: HostCounts) => [
   { href: '/host', label: `모집 중 ${n.recruiting}` },
   { href: '/host?tab=matched', label: `성사 ${n.matched}` },
   { href: '/host/past', label: `지난 테마 ${n.past}` },

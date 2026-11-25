@@ -2,14 +2,14 @@
 
 import Link from 'next/link'
 import { type ReactNode, useActionState, useState } from 'react'
-import { writePostAction } from '@/app/actions/c'
-import { ChipGroup, FieldLabel, SwitchRow, TextArea, TextInput } from '@/components/c/form'
+import { writePostAction } from '@/app/actions/community'
+import { ChipGroup, FieldLabel, SwitchRow, TextArea, TextInput } from '@/components/forms/fields'
 import { ThemeMini } from '@/components/theme/cards'
 import { Icon } from '@/components/ui/icon'
 import { Mascot } from '@/components/ui/mascot'
 import { Button, Note, Photo } from '@/components/ui/primitives'
 import { keep } from '@/lib/client/keep-form'
-import type { ThemeView } from '@/lib/server/q/themes'
+import type { ThemeView } from '@/lib/server/queries/themes'
 
 /** 후기 남기기 — 체크인한 테마에만. 사진은 서버에 저장된다 */
 export function ReviewForm({
@@ -121,7 +121,7 @@ export function ReviewForm({
   )
 }
 
-export function SubmitButton({ pending, children }: { pending: boolean; children: ReactNode }) {
+function SubmitButton({ pending, children }: { pending: boolean; children: ReactNode }) {
   return (
     <Button type="submit" size="lg" block disabled={pending}>
       {children}

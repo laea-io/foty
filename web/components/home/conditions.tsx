@@ -3,8 +3,8 @@
 // 홈 조건의 날짜·출발지 고르기 — 데스크톱 "조건" 패널과 조건 시트(/filter)가 같이 쓴다.
 import { useState } from 'react'
 import { Chip } from '@/components/ui/primitives'
-import type { HomeQuery } from '@/lib/demo/filters'
-import { DEFAULT_ORIGIN, MY_LOCATION, STATIONS } from '@/lib/stations'
+import type { HomeQuery } from '@/lib/shared/filters'
+import { DEFAULT_ORIGIN, MY_LOCATION, STATIONS } from '@/lib/shared/stations'
 
 export type UpcomingDate = { iso: string; label: string; count: number }
 

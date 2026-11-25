@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Narrow, PageTitle } from '@/components/a/form'
-import { MarkAllRead } from '@/components/a/live-toggles'
+import { MarkAllRead } from '@/components/my/live-toggles'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { Narrow, PageTitle } from '@/components/ui/parts'
 import { DemoNote } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { requireViewer } from '@/lib/server/auth'
-import { notificationsOf } from '@/lib/server/q/a'
+import { requireViewer } from '@/lib/server/auth/session'
+import { notificationsOf } from '@/lib/server/queries/my'
 
 type Notice = Awaited<ReturnType<typeof notificationsOf>>[number]
 

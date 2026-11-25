@@ -11,21 +11,21 @@ export async function register() {
   }
   if (process.env.DEMO_MODE === '1') {
     const { db } = await import('@/lib/db')
-    const { seedDemo } = await import('@/lib/db/seed-data')
+    const { seedDemo } = await import('@/lib/db/seed/data')
     const r = await seedDemo(db)
     if (!r.skipped) console.log(`[foty] demo data seeded (weekend ${r.saturday})`)
   }
   // 실제 장소(관광공사 TourAPI · stay-sync에서 만든 data/places-namyangju.json) — 있으면 갱신, 없으면 넣기
   if (process.env.PLACES_SYNC !== '0') {
     const { db } = await import('@/lib/db')
-    const { syncPlaces } = await import('@/lib/db/places-sync')
+    const { syncPlaces } = await import('@/lib/db/sync/places')
     const r = await syncPlaces(db)
     if (r.count) console.log(`[foty] places synced: ${r.count} (${r.fetchedOn})`)
   }
   // 운영팀 큐레이션 테마(data/curated-themes.json) — 없는 것만 넣는다. 끄려면 CURATED_THEMES=0
   if (process.env.CURATED_THEMES !== '0') {
     const { db } = await import('@/lib/db')
-    const { syncCurated } = await import('@/lib/db/curated-sync')
+    const { syncCurated } = await import('@/lib/db/sync/curated')
     const r = await syncCurated(db)
     if (r.added) console.log(`[foty] curated themes added: ${r.added}`)
   }

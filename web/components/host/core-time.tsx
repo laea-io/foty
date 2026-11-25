@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState, useState } from 'react'
-import { coreTimeAction } from '@/app/actions/c'
+import { coreTimeAction } from '@/app/actions/host'
 
 /** 핵심 장소 시간 바꾸기 — 주요 변경이라 참여자 모두에게 확인 요청이 간다 */
 export function CoreTime({ themeId, from }: { themeId: string; from: string }) {

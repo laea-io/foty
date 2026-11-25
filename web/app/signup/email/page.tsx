@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { signupFormAction } from '@/app/actions/a'
-import { ActionForm, FormError } from '@/components/a/action-form'
-import { Field, Narrow, PageTitle } from '@/components/a/form'
-import { ToggleRow } from '@/components/a/toggle'
+import { signupFormAction } from '@/app/actions/account'
+import { ActionForm, FormError } from '@/components/forms/action-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { Field, Narrow, PageTitle } from '@/components/ui/parts'
 import { Button, DemoNote } from '@/components/ui/primitives'
-import { safeNext } from '@/lib/server/auth'
+import { ToggleRow } from '@/components/ui/toggle'
+import { safeNext } from '@/lib/server/auth/session'
 
 export const metadata: Metadata = { title: '이메일로 가입' }
 

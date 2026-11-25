@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import { PageTitle } from '@/components/a/form'
-import { StampCell } from '@/components/a/stamps'
+import { StampCell } from '@/components/my/stamps'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeRow } from '@/components/theme/cards'
 import { StopList } from '@/components/theme/parts'
+import { PageTitle } from '@/components/ui/parts'
 import {
   Avatar,
   Badge,
@@ -18,8 +18,10 @@ import {
   Verified,
 } from '@/components/ui/primitives'
 import { personById } from '@/lib/demo/people'
-import { cellFor, placeById, type StampPlace } from '@/lib/demo/stamps'
-import { type Theme, themeById } from '@/lib/demo/themes'
+import { cellFor, placeById } from '@/lib/demo/stamps'
+import { themeById } from '@/lib/demo/themes'
+import type { StampPlace } from '@/lib/shared/stamps'
+import type { Theme } from '@/lib/shared/theme'
 
 export const metadata: Metadata = { title: '재사용 컴포넌트' }
 

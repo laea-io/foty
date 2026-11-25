@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { loadSpace, memberOf } from '@/components/b/trips/load'
-import { CloseButton, MemberGrid, MemberList, MemberMenu } from '@/components/b/trips/members'
-import { DesktopDialog, MobileSheet } from '@/components/b/trips/sheet'
-import { SpaceDesktopHead, SpaceMobileHead } from '@/components/b/trips/space'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { loadSpace, memberOf } from '@/components/trips/load'
+import { CloseButton, MemberGrid, MemberList, MemberMenu } from '@/components/trips/members'
+import { DesktopDialog, MobileSheet } from '@/components/trips/sheet'
+import { SpaceDesktopHead, SpaceMobileHead } from '@/components/trips/space'
 import { DemoNote } from '@/components/ui/primitives'
 
 type Props = { params: Promise<{ id: string; uid: string }> }

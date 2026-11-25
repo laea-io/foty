@@ -3,11 +3,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState, useState } from 'react'
-import { saveCourseAction } from '@/app/actions/c'
+import { saveCourseAction } from '@/app/actions/community'
 import { ShareButton } from '@/components/theme/share-button'
 import { Icon } from '@/components/ui/icon'
 import { Button, Chip, Note } from '@/components/ui/primitives'
-import type { CourseData } from '@/lib/server/q/c'
+import type { CourseData } from '@/lib/server/queries/places'
 
 const asks = ['카페 한 곳 더', '덜 걷는 코스로', '실내 장소로', '예산 줄이기']
 

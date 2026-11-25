@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { OtherDateRows, SectionHead, ThemeList } from '@/components/b/theme/flow'
-import { loadTheme } from '@/components/b/theme/load'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeRow } from '@/components/theme/cards'
+import { OtherDateRows, SectionHead, ThemeList } from '@/components/theme/flow'
+import { loadTheme } from '@/components/theme/load'
 import { Badge, DemoNote } from '@/components/ui/primitives'
-import { otherDates, similarThemes } from '@/lib/server/q/b-themes'
+import { otherDates, similarThemes } from '@/lib/server/queries/theme-screens'
 
 export const metadata: Metadata = { title: '이번 테마는 취소됐어요' }
 

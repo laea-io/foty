@@ -3,10 +3,10 @@
 // 다시 연결할 때는 ?since=<마지막 글 시각>부터 따라잡는다(빠진 글 없음, 같은 글은 화면에서 id로 거른다).
 // LISTEN이 실패하면 'fallback' 이벤트를 보내고, 화면은 ?once=1로 4초마다 묻는다.
 import { db, sql as pg } from '@/lib/db'
-import { getViewer } from '@/lib/server/auth'
-import { CHAT_CHANNEL } from '@/lib/server/b/writes'
+import { getViewer } from '@/lib/server/auth/session'
 import { groupIds } from '@/lib/server/domain/changes'
-import { chatMessages } from '@/lib/server/q/b-trips'
+import { CHAT_CHANNEL } from '@/lib/server/domain/trips'
+import { chatMessages } from '@/lib/server/queries/trips'
 
 export const dynamic = 'force-dynamic'
 

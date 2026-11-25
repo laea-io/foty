@@ -6,9 +6,9 @@ import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shel
 import { ThemeRow } from '@/components/theme/cards'
 import { Mascot } from '@/components/ui/mascot'
 import { Avatar, ButtonLink, DemoNote, Photo } from '@/components/ui/primitives'
-import { getViewer } from '@/lib/server/auth'
-import { type PostView as Post, post } from '@/lib/server/q/c'
-import { type ThemeView, themesByIds } from '@/lib/server/q/themes'
+import { getViewer } from '@/lib/server/auth/session'
+import { type PostView as Post, post } from '@/lib/server/queries/community'
+import { type ThemeView, themesByIds } from '@/lib/server/queries/themes'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   return { title: (await post((await params).id))?.title }

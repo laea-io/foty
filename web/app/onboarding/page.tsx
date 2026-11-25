@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
-import { onboardingAction } from '@/app/actions/a'
-import { ActionForm, FormError } from '@/components/a/action-form'
-import { PickGroup, Stack, StepDots } from '@/components/a/onboarding'
-import { nextOf, pick, withNext } from '@/components/a/onboarding-form'
+import { onboardingAction } from '@/app/actions/account'
+import { ActionForm, FormError } from '@/components/forms/action-form'
+import { PickGroup, Stack, StepDots } from '@/components/onboarding/onboarding'
+import { nextOf, pick, withNext } from '@/components/onboarding/onboarding-form'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Button, IconButton } from '@/components/ui/primitives'
 import type { Prefs } from '@/lib/db/schema'
-import { activityList } from '@/lib/demo/themes'
-import { requireViewer } from '@/lib/server/auth'
+import { requireViewer } from '@/lib/server/auth/session'
+import { activityList } from '@/lib/shared/theme'
 
 export const metadata: Metadata = { title: '어떤 여행을 좋아하세요?' }
 

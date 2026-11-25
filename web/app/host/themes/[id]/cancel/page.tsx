@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
-import { cancelThemeAction } from '@/app/actions/c'
-import { ChipGroup, FieldLabel, SwitchRow, TextArea } from '@/components/c/form'
-import { ActionForm } from '@/components/host/action-form'
+import { cancelThemeAction } from '@/app/actions/host'
+import { ChipGroup, FieldLabel, SwitchRow, TextArea } from '@/components/forms/fields'
+import { ActionForm } from '@/components/forms/locked-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeMini } from '@/components/theme/cards'
 import { Button, ButtonLink, DemoNote, Note } from '@/components/ui/primitives'
-import { ownTheme } from '@/lib/server/q/own'
-import type { ThemeView } from '@/lib/server/q/themes'
-import { addDays, dayLabel } from '@/lib/server/time'
+import { ownTheme } from '@/lib/server/queries/host'
+import type { ThemeView } from '@/lib/server/queries/themes'
+import { addDays, dayLabel } from '@/lib/server/util/time'
 
 export const metadata: Metadata = { title: '테마 취소' }
 

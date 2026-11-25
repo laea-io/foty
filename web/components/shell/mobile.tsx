@@ -3,10 +3,10 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
+import { useViewerBrief } from '@/components/shell/viewer-context'
 import { Icon, type IconName } from '@/components/ui/icon'
 import { Logo } from '@/components/ui/mascot'
 import { Badge, IconButton } from '@/components/ui/primitives'
-import { useViewerBrief } from './viewer-context'
 
 const tabs: { href: string; label: string; icon: IconName; match: (p: string) => boolean }[] = [
   { href: '/', label: '홈', icon: 'home', match: (p) => p === '/' },
@@ -17,7 +17,7 @@ const tabs: { href: string; label: string; icon: IconName; match: (p: string) =>
 ]
 
 /** 모바일 하단 메뉴(홈·코스·커뮤니티·내 여행·마이). 이 메뉴가 있는 화면은 MobileFrame tabbar를 켠다. */
-export function MobileTabBar() {
+function MobileTabBar() {
   const path = usePathname()
   return (
     <nav

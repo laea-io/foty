@@ -3,8 +3,8 @@ import type { ReactNode } from 'react'
 import { KakaoMap } from '@/components/map/kakao-map'
 import { Icon } from '@/components/ui/icon'
 import { Avatar, Badge, Photo, StepNo, Verified } from '@/components/ui/primitives'
-import type { Host } from '@/lib/demo/people'
-import type { Stop } from '@/lib/demo/themes'
+import type { Host } from '@/lib/shared/people'
+import type { Stop } from '@/lib/shared/theme'
 
 /** 장소 카드 목록(번호 · 이름 · 고정 · 시간·체류·종류·확인 시점·출처 · 다음 장소까지 · 사진) */
 export function StopList({ stops, className }: { stops: Stop[]; className?: string }) {

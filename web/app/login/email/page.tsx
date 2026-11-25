@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { safeNext } from '@/lib/server/auth'
+import { safeNext } from '@/lib/server/auth/session'
 
 /** 예전 주소 — 이메일 로그인은 이제 /login 첫 화면에 있다 */
 export default async function EmailLoginPage({

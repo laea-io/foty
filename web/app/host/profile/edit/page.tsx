@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
-import { editHostAction } from '@/app/actions/c'
-import { Field, TextArea, TextInput } from '@/components/c/form'
-import { ActionForm } from '@/components/host/action-form'
+import { editHostAction } from '@/app/actions/host'
+import { Field, TextArea, TextInput } from '@/components/forms/fields'
+import { ActionForm } from '@/components/forms/locked-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
 import { Avatar, Button, DemoNote } from '@/components/ui/primitives'
-import { requireHost, type Viewer } from '@/lib/server/auth'
-import { dayLabel, today } from '@/lib/server/time'
+import { requireHost, type Viewer } from '@/lib/server/auth/session'
+import { dayLabel, today } from '@/lib/server/util/time'
 
 export const metadata: Metadata = { title: '프로필 편집' }
 

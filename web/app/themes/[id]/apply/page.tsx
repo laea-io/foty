@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { ApplySheet } from '@/components/b/theme/apply-sheet'
-import { loadThemeCtx } from '@/components/b/theme/load'
+import { ApplySheet } from '@/components/theme/apply-sheet'
 import { ThemeDetail } from '@/components/theme/detail'
-import { requireViewer } from '@/lib/server/auth'
-import { hostCard } from '@/lib/server/q/b-themes'
+import { loadThemeCtx } from '@/components/theme/load'
+import { requireViewer } from '@/lib/server/auth/session'
+import { hostCard } from '@/lib/server/queries/theme-screens'
 
 export const metadata: Metadata = { title: '참여 신청' }
 

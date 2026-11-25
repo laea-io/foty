@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import { RequestsList } from '@/components/host/requests-list'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote, Note } from '@/components/ui/primitives'
-import { requireHost } from '@/lib/server/auth'
-import { requestsFor } from '@/lib/server/q/c'
+import { requireHost } from '@/lib/server/auth/session'
+import { requestsFor } from '@/lib/server/queries/host'
 
 export const metadata: Metadata = { title: '테마 요청' }
 

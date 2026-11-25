@@ -32,15 +32,40 @@
 
 ## 폴더
 
+기능(테마 · 여행 · 호스트 · 커뮤니티 · 계정 · 운영팀) 이름으로 나눈다. 같은 기능은 화면 · 부품 · 서버 액션 · 읽기 · 쓰기가 같은 이름을 쓴다.
+
 ```
-docker-compose.yml       운영(beta) — 첫 줄 주석이 배포 대상 표시
-docker-compose.dev.yml   로컬 개발용 postgres(127.0.0.1:54060)
+docker-compose.yml        운영(beta) — 첫 줄 주석이 배포 대상 표시
+docker-compose.dev.yml    로컬 개발용 postgres(127.0.0.1:54060)
+ops/                      스테이징(stg-up.sh) · 장소/큐레이션 데이터 만들기 · 시연 데이터
+design/                   디자인 문서 · 화면 사진 · e2e 스크립트(design/tools)
 web/
-  app/                   화면 + app/api/health(DB까지 확인)
-  lib/env.ts             환경변수 검사
-  lib/db/                schema.ts · index.ts(연결) · migrate.ts
-  drizzle/               생성된 SQL 마이그레이션(커밋함)
-  instrumentation.ts     시작 시 마이그레이션
+  app/                    화면(주소 = 폴더) + app/api(health · 카카오 로그인 · 파일 · 길찾기 · 대화 스트림)
+  app/actions/            서버 액션 — auth · password-reset · account · admin · themes · trips · host · community
+  components/
+    ui/                   공통 부품(primitives · icon · mascot · states · parts · toggle · chip-pick)
+    forms/                서버 액션 폼(action-form · locked-form) · 입력 칸(fields)
+    shell/                머리말 · 모바일 틀 · 보는 사람 정보
+    auth/ onboarding/     로그인 · 비밀번호 재설정 · 가입 단계
+    home/ theme/ trips/   홈 조건 · 테마 상세/신청 · 내 여행/그룹 공간
+    host/ community/ course/ my/ admin/ search/ legal/ map/
+  lib/
+    env.ts                환경변수 검사(zod) — 여기서만 읽는다
+    shared/               서버 · 브라우저 공용 타입과 고정 목록(theme · people · stamps · filters · stations)
+    client/               브라우저 전용 도구
+    db/                   schema · index(연결) · migrate · sync/(장소 · 큐레이션 테마) · seed/(스테이징 시연 세계)
+    demo/                 /design 쇼케이스(DEMO_MODE)에서만 쓰는 예시 데이터
+    server/
+      auth/               세션 · 비밀번호 · 재설정 · 서명 토큰(체크인 QR · 초대)
+      services/           바깥 서비스 — OpenAI(ai) · 카카오모빌리티(directions) · 메일 · 업로드
+      util/               act(액션 결과) · form(FormData 읽기) · rules(서비스 규칙) · time(한국 시간)
+      queries/            읽기 — themes · theme-screens · theme-view · trips · host · places · community · my · stamps · profiles · safety · search · admin
+      domain/             쓰기(db를 인자로 받아 PGlite로 시험) — flow(신청~체크인 상태) · changes · trips · host · community · account · admin · notify · suggest
+      jobs.ts             1분마다 마감 · 성사 · 알림(tick)
+  drizzle/                생성된 SQL 마이그레이션(커밋함)
+  test/                   vitest(PGlite) — account · trips · host-community · flow · admin · ai · places · fixes
+  instrumentation.ts      시작 시 마이그레이션 → 장소 · 큐레이션 동기화 → 작업 시작
+  proxy.ts                로그인 확인(로그인 · 가입 · 약관 · health만 열림)
   Dockerfile
 ```
 

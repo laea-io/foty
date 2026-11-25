@@ -1,8 +1,8 @@
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { env } from '@/lib/env'
-import { safeNext } from '@/lib/server/auth'
-import { randomToken } from '@/lib/server/crypto'
+import { randomToken } from '@/lib/server/auth/crypto'
+import { safeNext } from '@/lib/server/auth/session'
 
 /** 카카오 로그인 시작. KAKAO_REST_KEY가 없으면 로그인 화면으로 돌려보낸다 */
 export async function GET(req: Request) {

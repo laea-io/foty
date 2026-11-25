@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
-import { addDateAction } from '@/app/actions/c'
-import { Field, Stepper, TextInput } from '@/components/c/form'
-import { ActionForm } from '@/components/host/action-form'
+import { addDateAction } from '@/app/actions/host'
+import { Field, Stepper, TextInput } from '@/components/forms/fields'
+import { ActionForm } from '@/components/forms/locked-form'
 import { DayStrip } from '@/components/host/day-strip'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeMini } from '@/components/theme/cards'
 import { Button, DemoNote, Note } from '@/components/ui/primitives'
-import { ownTheme } from '@/lib/server/q/own'
-import { type ThemeView, weekStrip } from '@/lib/server/q/themes'
-import { addDays, kst } from '@/lib/server/time'
+import { ownTheme } from '@/lib/server/queries/host'
+import { type ThemeView, weekStrip } from '@/lib/server/queries/themes'
+import { addDays, kst } from '@/lib/server/util/time'
 
 export const metadata: Metadata = { title: '날짜 추가' }
 

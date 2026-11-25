@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { H2, Narrow } from '@/components/a/form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
 import { Mascot } from '@/components/ui/mascot'
+import { H2, Narrow } from '@/components/ui/parts'
 import { ButtonLink, DemoNote, Photo } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { requireViewer } from '@/lib/server/auth'
-import { stampPlace } from '@/lib/server/q/a'
+import { requireViewer } from '@/lib/server/auth/session'
+import { stampPlace } from '@/lib/server/queries/stamps'
 
 export const metadata: Metadata = { title: '스탬프' }
 

@@ -2,11 +2,11 @@
 // 주요 변경(날짜 · 집결 · 예산 · 핵심 장소 시간)은 참여자 전원 확인 뒤 반영된다.
 import { and, eq, sql } from 'drizzle-orm'
 import * as s from '@/lib/db/schema'
-import { memberIds } from './flow'
-import { notify, systemMessage } from './notify'
-import { type AnyDb, FlowError } from './types'
+import { memberIds } from '@/lib/server/domain/flow'
+import { notify, systemMessage } from '@/lib/server/domain/notify'
+import { type AnyDb, FlowError } from '@/lib/server/domain/types'
 
-export const MAJOR_KINDS = ['date', 'meet_time', 'meet_place', 'budget', 'core_time'] as const
+const MAJOR_KINDS = ['date', 'meet_time', 'meet_place', 'budget', 'core_time'] as const
 export type ChangeKind = (typeof MAJOR_KINDS)[number] | 'stop'
 
 async function themeAndHost(db: AnyDb, themeId: string) {

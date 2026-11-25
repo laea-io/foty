@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { Field, TextInput } from '@/components/c/form'
+import { Field, TextInput } from '@/components/forms/fields'
 import { Icon } from '@/components/ui/icon'
-import { hostKinds } from '@/lib/demo/host'
+import { hostKinds } from '@/lib/shared/people'
 
 /** 가게·관광지 / 남양주 주민 고르기(링크로 화면 전환) */
 export function KindPicker({ current }: { current: 'business' | 'resident' }) {

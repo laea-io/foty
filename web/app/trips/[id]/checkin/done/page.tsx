@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { loadSpace } from '@/components/b/trips/load'
-import { SimpleScreen } from '@/components/b/trips/simple'
 import { ThemeMini } from '@/components/theme/cards'
+import { loadSpace } from '@/components/trips/load'
+import { SimpleScreen } from '@/components/trips/simple'
 import { Mascot } from '@/components/ui/mascot'
 import { ButtonLink } from '@/components/ui/primitives'
-import { requireViewer } from '@/lib/server/auth'
-import { myCheckin } from '@/lib/server/q/b-trips'
-import { dayLabel } from '@/lib/server/time'
+import { requireViewer } from '@/lib/server/auth/session'
+import { myCheckin } from '@/lib/server/queries/trips'
+import { dayLabel } from '@/lib/server/util/time'
 
 type Props = { params: Promise<{ id: string }> }
 

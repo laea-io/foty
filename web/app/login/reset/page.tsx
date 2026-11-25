@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { Narrow, PageTitle } from '@/components/a/form'
-import { ResetForm } from '@/components/a/reset-forms'
+import { ResetForm } from '@/components/auth/reset-forms'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { Narrow, PageTitle } from '@/components/ui/parts'
 
 export const metadata: Metadata = { title: '새 비밀번호' }
 

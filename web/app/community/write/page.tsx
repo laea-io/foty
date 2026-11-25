@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation'
 import { ReviewForm } from '@/components/community/review-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Button, ButtonLink, DemoNote } from '@/components/ui/primitives'
-import { getViewer } from '@/lib/server/auth'
-import { reviewableTheme } from '@/lib/server/q/c'
+import { getViewer } from '@/lib/server/auth/session'
+import { reviewableTheme } from '@/lib/server/queries/community'
 
 export const metadata: Metadata = { title: '후기 남기기' }
 

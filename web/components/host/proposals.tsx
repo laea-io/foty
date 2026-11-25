@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
-import { decideChangeAction } from '@/app/actions/c'
+import { decideChangeAction } from '@/app/actions/host'
 import { Badge, type BadgeTone } from '@/components/ui/primitives'
 
 export type ProposalItem = {

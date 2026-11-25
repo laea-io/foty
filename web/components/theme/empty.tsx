@@ -1,6 +1,6 @@
+import { NotifyButton } from '@/components/theme/notify-button'
 import { Mascot } from '@/components/ui/mascot'
 import { ButtonLink } from '@/components/ui/primitives'
-import { NotifyButton } from './notify-button'
 
 /** 조건에 맞는 테마가 없을 때. 성사를 보장하는 표현은 쓰지 않는다. */
 export function NoThemes({

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { ResultHead } from '@/components/b/theme/flow'
-import { loadThemeCtx } from '@/components/b/theme/load'
-import { ShareAction } from '@/components/b/trips/actions'
-import { SimpleScreen } from '@/components/b/trips/simple'
 import { ThemeMini } from '@/components/theme/cards'
+import { ResultHead } from '@/components/theme/flow'
+import { loadThemeCtx } from '@/components/theme/load'
+import { ShareAction } from '@/components/trips/actions'
+import { SimpleScreen } from '@/components/trips/simple'
 import { ButtonLink, Note, Progress } from '@/components/ui/primitives'
-import { requireViewer } from '@/lib/server/auth'
+import { requireViewer } from '@/lib/server/auth/session'
 
 export const metadata: Metadata = { title: '신청을 보냈어요' }
 

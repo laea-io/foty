@@ -3,7 +3,7 @@
 import { and, eq, gt } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import { db, schema } from '@/lib/db'
-import { sha256 } from '@/lib/server/crypto'
+import { sha256 } from '@/lib/server/auth/crypto'
 
 const OPEN = [
   /^\/login(\/|$)/,

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { CourseView } from '@/components/course/course-view'
-import { courseFor } from '@/lib/server/q/c'
+import { courseFor } from '@/lib/server/queries/places'
 
 export const metadata: Metadata = { title: '코스 지도' }
 

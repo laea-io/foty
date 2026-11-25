@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { Narrow } from '@/components/a/form'
-import { StampGroup } from '@/components/a/stamps'
+import { StampGroup } from '@/components/my/stamps'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { Narrow } from '@/components/ui/parts'
 import { DemoNote, Segmented } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { requireViewer } from '@/lib/server/auth'
-import { seasonSeries } from '@/lib/server/q/a'
+import { requireViewer } from '@/lib/server/auth/session'
+import { seasonSeries } from '@/lib/server/queries/stamps'
 
 export const metadata: Metadata = { title: '계절 시리즈' }
 

@@ -1,5 +1,6 @@
+// 알림 · 그룹 대화의 시스템 메시지 넣기
 import * as s from '@/lib/db/schema'
-import type { AnyDb } from './types'
+import type { AnyDb } from '@/lib/server/domain/types'
 
 /** 알림 넣기(같은 사람에게 여러 번 넣지 않게 중복 제거) */
 export async function notify(

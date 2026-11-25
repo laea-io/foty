@@ -2,8 +2,7 @@ import type { Metadata } from 'next'
 import { HostReviewForm } from '@/components/host/review-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Button, ButtonLink, DemoNote, Note } from '@/components/ui/primitives'
-import { reviewRows } from '@/lib/server/q/c'
-import { ownTheme } from '@/lib/server/q/own'
+import { ownTheme, reviewRows } from '@/lib/server/queries/host'
 
 export const metadata: Metadata = { title: '참여자 평가' }
 

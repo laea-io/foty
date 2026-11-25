@@ -5,8 +5,8 @@ import { DesktopFooter, DesktopHeader } from '@/components/shell/desktop-header'
 import { type ViewerBrief, ViewerProvider } from '@/components/shell/viewer-context'
 import { db, schema } from '@/lib/db'
 import { env } from '@/lib/env'
-import { getViewer } from '@/lib/server/auth'
-import './globals.css'
+import { getViewer } from '@/lib/server/auth/session'
+import '@/app/globals.css'
 
 export const metadata: Metadata = {
   title: { default: 'foty — 남양주가 여는 당일 테마 여행', template: '%s · foty' },

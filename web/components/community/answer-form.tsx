@@ -1,8 +1,8 @@
 'use client'
 
 import { useActionState, useRef } from 'react'
-import { answerAction } from '@/app/actions/c'
-import { TextArea } from '@/components/c/form'
+import { answerAction } from '@/app/actions/community'
+import { TextArea } from '@/components/forms/fields'
 import { Button } from '@/components/ui/primitives'
 
 export function AnswerForm({ postId }: { postId: string }) {

@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import { Applicants } from '@/components/host/applicants'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote, Photo, Progress } from '@/components/ui/primitives'
-import { applicantsOf } from '@/lib/server/q/c'
-import { ownTheme } from '@/lib/server/q/own'
-import type { ThemeView } from '@/lib/server/q/themes'
+import { applicantsOf, ownTheme } from '@/lib/server/queries/host'
+import type { ThemeView } from '@/lib/server/queries/themes'
 
 export const metadata: Metadata = { title: '신청 현황' }
 

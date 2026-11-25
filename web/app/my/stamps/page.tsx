@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { StampGroup } from '@/components/a/stamps'
+import { StampGroup } from '@/components/my/stamps'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote, Segmented } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { requireViewer } from '@/lib/server/auth'
-import { stampbook } from '@/lib/server/q/a'
+import { requireViewer } from '@/lib/server/auth/session'
+import { stampbook } from '@/lib/server/queries/stamps'
 
 export const metadata: Metadata = { title: '스탬프북' }
 

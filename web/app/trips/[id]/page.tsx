@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
-import { loadSpace } from '@/components/b/trips/load'
+import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { loadSpace } from '@/components/trips/load'
 import {
   SpaceDesktopHead,
   SpaceMobileHead,
   SpacePlanDesktop,
   SpacePlanMobile,
-} from '@/components/b/trips/space'
-import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+} from '@/components/trips/space'
 import { DemoNote } from '@/components/ui/primitives'
-import { themeDetail } from '@/lib/server/q/themes'
+import { themeDetail } from '@/lib/server/queries/themes'
 
 type Props = { params: Promise<{ id: string }> }
 

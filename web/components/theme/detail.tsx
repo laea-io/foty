@@ -1,18 +1,18 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { courseLength, DetailHead, HostBlock, InfoRows, MapSketch, StopList } from '@/components/theme/parts'
+import { ShareButton } from '@/components/theme/share-button'
 import { Icon } from '@/components/ui/icon'
 import { Badge, ButtonLink, DemoNote, Note, Photo, Progress, Reason } from '@/components/ui/primitives'
-import type { Host } from '@/lib/demo/people'
-import type { Theme } from '@/lib/demo/themes'
-import { courseLength, DetailHead, HostBlock, InfoRows, MapSketch, StopList } from './parts'
-import { ShareButton } from './share-button'
+import type { Host } from '@/lib/shared/people'
+import type { Theme } from '@/lib/shared/theme'
 
 const statusTone = (s: Theme['status']) => (s === '일정 확정' ? 'ink' : s === '취소' ? 'muted' : 'soft')
 
 /**
  * 테마 상세 — 모집 중(기본). guest: 로그인 없이 보는 화면(위 안내 띠 + “가입하고 신청하기”).
- * 모집 마감·일정 확정·여행 완료는 components/b/theme/state-detail.tsx.
+ * 모집 마감·일정 확정·여행 완료는 components/theme/state-detail.tsx.
  * host: DB의 호스트(진행한 테마 수 포함) · action: 보는 사람에 따라 바뀌는 버튼(신청 취소 · 그룹 공간 …)
  * notice: 내 신청 상태 한 줄
  */

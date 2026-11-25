@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
-import { editThemeAction } from '@/app/actions/host-edit'
-import { Field, Stepper, TextInput } from '@/components/c/form'
-import { ActionForm } from '@/components/host/action-form'
+import { editThemeAction } from '@/app/actions/host'
+import { Field, Stepper, TextInput } from '@/components/forms/fields'
+import { ActionForm } from '@/components/forms/locked-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeMini } from '@/components/theme/cards'
 import { Button, Note } from '@/components/ui/primitives'
-import { ownTheme } from '@/lib/server/q/own'
-import type { ThemeView } from '@/lib/server/q/themes'
+import { ownTheme } from '@/lib/server/queries/host'
+import type { ThemeView } from '@/lib/server/queries/themes'
 
 export const metadata: Metadata = { title: '테마 정보 고치기' }
 

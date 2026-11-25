@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { setSubscriptionAction } from '@/app/actions/a'
+import { setSubscriptionAction } from '@/app/actions/account'
 import { Button } from '@/components/ui/primitives'
 
 /** “새 테마 알림 받기” — 새 테마가 게시되면 알림으로 알려 준다(subscriptions kind 'all') */

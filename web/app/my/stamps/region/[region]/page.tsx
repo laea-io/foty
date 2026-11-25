@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Narrow, PageTitle } from '@/components/a/form'
-import { SubscribeButton } from '@/components/a/live-toggles'
+import { SubscribeButton } from '@/components/my/live-toggles'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeRow } from '@/components/theme/cards'
 import { Mascot } from '@/components/ui/mascot'
+import { Narrow, PageTitle } from '@/components/ui/parts'
 import { ButtonLink, DemoNote } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { getViewer } from '@/lib/server/auth'
-import { regionThemes } from '@/lib/server/q/a'
+import { getViewer } from '@/lib/server/auth/session'
+import { regionThemes } from '@/lib/server/queries/stamps'
 
 export const metadata: Metadata = { title: '모집 중인 테마' }
 

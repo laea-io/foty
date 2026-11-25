@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Narrow, PageTitle } from '@/components/a/form'
-import { PrivacyRow } from '@/components/a/live-toggles'
+import { PrivacyRow } from '@/components/my/live-toggles'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { Narrow, PageTitle } from '@/components/ui/parts'
 import { DemoNote } from '@/components/ui/primitives'
-import { type PrivacyKey, type PrivacyState, privacyState } from '@/lib/server/a-ops'
-import { requireViewer } from '@/lib/server/auth'
+import { requireViewer } from '@/lib/server/auth/session'
+import { type PrivacyKey, type PrivacyState, privacyState } from '@/lib/server/domain/account'
 
 export const metadata: Metadata = { title: '공개 범위' }
 

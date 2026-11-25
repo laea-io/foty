@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 import { useActionState } from 'react'
-import { decideAction } from '@/app/actions/c'
+import { decideAction } from '@/app/actions/host'
 import { Avatar, Badge, Tag } from '@/components/ui/primitives'
-import type { applicantsOf } from '@/lib/server/q/c'
+import type { applicantsOf } from '@/lib/server/queries/host'
 
 type A = Awaited<ReturnType<typeof applicantsOf>>[number]
 

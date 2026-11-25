@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { ErrorBody, StateFrame } from '@/components/a/states'
 import { BackBar } from '@/components/shell/mobile'
 import { ButtonLink } from '@/components/ui/primitives'
+import { ErrorBody, StateFrame } from '@/components/ui/states'
 
 export const metadata: Metadata = { title: '신청을 보내지 못했어요' }
 

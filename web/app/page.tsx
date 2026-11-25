@@ -1,7 +1,7 @@
 import { HomeView } from '@/components/home/home-view'
-import { parseQuery } from '@/lib/demo/filters'
-import { homeData } from '@/lib/server/q/b-themes'
-import { defaultOrigin } from '@/lib/server/q/themes'
+import { homeData } from '@/lib/server/queries/theme-screens'
+import { defaultOrigin } from '@/lib/server/queries/themes'
+import { parseQuery } from '@/lib/shared/filters'
 
 export default async function HomePage({
   searchParams,

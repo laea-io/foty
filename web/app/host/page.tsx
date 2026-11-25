@@ -12,9 +12,9 @@ import {
   Photo,
   Progress,
 } from '@/components/ui/primitives'
-import { requireHost } from '@/lib/server/auth'
-import { applicantsOf, hostSummary, hostThemes, requestsFor } from '@/lib/server/q/c'
-import type { ThemeView } from '@/lib/server/q/themes'
+import { requireHost } from '@/lib/server/auth/session'
+import { applicantsOf, hostSummary, hostThemes, requestsFor } from '@/lib/server/queries/host'
+import type { ThemeView } from '@/lib/server/queries/themes'
 
 export const metadata: Metadata = { title: '호스트 — 내 테마' }
 

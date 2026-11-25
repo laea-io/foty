@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { PageTitle } from '@/components/a/form'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { PageTitle } from '@/components/ui/parts'
 import { DemoNote, Photo } from '@/components/ui/primitives'
-import { type Img, img } from '@/lib/demo/themes'
+import { type Img, img } from '@/lib/shared/theme'
 
 export const metadata: Metadata = { title: '사진 출처' }
 

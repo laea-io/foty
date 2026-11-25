@@ -12,9 +12,9 @@ import {
   hostCancel,
   tick,
 } from '@/lib/server/domain/flow'
-import { loadTheme, relation } from '@/lib/server/domain/read'
 import { FlowError } from '@/lib/server/domain/types'
-import { NOW, testDb } from './db'
+import { loadTheme, relation } from '@/lib/server/queries/theme-view'
+import { NOW, testDb } from '@/test/db'
 
 let t: Awaited<ReturnType<typeof testDb>>
 beforeEach(async () => {

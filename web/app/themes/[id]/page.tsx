@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { CancelButton } from '@/components/b/theme/cancel-button'
-import { loadThemeCtx } from '@/components/b/theme/load'
-import { type DetailState, StateDetail } from '@/components/b/theme/state-detail'
+import { CancelButton } from '@/components/theme/cancel-button'
 import { ThemeDetail } from '@/components/theme/detail'
+import { loadThemeCtx } from '@/components/theme/load'
+import { type DetailState, StateDetail } from '@/components/theme/state-detail'
 import { ButtonLink } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
 import { memberIds } from '@/lib/server/domain/flow'
+import { blockedBy } from '@/lib/server/queries/community'
 import {
   detailExtras,
   hostCard,
@@ -15,9 +16,8 @@ import {
   meetFor,
   otherDates,
   subscribedToHost,
-} from '@/lib/server/q/b-themes'
-import { blockedBy } from '@/lib/server/q/c'
-import { themeDetail } from '@/lib/server/q/themes'
+} from '@/lib/server/queries/theme-screens'
+import { themeDetail } from '@/lib/server/queries/themes'
 
 type Props = {
   params: Promise<{ id: string }>

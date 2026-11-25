@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { Narrow, PageTitle } from '@/components/a/form'
-import { ForgotForm } from '@/components/a/reset-forms'
+import { ForgotForm } from '@/components/auth/reset-forms'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
-import { mailReady } from '@/lib/server/mail'
+import { Narrow, PageTitle } from '@/components/ui/parts'
+import { mailReady } from '@/lib/server/services/mail'
 
 export const metadata: Metadata = { title: '비밀번호 찾기' }
 

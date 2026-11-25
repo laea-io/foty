@@ -2,8 +2,8 @@ import { eq } from 'drizzle-orm'
 import { beforeEach, describe, expect, it } from 'vitest'
 import * as s from '@/lib/db/schema'
 import { apply, cancelApplication, confirmSchedule, decide } from '@/lib/server/domain/flow'
-import { editTheme, setMeetDetail } from '@/lib/server/domain/host-edit'
-import { NOW, testDb } from './db'
+import { editTheme, setMeetDetail } from '@/lib/server/domain/host'
+import { NOW, testDb } from '@/test/db'
 
 let t: Awaited<ReturnType<typeof testDb>>
 beforeEach(async () => {

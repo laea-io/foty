@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { H2 } from '@/components/a/form'
-import { SubscribeButton } from '@/components/a/live-toggles'
+import { SubscribeButton } from '@/components/my/live-toggles'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeRow, ThemeTile } from '@/components/theme/cards'
+import { H2 } from '@/components/ui/parts'
 import { Avatar, ButtonLink, DemoNote, Verified } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { getViewer } from '@/lib/server/auth'
-import { hostProfile } from '@/lib/server/q/a'
+import { getViewer } from '@/lib/server/auth/session'
+import { hostProfile } from '@/lib/server/queries/profiles'
 
 export const metadata: Metadata = { title: '호스트' }
 

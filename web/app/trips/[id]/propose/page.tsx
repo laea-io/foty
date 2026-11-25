@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { loadSpace } from '@/components/b/trips/load'
-import { ProposeForm } from '@/components/b/trips/propose-form'
-import { PageTitle, SimpleScreen } from '@/components/b/trips/simple'
+import { loadSpace } from '@/components/trips/load'
+import { ProposeForm } from '@/components/trips/propose-form'
+import { PageTitle, SimpleScreen } from '@/components/trips/simple'
 
 export const metadata: Metadata = { title: '변경 제안' }
 

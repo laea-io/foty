@@ -1,10 +1,10 @@
 // 이용약관 · 개인정보 처리 방침 · 고객센터 공통 틀 — 로그인하지 않아도 열린다(proxy OPEN)
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { PageTitle } from '@/components/a/form'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { PageTitle } from '@/components/ui/parts'
 
-export const EFFECTIVE = '2026-11-22'
+const EFFECTIVE = '2026-11-22'
 
 export type Section = { title: string; body: ReactNode[] }
 

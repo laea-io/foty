@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation'
 import { AskForm } from '@/components/community/ask-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Button, DemoNote } from '@/components/ui/primitives'
-import { getViewer } from '@/lib/server/auth'
-import { corePlaces } from '@/lib/server/q/c'
+import { getViewer } from '@/lib/server/auth/session'
+import { corePlaces } from '@/lib/server/queries/places'
 
 export const metadata: Metadata = { title: '질문하기' }
 

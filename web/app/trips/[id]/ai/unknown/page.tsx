@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { AiInput } from '@/components/b/trips/ai'
-import { loadSpace } from '@/components/b/trips/load'
-import { PageTitle, SimpleScreen } from '@/components/b/trips/simple'
+import { AiInput } from '@/components/trips/ai'
+import { loadSpace } from '@/components/trips/load'
+import { PageTitle, SimpleScreen } from '@/components/trips/simple'
 import { Mascot } from '@/components/ui/mascot'
 import { Badge } from '@/components/ui/primitives'
-import { aiSuggest } from '@/lib/server/q/b-trips'
+import { aiSuggest } from '@/lib/server/queries/trips'
 
 type Props = {
   params: Promise<{ id: string }>

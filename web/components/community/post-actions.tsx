@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 import { useActionState } from 'react'
-import { saveCourseAction } from '@/app/actions/c'
+import { saveCourseAction } from '@/app/actions/community'
 import { buttonClass } from '@/components/ui/primitives'
-import type { PostView as Post } from '@/lib/server/q/c'
+import type { PostView as Post } from '@/lib/server/queries/community'
 
 /** 글 카드 아래 버튼: 코스 가져오기 · 이 테마의 다음 날짜 보기 / 질문은 답변하기 */
 export function PostActions({ p, size }: { p: Post; size: 'card' | 'wide' }) {

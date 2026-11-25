@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm'
 import { drizzle } from 'drizzle-orm/pglite'
 import { migrate } from 'drizzle-orm/pglite/migrator'
 import * as schema from '@/lib/db/schema'
-import { seedDemo } from '@/lib/db/seed-data'
+import { seedDemo } from '@/lib/db/seed/data'
 import type { AnyDb } from '@/lib/server/domain/types'
 
 /** 시험 기준 시각: 2026-11-21(토) 12:00 KST → 이번 주말 = 11-28 */

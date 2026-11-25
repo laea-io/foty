@@ -5,7 +5,7 @@ import { CourseView } from '@/components/course/course-view'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
 import { Badge, Photo } from '@/components/ui/primitives'
-import { courseFor, type PlaceItem, searchPlaces } from '@/lib/server/q/c'
+import { courseFor, type PlaceItem, searchPlaces } from '@/lib/server/queries/places'
 
 export const metadata: Metadata = { title: '코스' }
 

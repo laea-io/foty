@@ -3,12 +3,12 @@ import { DesktopFrame, MobileFrame, MobileTopBar } from '@/components/shell/mobi
 import { ThemeRow } from '@/components/theme/cards'
 import { Icon } from '@/components/ui/icon'
 import { Avatar, ButtonLink, DemoNote, Photo } from '@/components/ui/primitives'
-import type { PostView as Post } from '@/lib/server/q/c'
-import type { ThemeView } from '@/lib/server/q/themes'
+import type { PostView as Post } from '@/lib/server/queries/community'
+import type { ThemeView } from '@/lib/server/queries/themes'
 
 type PostKind = Post['kind']
 
-import { PostActions } from './post-actions'
+import { PostActions } from '@/components/community/post-actions'
 
 const kinds: ('전체' | PostKind)[] = ['전체', '여행 후기', '코스 공유', '질문']
 

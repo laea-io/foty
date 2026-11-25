@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { joinHostAction } from '@/app/actions/c'
-import { ActionForm } from '@/components/host/action-form'
+import { joinHostAction } from '@/app/actions/host'
+import { ActionForm } from '@/components/forms/locked-form'
 import { BusinessFields, JoinProgress, KindPicker } from '@/components/host/join'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Button, ButtonLink, DemoNote } from '@/components/ui/primitives'
-import { requireViewer } from '@/lib/server/auth'
-import { dayLabel, today } from '@/lib/server/time'
+import { requireViewer } from '@/lib/server/auth/session'
+import { dayLabel, today } from '@/lib/server/util/time'
 
 export const metadata: Metadata = { title: '호스트 등록' }
 

@@ -1,12 +1,13 @@
 'use server'
 
+// 로그인 · 가입 · 로그아웃 서버 액션
 import { eq, sql } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { db, schema } from '@/lib/db'
 import { env } from '@/lib/env'
-import { endSession, safeNext, startSession } from '@/lib/server/auth'
-import { hashPassword, verifyPassword } from '@/lib/server/crypto'
+import { hashPassword, verifyPassword } from '@/lib/server/auth/crypto'
+import { endSession, safeNext, startSession } from '@/lib/server/auth/session'
 
 export type AuthState = { error?: string } | undefined
 

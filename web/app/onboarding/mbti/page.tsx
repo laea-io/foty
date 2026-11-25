@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
-import { onboardingAction } from '@/app/actions/a'
-import { ActionForm, FormError } from '@/components/a/action-form'
-import { MbtiPick } from '@/components/a/chip-pick'
-import { Narrow, PageTitle } from '@/components/a/form'
-import { LaterNextSubmit } from '@/components/a/later-bar'
-import { nextOf, withNext } from '@/components/a/onboarding-form'
-import { ToggleRow } from '@/components/a/toggle'
+import { onboardingAction } from '@/app/actions/account'
+import { ActionForm, FormError } from '@/components/forms/action-form'
+import { LaterNextSubmit } from '@/components/onboarding/later-bar'
+import { nextOf, withNext } from '@/components/onboarding/onboarding-form'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { MbtiPick } from '@/components/ui/chip-pick'
+import { Narrow, PageTitle } from '@/components/ui/parts'
 import { DemoNote } from '@/components/ui/primitives'
-import { requireViewer, type Viewer } from '@/lib/server/auth'
+import { ToggleRow } from '@/components/ui/toggle'
+import { requireViewer, type Viewer } from '@/lib/server/auth/session'
 
 export const metadata: Metadata = { title: 'MBTI' }
 

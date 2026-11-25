@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote, Note, Segmented } from '@/components/ui/primitives'
-import { getViewer, requireAdmin, requireHost } from '@/lib/server/auth'
-import { regionSummary } from '@/lib/server/q/c'
+import { getViewer, requireAdmin, requireHost } from '@/lib/server/auth/session'
+import { regionSummary } from '@/lib/server/queries/host'
 
 type R = Awaited<ReturnType<typeof regionSummary>>
 

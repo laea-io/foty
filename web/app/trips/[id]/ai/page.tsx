@@ -1,17 +1,17 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { AiInput, type AiPlace, AiThread } from '@/components/b/trips/ai'
-import { loadSpace } from '@/components/b/trips/load'
-import { CloseLink, MobileSheet } from '@/components/b/trips/sheet'
+import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { AiInput, type AiPlace, AiThread } from '@/components/trips/ai'
+import { loadSpace } from '@/components/trips/load'
+import { CloseLink, MobileSheet } from '@/components/trips/sheet'
 import {
   SpaceDesktopHead,
   SpaceMobileHead,
   SpacePlanDesktop,
   SpacePlanMobile,
-} from '@/components/b/trips/space'
-import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+} from '@/components/trips/space'
 import { DemoNote } from '@/components/ui/primitives'
-import { aiSuggest } from '@/lib/server/q/b-trips'
+import { aiSuggest } from '@/lib/server/queries/trips'
 
 type Props = {
   params: Promise<{ id: string }>

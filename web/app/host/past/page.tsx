@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { HostHeadDesktop, HostHeadMobile } from '@/components/host/host-head'
 import { BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Badge, ButtonLink, DemoNote, Photo } from '@/components/ui/primitives'
-import { requireHost } from '@/lib/server/auth'
-import { hostSummary, hostThemes } from '@/lib/server/q/c'
-import type { ThemeView } from '@/lib/server/q/themes'
+import { requireHost } from '@/lib/server/auth/session'
+import { hostSummary, hostThemes } from '@/lib/server/queries/host'
+import type { ThemeView } from '@/lib/server/queries/themes'
 
 export const metadata: Metadata = { title: '호스트 — 지난 테마' }
 

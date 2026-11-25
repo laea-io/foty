@@ -2,9 +2,9 @@
 // 정원은 행 잠금(SELECT … FOR UPDATE) 안에서 다시 세서 정원 초과·중복 확정을 막는다.
 import { and, eq, inArray, lt, sql } from 'drizzle-orm'
 import * as s from '@/lib/db/schema'
-import { rules } from '../rules'
-import { notify, systemMessage } from './notify'
-import { type AnyDb, FlowError } from './types'
+import { notify, systemMessage } from '@/lib/server/domain/notify'
+import { type AnyDb, FlowError } from '@/lib/server/domain/types'
+import { rules } from '@/lib/server/util/rules'
 
 type Tx = AnyDb
 
@@ -424,7 +424,7 @@ async function notifyOnce(db: Tx, userIds: string[], n: { title: string; body?: 
 }
 
 /** 여행 날 아침(08시 이후) 체크인 안내 · 완료 3일 뒤 평가 안 한 사람에게 한 번 더 */
-export async function reminders(db: AnyDb, now = new Date()) {
+async function reminders(db: AnyDb, now = new Date()) {
   const kstDay = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(now)
   const hour = Number(
     new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Seoul', hour: '2-digit', hour12: false }).format(now),

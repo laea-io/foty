@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { changePasswordAction, deleteAccountAction } from '@/app/actions/a'
-import { ActionForm, FormError } from '@/components/a/action-form'
-import { Field, H2, Narrow, PageTitle } from '@/components/a/form'
+import { changePasswordAction, deleteAccountAction } from '@/app/actions/account'
+import { ActionForm, FormError } from '@/components/forms/action-form'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { Field, H2, Narrow, PageTitle } from '@/components/ui/parts'
 import { Button } from '@/components/ui/primitives'
-import { requireViewer, type Viewer } from '@/lib/server/auth'
+import { requireViewer, type Viewer } from '@/lib/server/auth/session'
 
 export const metadata: Metadata = { title: '계정' }
 

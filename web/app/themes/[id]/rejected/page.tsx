@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { SectionHead, StatusHead, ThemeList } from '@/components/b/theme/flow'
-import { loadThemeCtx } from '@/components/b/theme/load'
-import { SimpleScreen } from '@/components/b/trips/simple'
 import { ThemeMini } from '@/components/theme/cards'
-import { requireViewer } from '@/lib/server/auth'
-import { similarThemes } from '@/lib/server/q/b-themes'
+import { SectionHead, StatusHead, ThemeList } from '@/components/theme/flow'
+import { loadThemeCtx } from '@/components/theme/load'
+import { SimpleScreen } from '@/components/trips/simple'
+import { requireViewer } from '@/lib/server/auth/session'
+import { similarThemes } from '@/lib/server/queries/theme-screens'
 
 export const metadata: Metadata = { title: '이번에는 함께하지 못하게 됐어요' }
 

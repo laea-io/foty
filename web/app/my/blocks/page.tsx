@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { H2, Narrow } from '@/components/a/form'
-import { BlockButton } from '@/components/a/live-toggles'
+import { BlockButton } from '@/components/my/live-toggles'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { H2, Narrow } from '@/components/ui/parts'
 import { Avatar, Badge, DemoNote, Segmented } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { requireViewer } from '@/lib/server/auth'
-import { blocksAndReports } from '@/lib/server/q/a'
+import { requireViewer } from '@/lib/server/auth/session'
+import { blocksAndReports } from '@/lib/server/queries/safety'
 
 export const metadata: Metadata = { title: '신고·차단 내역' }
 

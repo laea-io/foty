@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { CorePick } from '@/components/course/core-pick'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { DemoNote } from '@/components/ui/primitives'
-import { corePlaces } from '@/lib/server/q/c'
+import { corePlaces } from '@/lib/server/queries/places'
 
 export const metadata: Metadata = { title: '핵심 장소 고르기' }
 

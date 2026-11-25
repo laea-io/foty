@@ -1,16 +1,16 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { onboardingAction } from '@/app/actions/a'
-import { ActionForm, FormError } from '@/components/a/action-form'
-import { Narrow, PageTitle } from '@/components/a/form'
-import { LaterNextSubmit } from '@/components/a/later-bar'
-import { PickGroup, StepDots } from '@/components/a/onboarding'
-import { nextOf, pick, withNext } from '@/components/a/onboarding-form'
+import { onboardingAction } from '@/app/actions/account'
+import { ActionForm, FormError } from '@/components/forms/action-form'
+import { LaterNextSubmit } from '@/components/onboarding/later-bar'
+import { PickGroup, StepDots } from '@/components/onboarding/onboarding'
+import { nextOf, pick, withNext } from '@/components/onboarding/onboarding-form'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
+import { Narrow, PageTitle } from '@/components/ui/parts'
 import { DemoNote } from '@/components/ui/primitives'
 import type { Prefs } from '@/lib/db/schema'
-import { requireViewer } from '@/lib/server/auth'
+import { requireViewer } from '@/lib/server/auth/session'
 
 export const metadata: Metadata = { title: '조금만 더 알려주세요' }
 

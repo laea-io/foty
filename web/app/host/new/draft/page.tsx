@@ -6,9 +6,9 @@ import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shel
 import { MapSketch, StopList } from '@/components/theme/parts'
 import { ButtonLink, DemoNote, Note } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { requireHost } from '@/lib/server/auth'
-import { draftCourse } from '@/lib/server/suggest'
-import { dayLabel, parts } from '@/lib/server/time'
+import { requireHost } from '@/lib/server/auth/session'
+import { draftCourse } from '@/lib/server/domain/suggest'
+import { dayLabel, parts } from '@/lib/server/util/time'
 
 export const metadata: Metadata = { title: '코스 초안' }
 

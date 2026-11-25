@@ -1,7 +1,7 @@
 'use client'
 
 import { useActionState, useEffect } from 'react'
-import { publishThemeAction } from '@/app/actions/c'
+import { publishThemeAction } from '@/app/actions/host'
 import { Button } from '@/components/ui/primitives'
 import { keep } from '@/lib/client/keep-form'
 

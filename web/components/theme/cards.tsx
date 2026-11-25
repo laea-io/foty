@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Badge, Photo, Progress, Verified } from '@/components/ui/primitives'
-import { type Theme, themeBadge } from '@/lib/demo/themes'
+import { type Theme, themeBadge } from '@/lib/shared/theme'
 
 /** 모바일 목록형 테마 카드(88px 사진 + 네 줄) */
 export function ThemeRow({ t, href }: { t: Theme; href?: string }) {

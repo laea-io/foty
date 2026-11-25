@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { ResultHead } from '@/components/b/theme/flow'
-import { JoinButton } from '@/components/b/theme/invite'
-import { loadThemeCtx } from '@/components/b/theme/load'
-import { SimpleScreen } from '@/components/b/trips/simple'
 import { ThemeMini } from '@/components/theme/cards'
+import { ResultHead } from '@/components/theme/flow'
+import { JoinButton } from '@/components/theme/invite'
+import { loadThemeCtx } from '@/components/theme/load'
+import { SimpleScreen } from '@/components/trips/simple'
 import { ButtonLink, Note, Progress } from '@/components/ui/primitives'
-import { inviteFor } from '@/lib/server/q/b-themes'
+import { inviteFor } from '@/lib/server/queries/theme-screens'
 
 export const metadata: Metadata = { title: '초대' }
 

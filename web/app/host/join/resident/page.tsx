@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { joinHostAction } from '@/app/actions/c'
-import { Field, TextInput } from '@/components/c/form'
-import { ActionForm } from '@/components/host/action-form'
+import { joinHostAction } from '@/app/actions/host'
+import { Field, TextInput } from '@/components/forms/fields'
+import { ActionForm } from '@/components/forms/locked-form'
 import { ContactField, KindPicker } from '@/components/host/join'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Icon } from '@/components/ui/icon'
 import { Button, DemoNote, Note } from '@/components/ui/primitives'
-import { requireViewer } from '@/lib/server/auth'
+import { requireViewer } from '@/lib/server/auth/session'
 
 export const metadata: Metadata = { title: '호스트 등록 — 주민' }
 

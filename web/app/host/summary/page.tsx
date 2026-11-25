@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Badge, DemoNote, Note, Segmented } from '@/components/ui/primitives'
-import { requireHost } from '@/lib/server/auth'
-import { hostSummary } from '@/lib/server/q/c'
+import { requireHost } from '@/lib/server/auth/session'
+import { hostSummary } from '@/lib/server/queries/host'
 
 type Sum = Awaited<ReturnType<typeof hostSummary>>
 

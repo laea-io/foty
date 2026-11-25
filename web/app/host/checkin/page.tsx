@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import QRCode from 'qrcode'
-import { manualCheckinAction } from '@/app/actions/c'
-import { ActionForm } from '@/components/host/action-form'
+import { manualCheckinAction } from '@/app/actions/host'
+import { ActionForm } from '@/components/forms/locked-form'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { Avatar, Badge, Button, DemoNote } from '@/components/ui/primitives'
 import { env } from '@/lib/env'
-import { requireHost } from '@/lib/server/auth'
-import { checkinUrl } from '@/lib/server/checkin-token'
-import { checkinBoard } from '@/lib/server/q/c'
+import { requireHost } from '@/lib/server/auth/session'
+import { checkinUrl } from '@/lib/server/auth/tokens'
+import { checkinBoard } from '@/lib/server/queries/host'
 
 export const metadata: Metadata = { title: '호스트 — 체크인' }
 

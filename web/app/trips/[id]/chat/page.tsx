@@ -1,13 +1,13 @@
 import { and, eq, isNull } from 'drizzle-orm'
 import type { Metadata } from 'next'
-import { ChatThread } from '@/components/b/trips/chat'
-import { loadSpace } from '@/components/b/trips/load'
-import { ChangeCard, SpaceDesktopHead, SpaceMobileHead } from '@/components/b/trips/space'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { StopList } from '@/components/theme/parts'
+import { ChatThread } from '@/components/trips/chat'
+import { loadSpace } from '@/components/trips/load'
+import { ChangeCard, SpaceDesktopHead, SpaceMobileHead } from '@/components/trips/space'
 import { db, schema } from '@/lib/db'
-import { requireViewer } from '@/lib/server/auth'
-import { chatMessages } from '@/lib/server/q/b-trips'
+import { requireViewer } from '@/lib/server/auth/session'
+import { chatMessages } from '@/lib/server/queries/trips'
 
 type Props = { params: Promise<{ id: string }> }
 

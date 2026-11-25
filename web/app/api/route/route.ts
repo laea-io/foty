@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { roadRoute } from '@/lib/server/route'
+import { roadRoute } from '@/lib/server/services/directions'
 
 /** GET /api/route?p=37.56,127.30;37.57,127.32 — 장소 순서대로 실제 도로 경로(로그인 필요: proxy) */
 export async function GET(req: Request) {

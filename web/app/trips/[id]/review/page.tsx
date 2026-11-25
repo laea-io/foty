@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
-import { loadSpace } from '@/components/b/trips/load'
-import { ReviewForm } from '@/components/b/trips/review'
-import { PageTitle, SimpleScreen } from '@/components/b/trips/simple'
+import { loadSpace } from '@/components/trips/load'
+import { ReviewForm } from '@/components/trips/review'
+import { PageTitle, SimpleScreen } from '@/components/trips/simple'
 import { ButtonLink } from '@/components/ui/primitives'
-import { requireViewer } from '@/lib/server/auth'
-import { reviewData } from '@/lib/server/q/b-trips'
-import { parts } from '@/lib/server/time'
+import { requireViewer } from '@/lib/server/auth/session'
+import { reviewData } from '@/lib/server/queries/trips'
+import { parts } from '@/lib/server/util/time'
 
 type Props = { params: Promise<{ id: string }> }
 

@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useViewerBrief } from '@/components/shell/viewer-context'
 import { Logo } from '@/components/ui/mascot'
 import { Avatar, Badge, IconButton } from '@/components/ui/primitives'
-import { useViewerBrief } from './viewer-context'
 
 const guestNav = [
   { href: '/', label: '홈', match: (p: string) => p === '/' || p.startsWith('/themes') },

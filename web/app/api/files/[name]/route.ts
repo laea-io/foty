@@ -1,4 +1,4 @@
-import { readImage } from '@/lib/server/uploads'
+import { readImage } from '@/lib/server/services/uploads'
 
 export async function GET(_: Request, { params }: { params: Promise<{ name: string }> }) {
   const f = await readImage((await params).name)

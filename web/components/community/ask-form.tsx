@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation'
 import { useActionState } from 'react'
-import { writePostAction } from '@/app/actions/c'
-import { ChipGroup, FieldLabel, TextArea, TextInput } from '@/components/c/form'
+import { writePostAction } from '@/app/actions/community'
+import { ChipGroup, FieldLabel, TextArea, TextInput } from '@/components/forms/fields'
 import { Icon } from '@/components/ui/icon'
 import { Note } from '@/components/ui/primitives'
 import { keep } from '@/lib/client/keep-form'

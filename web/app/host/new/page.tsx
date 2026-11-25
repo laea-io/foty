@@ -4,10 +4,11 @@ import { NewThemeForm } from '@/components/host/new-theme-form'
 import { BackBar, BottomBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeTile } from '@/components/theme/cards'
 import { Button, DemoNote, Note } from '@/components/ui/primitives'
-import { requireHost } from '@/lib/server/auth'
-import { corePlaces, hostThemes } from '@/lib/server/q/c'
-import { weekStrip } from '@/lib/server/q/themes'
-import { addDays, kst } from '@/lib/server/time'
+import { requireHost } from '@/lib/server/auth/session'
+import { hostThemes } from '@/lib/server/queries/host'
+import { corePlaces } from '@/lib/server/queries/places'
+import { weekStrip } from '@/lib/server/queries/themes'
+import { addDays, kst } from '@/lib/server/util/time'
 
 export const metadata: Metadata = { title: '테마 등록' }
 

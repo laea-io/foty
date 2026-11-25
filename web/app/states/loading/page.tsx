@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { LoadingSkeleton } from '@/components/a/states'
+import { LoadingSkeleton } from '@/components/ui/states'
 
 export const metadata: Metadata = { title: '불러오는 중' }
 

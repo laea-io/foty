@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { DesktopFrame, MobileFrame, MobileTopBar } from '@/components/shell/mobile'
 import { ButtonLink, DemoNote, Photo, Segmented } from '@/components/ui/primitives'
-import { getViewer } from '@/lib/server/auth'
-import { savedCourses as loadSaved, type SavedRow as SavedCourse } from '@/lib/server/q/c'
+import { getViewer } from '@/lib/server/auth/session'
+import { savedCourses as loadSaved, type SavedRow as SavedCourse } from '@/lib/server/queries/places'
 
 export const metadata: Metadata = { title: '저장한 코스' }
 

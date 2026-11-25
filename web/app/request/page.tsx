@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { RequestForm } from '@/components/b/theme/request-form'
-import { requireViewer } from '@/lib/server/auth'
+import { RequestForm } from '@/components/theme/request-form'
+import { requireViewer } from '@/lib/server/auth/session'
 
 export const metadata: Metadata = { title: '테마 요청' }
 

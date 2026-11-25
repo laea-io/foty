@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { SearchBox } from '@/components/a/search-box'
+import { SearchBox } from '@/components/search/search-box'
 import { BackBar, DesktopFrame, MobileFrame } from '@/components/shell/mobile'
 import { ThemeRow, ThemeTile } from '@/components/theme/cards'
 import { Mascot } from '@/components/ui/mascot'
 import { ButtonLink, DemoNote, Segmented } from '@/components/ui/primitives'
 import { db } from '@/lib/db'
-import { getViewer } from '@/lib/server/auth'
-import { searchAll } from '@/lib/server/q/a'
+import { getViewer } from '@/lib/server/auth/session'
+import { searchAll } from '@/lib/server/queries/search'
 
 /** 결과가 없을 때 보여 줄 추천 검색어 */
 const suggestions = ['산책', '카페', '두물머리']

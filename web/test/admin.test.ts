@@ -2,20 +2,19 @@
 import { and, eq, gte, inArray } from 'drizzle-orm'
 import { beforeEach, describe, expect, it } from 'vitest'
 import * as s from '@/lib/db/schema'
+import { verifyPassword } from '@/lib/server/auth/password'
+import { changePassword, deleteAccount } from '@/lib/server/domain/account'
 import {
   adminCancelTheme,
-  changePassword,
   decideHost,
-  deleteAccount,
   setHostSuspended,
   setPostHidden,
   setUserSuspended,
-} from '@/lib/server/a-ops'
+} from '@/lib/server/domain/admin'
 import { FlowError } from '@/lib/server/domain/types'
-import { verifyPassword } from '@/lib/server/password'
-import { adminQueue, adminUsers } from '@/lib/server/q/a'
-import { today } from '@/lib/server/time'
-import { NOW, testDb } from './db'
+import { adminQueue, adminUsers } from '@/lib/server/queries/admin'
+import { today } from '@/lib/server/util/time'
+import { NOW, testDb } from '@/test/db'
 
 let t: Awaited<ReturnType<typeof testDb>>
 beforeEach(async () => {

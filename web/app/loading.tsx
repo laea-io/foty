@@ -1,4 +1,4 @@
-import { LoadingSkeleton } from '@/components/a/states'
+import { LoadingSkeleton } from '@/components/ui/states'
 
 export default function Loading() {
   return <LoadingSkeleton />

@@ -2,14 +2,14 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { DateChoices, OriginChoices, type UpcomingDate } from '@/components/home/conditions'
 import { DesktopFrame, MobileFrame, MobileTopBar } from '@/components/shell/mobile'
 import { ThemeRow, ThemeTile } from '@/components/theme/cards'
 import { NoThemes } from '@/components/theme/empty'
 import { Icon } from '@/components/ui/icon'
 import { Button, Chip, DemoNote, Photo, Reason, TextTabs } from '@/components/ui/primitives'
-import { type HomeQuery, toSearch } from '@/lib/demo/filters'
-import { activityList, budgets, type Theme } from '@/lib/demo/themes'
-import { DateChoices, OriginChoices, type UpcomingDate } from './conditions'
+import { type HomeQuery, toSearch } from '@/lib/shared/filters'
+import { activityList, budgets, type Theme } from '@/lib/shared/theme'
 
 /** 달력 한 칸(weekStrip) */
 // 배너 사진: 물의 정원(한국관광공사, 공공누리 제1유형 — 출처 표시, 잘라 써도 된다)

@@ -1,6 +1,6 @@
 import 'server-only'
 import { db, sql } from '@/lib/db'
-import { tick } from './domain/flow'
+import { tick } from '@/lib/server/domain/flow'
 
 const LOCK = 4060_2111 // pg advisory lock 번호 — 인스턴스가 늘어도 한 곳만 돈다
 

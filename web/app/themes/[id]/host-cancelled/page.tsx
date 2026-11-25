@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
-import { OtherDateRows, SectionHead, StatusHead, ThemeList } from '@/components/b/theme/flow'
-import { loadTheme } from '@/components/b/theme/load'
-import { SimpleScreen } from '@/components/b/trips/simple'
+import { OtherDateRows, SectionHead, StatusHead, ThemeList } from '@/components/theme/flow'
+import { loadTheme } from '@/components/theme/load'
+import { SimpleScreen } from '@/components/trips/simple'
 import { ButtonLink } from '@/components/ui/primitives'
-import { otherDates, similarThemes } from '@/lib/server/q/b-themes'
+import { otherDates, similarThemes } from '@/lib/server/queries/theme-screens'
 
 export const metadata: Metadata = { title: '호스트 사정으로 취소됐어요' }
 

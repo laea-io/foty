@@ -1,11 +1,11 @@
 import Link from 'next/link'
+import { CourseActions } from '@/components/course/course-actions'
 import { DesktopFrame, MobileFrame, MobileTopBar } from '@/components/shell/mobile'
 import { ThemeRow } from '@/components/theme/cards'
 import { MapSketch, StopList } from '@/components/theme/parts'
 import { Icon } from '@/components/ui/icon'
 import { Badge, DemoNote, Photo, Segmented } from '@/components/ui/primitives'
-import type { CourseData as Course } from '@/lib/server/q/c'
-import { CourseActions } from './course-actions'
+import type { CourseData as Course } from '@/lib/server/queries/places'
 
 /** 코스 — 일정(기본) / 지도. 모바일은 탭 전환, 데스크톱은 왼쪽 일정 + 오른쪽 지도 */
 export function CourseView({ c, view }: { c: Course; view: 'list' | 'map' }) {

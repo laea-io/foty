@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { ChipGroup, Field, Stepper, SwitchRow, TextInput } from '@/components/c/form'
+import { ChipGroup, Field, Stepper, SwitchRow, TextInput } from '@/components/forms/fields'
+import { DayStrip, type StripDay } from '@/components/host/day-strip'
 import { Icon } from '@/components/ui/icon'
-import { STATIONS } from '@/lib/stations'
-import { DayStrip, type StripDay } from './day-strip'
+import { STATIONS } from '@/lib/shared/stations'
 
 export type NewThemeDefaults = {
   place: string

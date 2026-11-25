@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { skipRequestAction } from '@/app/actions/c'
+import { skipRequestAction } from '@/app/actions/host'
 import { Chip } from '@/components/ui/primitives'
 
 type Req = { id: string; text: string; when: string; tags: string[]; same: number }

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import { freeHandle } from '@/app/actions/auth'
 import { db, schema } from '@/lib/db'
 import { env } from '@/lib/env'
-import { startSession } from '@/lib/server/auth'
+import { startSession } from '@/lib/server/auth/session'
 
 type KakaoMe = { id: number; kakao_account?: { profile?: { nickname?: string } } }
 

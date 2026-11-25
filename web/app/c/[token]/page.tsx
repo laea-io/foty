@@ -1,15 +1,15 @@
 import { eq } from 'drizzle-orm'
 import type { Metadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import { ResultHead } from '@/components/b/theme/flow'
-import { SimpleScreen } from '@/components/b/trips/simple'
+import { ResultHead } from '@/components/theme/flow'
+import { SimpleScreen } from '@/components/trips/simple'
 import { ButtonLink } from '@/components/ui/primitives'
 import { db, schema as s } from '@/lib/db'
 import { env } from '@/lib/env'
-import { act } from '@/lib/server/act'
-import { requireViewer } from '@/lib/server/auth'
-import { readCheckinToken } from '@/lib/server/checkin-token'
+import { requireViewer } from '@/lib/server/auth/session'
+import { readCheckinToken } from '@/lib/server/auth/tokens'
 import { checkin } from '@/lib/server/domain/flow'
+import { act } from '@/lib/server/util/act'
 
 export const metadata: Metadata = { title: '현장 체크인' }
 

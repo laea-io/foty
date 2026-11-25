@@ -3,10 +3,10 @@ import { tmpdir } from 'node:os'
 import path from 'node:path'
 import { eq, sql } from 'drizzle-orm'
 import { beforeEach, describe, expect, it } from 'vitest'
-import { PLACES_FILE, type SourcePlace, syncPlaces } from '@/lib/db/places-sync'
 import * as s from '@/lib/db/schema'
-import { draftCourse } from '@/lib/server/suggest'
-import { testDb } from './db'
+import { PLACES_FILE, type SourcePlace, syncPlaces } from '@/lib/db/sync/places'
+import { draftCourse } from '@/lib/server/domain/suggest'
+import { testDb } from '@/test/db'
 
 let t: Awaited<ReturnType<typeof testDb>>
 beforeEach(async () => {
@@ -95,7 +95,7 @@ describe('real places (TourAPI file)', () => {
 
 describe('curated themes (data/curated-themes.json)', () => {
   it('loads live themes once, hosted by foty 큐레이션, with real stops', async () => {
-    const { syncCurated, CURATED_FILE } = await import('@/lib/db/curated-sync')
+    const { syncCurated, CURATED_FILE } = await import('@/lib/db/sync/curated')
     await syncPlaces(t.db, PLACES_FILE)
     // 파일의 첫 날짜보다 사흘 전으로 시계를 맞춘다
     const now = new Date('2026-11-25T00:00:00+09:00')

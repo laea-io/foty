@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import { loadSpace } from '@/components/b/trips/load'
-import { MemberGrid, MemberList } from '@/components/b/trips/members'
-import { SpaceDesktopHead, SpaceMobileHead } from '@/components/b/trips/space'
 import { DesktopFrame, MobileFrame } from '@/components/shell/mobile'
+import { loadSpace } from '@/components/trips/load'
+import { MemberGrid, MemberList } from '@/components/trips/members'
+import { SpaceDesktopHead, SpaceMobileHead } from '@/components/trips/space'
 import { DemoNote } from '@/components/ui/primitives'
 
 type Props = { params: Promise<{ id: string }> }

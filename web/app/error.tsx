@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
-import { ErrorBody, StateFrame } from '@/components/a/states'
 import { BackBar } from '@/components/shell/mobile'
 import { Button, ButtonLink } from '@/components/ui/primitives'
+import { ErrorBody, StateFrame } from '@/components/ui/states'
 
 /** 화면을 그리다 오류가 났을 때(디자인 Error의 모양) */
 export default function ErrorPage({

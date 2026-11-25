@@ -4,11 +4,11 @@ import {
   adminCancelThemeAction,
   adminHideAction,
   adminUserSuspendAction,
-} from '@/app/actions/a'
-import { ActionForm, FormError } from '@/components/a/action-form'
-import { AdminResetLink } from '@/components/a/reset-forms'
+} from '@/app/actions/admin'
+import { AdminResetLink } from '@/components/auth/reset-forms'
+import { ActionForm, FormError } from '@/components/forms/action-form'
 import { Badge, Button } from '@/components/ui/primitives'
-import type { AdminPost, AdminUser } from '@/lib/server/q/a'
+import type { AdminPost, AdminUser } from '@/lib/server/queries/admin'
 
 // 운영팀 화면 부품 — 사용자 · 커뮤니티 · 테마 취소 · 참여 기록 검토
 
